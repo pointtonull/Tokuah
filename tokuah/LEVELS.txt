@@ -1,10 +1,10 @@
-** PLEASE READ THIS WHOLE DOCUMENT **
-(or at least, consult it as you go... it contains all the answers! more or less!)
+** LEER TODO ESTE DOCUMENTO POR FAVOR ** 
+(o, al menos, consultarlo al ser necesario, contiene todas las respuestas!, más o menos!)
 
-STORY
-the basic story line, is ..
-for some reason you've gotta travel through the jungle, up the volcano, to the moon
-floating on bubble encased enemies all the way!
+** HISTORIA **
+el argumento básico es...
+por alguna razón debes viajar a través de la jungla, subir un volcán, y la luna encerrando en
+una burbuja todos los enemigos que encuentres en el camino!
 
 your guy has two phases
 "powered up" with the big bubbles
