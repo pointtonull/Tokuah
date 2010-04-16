@@ -1,10 +1,16 @@
 #TODO: LIST
 
-- Verificar niveles por la capacidad de saltar a lo más alto (no se debería golpear
-    un bloque invisible al menos que se suponga que haya uno allí)
+- Empaquetado:
+  - py2exe
+  - py2app
+  - setup.py
+  - save-locator.py y esas cosas
+  - iconos!!!
 - f2 = habilita/deshabilita sonido
 - Hacer que los pandas sean matables con muchos tiros y que, al matar uno, se vaya
   a un nivel especial.
+- Verificar niveles por la capacidad de saltar a lo más alto (no se debería golpear
+    un bloque invisible al menos que se suponga que haya uno allí)
 - Añadir una señal "Salida" al final de los niveles (puede ser simbolica)
 - Añadir mapas especiales 
 - Añadir item de invisibilidad
@@ -13,9 +19,3 @@
 - Implementar pause, quit y otras cosas necesarias
 - Mini-juegos
 - Doble background
-- Empaquetado:
-  - py2exe
-  - py2app
-  - setup.py
-  - save-locator.py stuff
-  - and icons
