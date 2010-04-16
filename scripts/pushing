@@ -4,28 +4,30 @@ awk '
 BEGIN{
     comando = "git commit -a --dry-run --short"
     while (comando|getline){
-        s = substr($0, 1, 2)
-        n = substr($0, 4)
-        t = 0
-        if (s == "A ")
-            t = "añadido"
-        if (s == "D ")
-            t = "eliminado"
-        if (s == "R "){
-            t = "renombrado"
-            split(" -> ", a, n)
-            n = a[2]
-            print n
-        }
-        if (s == "M ")
-            t = "modificado"
-        if (s == "??" && !(n ~ ".swp$"))
-            d[n]++
-        if (t){
-            gsub("^ *", "", $2)
-            printf "Mensaje para \"%s\" que fue %s: ", $2, t
-            getline mensaje
-            a[n] = mensaje
+        if (!($0 ~ ".pyc$" || $0 ~ ".swp$")){
+            s = substr($0, 1, 2)
+            n = substr($0, 4)
+            t = 0
+            if (s == "A ")
+                t = "añadido"
+            if (s == "D ")
+                t = "eliminado"
+            if (s == "R "){
+                t = "renombrado"
+                split(" -> ", a, n)
+                n = a[2]
+                print n
+            }
+            if (s == "M ")
+                t = "modificado"
+            if (s == "??" && !(n ~ ".swp$"))
+                d[n]++
+            if (t){
+                gsub("^ *", "", $2)
+                printf "Mensaje para \"%s\" que fue %s: ", $2, t
+                getline mensaje
+                a[n] = mensaje
+            }
         }
     }
     close(commando)
