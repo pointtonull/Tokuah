@@ -266,12 +266,15 @@ def pan_screen(g,s):
     
 
 def powerup(g,s):
+
     if not s.powered_up:
         s.powerup_transition = 100
         s.powered_up = True
+
         if hasattr(g.game, 'powerup'):
             g.game.powerup = True
     
+
 def damage(g,s):
     if s.god_mode:
         return
