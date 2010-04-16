@@ -11,7 +11,21 @@ BEGIN{
             getline mensaje
             a[$2] = mensaje
         }
-    for (i in a)
-        system("git commit -m \"" a[i] "\" \"" i "\"")
+    close(commando)
+    if (length(a)){
+        for (i in a)
+            system("git commit -m \"" a[i] "\" \"" i "\"")
+        errorpush = system("git push")
+        if (errorpush){
+            errorpull = system("git pull origin master")
+            if (errorpull){
+                print "No se ha podido aplicar, intervención manual necesaria"
+                exit 1
+            }
+            else {
+                system("git push")
+            }
+        }
+    }
 }
 '
