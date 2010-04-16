@@ -15,16 +15,32 @@ BEGIN{
     if (length(a)){
         for (i in a)
             system("git commit -m \"" a[i] "\" \"" i "\"")
+        print "Commit finalizado"
+        print "Intentando push"
         errorpush = system("git push")
         if (errorpush){
+            print "No se ha podido push directo, intentando pull"
             errorpull = system("git pull origin master")
             if (errorpull){
-                print "No se ha podido aplicar, intervención manual necesaria"
+                print "No se ha podido pull, intervención manual requerida"
                 exit 1
             }
             else {
-                system("git push")
+                print "Hemos podido pull, ahora intentaremos push"
+                errorpush = system("git push")
+                if (errorpush){
+                    print "Esto si que es raro... push falló..."
+                    exit 2
+                }
+                else{
+                    print "Hemos pusheado con exito!"
+                    exit 0
+                }
             }
+        }
+        else{
+            print "Ese fue un push limpio y en regla..."
+            exit 0
         }
     }
 }
