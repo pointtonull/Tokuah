@@ -1,0 +1,33 @@
+- make boss explode cool - like 100 bubbles
+
+- in phil_12 - make the final room elevator stop where it should
+- in phil_13 - make the bird you have to ride to go up the tree be
+    a single tile lower so it can be shot when you are small
+
+- add extra life sound effect 
+- add "got hit by something" sfx
+
+- insta-death when hitting those fire-ball tiles.
+- get rid of excessing print statements
+- when an enemy is bubblized, have the enemy bubble be the enemy-code-respawn item
+
+- (volcano 3) pekuja's crazy maze level is easy to get yourself into a no-win setup
+- (volcano 3) invalid codes (0x39)
+- (moon 2) 0x59 invalid code
+- (moon 3) 0x59, 0x99 codes 
+
+- fire guy's don't seem very random ?
+    - made him random choice each time
+- green evil seahorse
+    - make it shoot slower,
+    - have shots die when they hit a wall
+- make big head guy a bit faster, but not much...
+
+- keyboard controls a bit glitchey (sometimes get stuck - check on using pygame.kye.get_pressed()
+- game crashes in phil_5 at the end ... sometimes? (when you return through the final door)
+(09:05:05 PM) pekuja: philhassey, I found a bug in moon-2
+(09:05:50 PM) pekuja: philhassey, in the last screen, some of the floor tiles aren't, so you fall through the floor and die
+(09:15:45 PM) pekuja: philhassey, apparentlsy the bottom right tile is missing for each of the tilesets... ;-(
+- added a debug mode (press d on main menu to see all levels0
+- remove the F12 "crash the game" key (ha ha ha)
+- remove the data/sounds dir (it's useless!)

@@ -1,0 +1,102 @@
+** DELUXE VERSION TODO LIST **
+
+- check levels for ability to jump at the top (they shouldn't hit
+    an invisible ceiling unless there is supposed to be a ceiling there)
+
+- py2exe, py2app -- get rid of lib.data.filepath and just use os.path.join ...
+- f2 = toggle sound
+
+- in boss level if you jump at the top of the screen you can
+    go to part 2 w/o the boss
+- make pandas killable with like 100 shots
+    and if you kill one, you go to a secret level
+- fix Tee's level - no win 
+- add clear "Exit" signs to the end of levels
+- overworld map ??
+- every n points get the big hair
+- add temp invincibility when you upgrade to new hair
+    if you already have top hair, give a longer invincibility length?
+- if you get an extra hair, you get a "2x hair" or "3x hair" ...
+    which stays with you ..
+
+** CRUNCH TIME TODO LIST **
+
+Everyone:
+    - create levels, level testing, etc etc
+
+DrPetter: 
+    - backgrounds for volcano and moon zones
+    - sound effects for everything!! :)
+    
+philhassey:
+    - menus
+    - pause, quit and other niceties
+    - some levels, level testing
+    
+trick:
+    - a couple more volcano enemies
+    - a couple more moon enemies
+    - a final boss?
+     
+pekuja:
+    - code for new enemies created
+    - all round coding
+    - mini-games?  cut-scenes? (totally optional)
+    
+timinge:
+    - finish music
+
+
+
+
+
+
+
+
+
+
+===========================================================
+"The only way is UP"
+- try to design all items with that in mind (to some extent)
+
+Engine stuff (for phil):
+- display background
+- z sorting of tiles and sprites
+
+3 phases:
+- jungle
+- volcano
+- moon
+
+10 enemies:
+- 3 standard
+- 2 jungle
+- 2 volcano
+- 2 moon
+- 1 boss
+
+12 levels:
+- 4 per phase
+
+3 player states
+- "weak"
+- "strong"
+- "+power"
+
+5 pieces of music
+- jungle (timinge)
+- volcano (timinge)
+- moon (timinge)
+- title screen (?)
+- win the game (?)
+- world screen (?)
+- mini games (?)
+
+packaging:
+(save a good day for doing this, so it can be in the
+next version of the skellington)
+- py2exe
+- py2app
+- setup.py
+- save-locator.py stuff
+- and icons

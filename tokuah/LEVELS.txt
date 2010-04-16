@@ -1,0 +1,128 @@
+** PLEASE READ THIS WHOLE DOCUMENT **
+(or at least, consult it as you go... it contains all the answers! more or less!)
+
+STORY
+the basic story line, is ..
+for some reason you've gotta travel through the jungle, up the volcano, to the moon
+floating on bubble encased enemies all the way!
+
+your guy has two phases
+"powered up" with the big bubbles
+and "not powered up" with the small bubbles and no elvis hair
+if you get hit when "not powered up" you die (though at this point, you just blink)
+your powerup won't go away until you get hit (mario style)
+.. when you have small bubbles, enemies take 3 hits
+.. when you have big bubbles, enemies take one hit
+.. you can stand on bubbles and float UP to higher places!
+
+HOW TO MAKE A LEVEL!!!
+
+1. click on run_game.py to try out what we've got
+2. to create a new level, just create a RGBA .tga file that is the size you want ..
+-or-
+2. copy blank.tga (it's pretty big 160x160) 
+3. and edit it with the leveledit.py 
+4. you might want to check out how the magic stuff works in test.tga and phil_1.tga
+
+LEVELEDIT.PY - KEYS AND STUFF
+
+interface:
+- menus for common commands
+- toolbox
+- tile edit area
+    left click to use current tool
+    right click to select a tile
+    middle drag to move around the level
+- tile select area
+    click to select a tile
+- code select area
+    click to select a code
+
+keys:
+l - load
+s - save
+p - preview
+
+a - select all
+z - undo
+c - copy selection to clipboard
+v - paste clipboard at selection origin
+delete - delete selection
+f - fill selection
+
+t - switch tile & bkgr layers
+
+arrows - change tile
+shift+arrows - scroll screen by 1/8 screen size jumps
+ctrl+arrows - scroll screen by full screen size jumps
+return - toggle fullscreen
+
+
+F.A.Q.
+
+Q. Hmm, I tried making a simple level with a platform and the blue stick guy, and when I tried to play, I got a "IndexError: list index out of range".
+A. you probably need those red boxes defining the bounds of the viewable part of the level ...
+
+Q. I set the background, but it all looks awful and things are smearing around
+A. See level tip #3 -Make sure the level viewable area is *at least* 20x15 , otherwise
+it won't work.
+ 
+Q. I made an awesome level, what shouold I do now?
+A. Show it to us on the irc channel... and e-mail it to philhassey@gmail.com - Thanks!
+
+Q. Can I use the red or moon tiles?
+A. Not yet - we need to add enemies for those parts yet (volcano and moon levels)
+
+Q. I used run_game and started the blank level and the screen is blank.
+A.  Use the arrow keys to choose other levels 
+
+Q. What's the "dotted thing that stops the green enemy" with an arrow up?
+A: place it in a gap to make a frog jump the gap
+
+Q. How do you play (what are the controls)?
+A. arrow keys, CTRL and ALT .. game also includes gamepad support
+.. big bubbles can capture enemies, or 3 small ones.  you can ride those bubbles
+up the screen! wheeeeeeeeeee!  THe "a" and "z" keys also work...
+
+MAKE A LEVEL TIPS
+
+1. Make sure you use the red box codes around the edge of your level to define
+the viewable area
+2. For using animated tiles, use the first in the series, the others won't work
+3. Make sure the level viewable area is *at least* 20x15 , otherwise
+it won't work.
+
+4. Right now we only have jungle enemies, so don't use the red or moon tiles yet
+because those are for when we have enemies for those parts!
+
+TILE TIPS
+
+- blue shard thing - a powerup!
+- orange S thing - an extra life!
+- vegetables (4) - points, 100, 250, 500 and 1000
+- coins - collect 100 get an extra life!
+- the dark blue face turns bright and falls when you stand on it,
+    it won't come back
+    - if you want it to come back, use the similar looking code
+    it will respawn when you leave the screen
+- the fireball should only be used offscreen to kill the player
+
+
+CODE TIPS
+
+BG: set the background, put a number in the next code box and that will choose the bg
+see the images in data/bkgr to see them
+
+DOTTED-LINES-AROUND-IT-WITH SOMETHING INSIDE: likely stops whatever critter
+
+DOTTED-GREEN-BOX: defines a "door way" (you have to press a button to use it)
+ -- WITH AN A in iT: defines an auto-door that transports you upon contact
+ - to the left of the door code you can put in the "ID" of the door (a number)
+ - to the right of the door code you can put in the destiation "ID" where you
+ want to transport the player to.  make sure a door exists with that "ID"
+ 
+ * you have to place a door code over the door image *
+ 
+Anytime a user comes out of a door, you'll want to include a BG code nearby to
+define the background of the area he appears in.
+

@@ -1,0 +1,148 @@
+PHIL'S LEVEL RATINGS:
+
+starred levels are going in the final game .. haven't rated all levels yet
+
+N J T P
++ + +   phil_1                easy       jungle
+  + +   phil_7                easy       jungle
+  + + + tim_2.tga             easy/med   jungle
+  + + + phil_2.tga            easy/med   jungle
+  ? + + phil_13.tga           med/hard   jungle
+  
+? + +   pekuja_3              medium     volcano
+  + + + tim_4                 medium     volcano
+  ? ? + phil_14.tga           med/hard   volcano
+  + + + phil_8.tga            easy       volcano-bonus
+  
+  + + + phil_12.tga           easy/med   moon
++ + +   pekuja_1              easy/med   moon
+  + + + phil_5.tga            medium     moon
++ ? + + phil_10.tga           hard       moon
+  + + + boss_1.tga            hard       boss
+  
+? + ? ? fydo_1.tga            easy/med   volcano
+  ? ? ? tim_1.tga             medium     volcano
+  + ? ? phil_9                easy/med   moon
+  ? ?   tee_1                 hard       jungle
+- + -   pekuja_2              medium     volcano
+  ? - - phil_3                med/hard   jungle
+  ? -   phil_11               
+    - ? phil_15
+  + - - phil_4                medium     volcano
+  + - - phil_6                hard       volcano (replace 1st fallies w/ blocks)
+- -     drpetter_1            hard       volcano
+- -     eugman_1              medium     jungle
+
+MILLIONS OF GAME MAPS:
+http://www.vgmaps.com/Atlas/NES/index.htm
+
+GOD MODE:
+press f10 for god mode!
+
+IMPORTANT NOTES TO CODERS:
+- don't edit level.py !!!! ask phil to 
+- in general, just add new tiles, and new enemies with CODES, see the HOWTO
+section a bit down the file
+
+PLOT OF THE GAME:
+The basic plot of the game is "Oh no, the evil overlord stole the galaxy crystal, we must fly up to the moon to get it!" In more concrete terms - first few levels are in a jungle. The next 3 levels are flying up an exploding volcano. The last 3 levels are going to be on the moon.
+
+
+HOW TO EDIT LEVELS AND TILES:
+- run leveledit.py - to edit levels
+    you can use File->Preview to preview your level as you go
+- All levels should have a two tile thick wall around them, to bound
+    stuff from escaping the level
+- run tileedit.py - to edit tiles
+    check out the top of tileedit.py in a text editor for a list of keyboard shortcuts
+    (same goes for leveledit, lots of nifty key shortcuts)
+- if you need to resize a level, backup your level, then resize it in an image editor
+
+HOW TO ORGANIZE TILES:
+- all tiles are to be put into tiles.tga 
+- tile size = 16x16 
+- it can hold 256 tiles
+- the first 64 tiles should be "general purpose" tiles
+- the next 64 tiles should be "jungle tiles"
+- next 64 "volcano / lava"
+- next 64 "moon tiles"
+- we will be able to have animated tiles, but I haven't implemented that yet.
+to have an animated tile, just put the frames in a row for now.
+
+HOW TO NAME SPRITES:
+- Each sprite should be in a separate file in data/sprites
+    named something like "player-left-0" etc..
+- All sprites for a given character should be the same size
+    so that the bounding box of the characters shape can always be the same
+    
+HOWTO ADD A NEW TILE TYPE:
+- open up tiles.py
+- add a line like: 0x01    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
+the key is the tile number .. then
+
+    t_init - the easy initializer, use that unless you need something crazy
+    groups - a list of groups that the tile can "hit"
+    function - a function to call when the tile hits something
+    *params - extra parameters to pass to that function
+
+some basic tile types are defined in tiles_basic.  you can probably copy those
+and muck around some.  the hit_block can do all kinds of blocks, but mainly
+1,1,1,1 for solid blocks and 1,0,0,0 for platforms are the most useful parameters
+
+TILE CODING TIPS:
+- animation isn't implemented yet, but i'll add that soon enough, don't 
+worry about it for now.  just check out tiles_basic.py for hit methods
+and do the stuff in the previous section. if we need to do anything super
+crazy, ask phil
+
+HOWTO ADD A NEW SPRITE TYPE:
+- copy spikey.py or platform.py to a new enemy.py
+- in sprites.py add "import enemy"
+- modify enemy.py with your new code, etc.
+- edit codes.tga to have a symbol for the code for the enemy
+- open codes.py, and add a line to the CODES section for enemies
+    key: [fnc,*params]
+    key - the number of that tile in codes.tga
+    fnc - the init function (sprites.enemy.init usually)
+    *params - some extra params to be passed to your init function
+
+MISC SPRITE CODING NOTES:
+- If an object can stand on other objects, it must
+    - have s.standing attribute = None in init
+    - call sprite.check_standing(g,s) at the end of each loop
+- If an object can carry other objects, it must
+    - set b.standing = a .. and .. 
+    - set a.carrying.append(b) when it starts to carry something
+- To get a sprite removed, 
+    - s.active = False
+    and it will be garbage collected sometime soon :)
+    deinit() will be auto-called if needed...
+- The sprites use names like
+    'sprite-01' not actual images.  The images are looked up during
+    rendering.  Should make things easier to follow.
+- to change the image a sprite is using, 
+    s.image = 'player-right-%d'%(s.frames%5) , etc ..
+    
+    
+SOFTWARE OTHER PEOPLE MIGHT NEED:
+http://tortoisesvn.net/downloads
+http://www.python.org/ftp/python/2.5/python-2.5.msi
+http://www.pygame.org/ftp/pygame-1.7.1release.win32-py2.5.exe
+
+OLD JUNK THAT CAN BE IGNORED, BUT I'M LEAVING HERE FOR NOW:
+philhassey: code
+trick: still haven't heard back...
+pekuja: gfx?
+DrPetter: sfx, gfx, music?
+timinge: music
+fydo: maybe some gfx somewhere
+lerc: gfx, code
+Tee : levels?
+eugman: levels?
+
+PoV: levels?
+
+jolle: levels/gfx
+illume: gfx/levels?
+
+
