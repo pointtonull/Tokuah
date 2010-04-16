@@ -27,7 +27,7 @@ BEGIN{
         print "Estos archivos son desconocidos para git:", ds
         for (i in d)
             print " ", i
-        print "Puede añadirlos ejecutando \"git add fichero\""
+        print "Puede añadirlos ejecutando \"git add archivo\""
     }
     if (length(a)){
         for (i in a){
