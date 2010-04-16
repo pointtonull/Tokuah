@@ -1,15 +1,16 @@
-** DELUXE VERSION TODO LIST **
+#TODO: LIST
 
-- check levels for ability to jump at the top (they shouldn't hit
-    an invisible ceiling unless there is supposed to be a ceiling there)
+- Verificar niveles por la capacidad de saltar a lo más alto (no se debería golpear
+    un bloque invisible al menos que se suponga que haya uno allí)
 
-- py2exe, py2app -- get rid of lib.data.filepath and just use os.path.join ...
-- f2 = toggle sound
+- Empaquetado py2exe o py2app:
+  - obtener lib.data.filepath y usar os.path.join (no comprendí)
+- f2 = habilita/deshabilita sonido
 
 - in boss level if you jump at the top of the screen you can
     go to part 2 w/o the boss
-- make pandas killable with like 100 shots
-    and if you kill one, you go to a secret level
+- make pandas killable with like 100 shots and if you kill one, you go to a secret
+  level
 - fix Tee's level - no win 
 - add clear "Exit" signs to the end of levels
 - overworld map ??
