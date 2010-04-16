@@ -9,9 +9,9 @@ BEGIN{
         if ($1~"modified")
             t = "modificado"
         if ($1~"new file")
-            t = creado
+            t = "creado"
         if ($1~"deleted")
-            t = eliminado
+            t = "eliminado"
         if (t){
             gsub("^ *", "", $2)
             printf "Mensaje para \"%s\" que fue %s: ", $2, t
