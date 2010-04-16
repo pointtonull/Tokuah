@@ -42,17 +42,17 @@ BEGIN{
         }
 
         print "Intentando push"
-        errorpush = system("git push")
+        errorpush = system("git push -q")
         if (errorpush){
             print "No se ha podido push directo, intentando pull"
-            errorpull = system("git pull origin master")
+            errorpull = system("git pull -q origin master")
             if (errorpull){
-                print "No se ha podido pull, intervención manual requerida"
+                print "No se ha podido pullear, intervención manual requerida"
                 exit 1
             }
             else {
                 print "Hemos podido pull, ahora intentaremos push"
-                errorpush = system("git push")
+                errorpush = system("git push -q")
                 if (errorpush){
                     print "Esto si que es raro... push falló..."
                     exit 2
