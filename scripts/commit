@@ -11,7 +11,7 @@ BEGIN{
             t = "añadido"
         if (s == "M ")
             t = "modificado"
-        if (s == "??" && !(s ~ ".swp"))
+        if (s == "??" && !(n ~ ".swp"))
             t = "desconocido"
         if (t){
             gsub("^ *", "", $2)
