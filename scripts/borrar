@@ -1,0 +1,59 @@
+#!/bin/sh
+#Para aplicar cambios interactivamente permitiendo un comentario por fichero
+awk '
+BEGIN{
+    FS=":"
+    comando = "git commit -a --dry-run"
+    while (comando|getline)
+        if ($1~"modified" || $1~"new file"){
+            gsub("^ *", "", $2)
+            printf "Mensaje para %s: ", $2
+            getline mensaje
+            a[$2] = mensaje
+        }
+    close(commando)
+    if (length(a)){
+        for (i in a){
+            errorcommit += system("git commit -m \"" a[i] "\" \"" i "\"")
+        }
+        if (errorcommit){
+            print "El commit no se realizó con exito, ¿escribió los mensajes?"
+            exit 1
+        }
+        else {
+            print "Commit exitoso"
+        }
+
+        print "Intentando push"
+        errorpush = system("git push")
+        if (errorpush){
+            print "No se ha podido push directo, intentando pull"
+            errorpull = system("git pull origin master")
+            if (errorpull){
+                print "No se ha podido pull, intervención manual requerida"
+                exit 1
+            }
+            else {
+                print "Hemos podido pull, ahora intentaremos push"
+                errorpush = system("git push")
+                if (errorpush){
+                    print "Esto si que es raro... push falló..."
+                    exit 2
+                }
+                else{
+                    print "Hemos pusheado con exito!"
+                    exit 0
+                }
+            }
+        }
+        else{
+            print "Ese fue un push limpio y en regla..."
+            exit 0
+        }
+    }
+    else{
+        print "No hay cambios que aplicar"
+        exit 0
+    }
+}
+'
