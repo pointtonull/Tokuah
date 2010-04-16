@@ -9,10 +9,12 @@ BEGIN{
         t = 0
         if (s == "A ")
             t = "añadido"
+        if (s == "D ")
+            t = "eliminado"
         if (s == "M ")
             t = "modificado"
         if (s == "??" && !(n ~ ".swp"))
-            t = "desconocido"
+            d[n]++
         if (t){
             gsub("^ *", "", $2)
             printf "Mensaje para \"%s\" que fue %s: ", $2, t
