@@ -4,13 +4,21 @@ awk '
 BEGIN{
     FS=":"
     comando = "git commit -a --dry-run"
-    while (comando|getline)
-        if ($1~"modified" || $1~"new file"){
+    while (comando|getline){
+        t = 0
+        if ($1~"modified")
+            t = "modificado"
+        if ($1~"new file")
+            t = creado
+        if ($1~"deleted")
+            t = eliminado
+        if (t){
             gsub("^ *", "", $2)
-            printf "Mensaje para %s: ", $2
+            printf "Mensaje para \"%s\" que fue %s: ", $2, t
             getline mensaje
             a[$2] = mensaje
         }
+    }
     close(commando)
     if (length(a)){
         for (i in a){
