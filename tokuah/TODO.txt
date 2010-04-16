@@ -2,97 +2,20 @@
 
 - Verificar niveles por la capacidad de saltar a lo más alto (no se debería golpear
     un bloque invisible al menos que se suponga que haya uno allí)
-- Empaquetado py2exe o py2app:
-  - obtener lib.data.filepath y usar os.path.join (no comprendí)
 - f2 = habilita/deshabilita sonido
 - Hacer que los pandas sean matables con muchos tiros y que, al matar uno, se vaya
   a un nivel especial.
 - Añadir una señal "Salida" al final de los niveles (puede ser simbolica)
-- overworld map ??
-- every n points get the big hair
-- add temp invincibility when you upgrade to new hair
-    if you already have top hair, give a longer invincibility length?
-- if you get an extra hair, you get a "2x hair" or "3x hair" ...
-    which stays with you ..
-
-** CRUNCH TIME TODO LIST **
-
-Everyone:
-    - create levels, level testing, etc etc
-
-DrPetter: 
-    - backgrounds for volcano and moon zones
-    - sound effects for everything!! :)
-    
-philhassey:
-    - menus
-    - pause, quit and other niceties
-    - some levels, level testing
-    
-trick:
-    - a couple more volcano enemies
-    - a couple more moon enemies
-    - a final boss?
-     
-pekuja:
-    - code for new enemies created
-    - all round coding
-    - mini-games?  cut-scenes? (totally optional)
-    
-timinge:
-    - finish music
-
-
-
-
-
-
-
-
-
-
-===========================================================
-"The only way is UP"
-- try to design all items with that in mind (to some extent)
-
-Engine stuff (for phil):
-- display background
-- z sorting of tiles and sprites
-
-3 phases:
-- jungle
-- volcano
-- moon
-
-10 enemies:
-- 3 standard
-- 2 jungle
-- 2 volcano
-- 2 moon
-- 1 boss
-
-12 levels:
-- 4 per phase
-
-3 player states
-- "weak"
-- "strong"
-- "+power"
-
-5 pieces of music
-- jungle (timinge)
-- volcano (timinge)
-- moon (timinge)
-- title screen (?)
-- win the game (?)
-- world screen (?)
-- mini games (?)
-
-packaging:
-(save a good day for doing this, so it can be in the
-next version of the skellington)
-- py2exe
-- py2app
-- setup.py
-- save-locator.py stuff
-- and icons
+- Añadir mapas especiales 
+- Añadir item de invisibilidad
+- Más poderes especiales
+- Mejorar menus
+- Implementar pause, quit y otras cosas necesarias
+- Mini-juegos
+- Doble background
+- Empaquetado:
+  - py2exe
+  - py2app
+  - setup.py
+  - save-locator.py stuff
+  - and icons
