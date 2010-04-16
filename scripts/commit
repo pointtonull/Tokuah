@@ -23,6 +23,10 @@ BEGIN{
         }
     }
     close(commando)
+    for (i in d)
+        ds = " " i
+    if (ds)
+        print "Estos archivos son desconocidos para git:" ds
     if (length(a)){
         for (i in a){
             errorcommit += system("git commit -m \"" a[i] "\" \"" i "\"")
@@ -52,13 +56,13 @@ BEGIN{
                     exit 2
                 }
                 else{
-                    print "Hemos pusheado con exito!"
+                    print "Hemos pull/pusheado con exito!"
                     exit 0
                 }
             }
         }
         else{
-            print "Ese fue un push limpio y en regla..."
+            print "Ese fue un push limpio y en toda regla..."
             exit 0
         }
     }
