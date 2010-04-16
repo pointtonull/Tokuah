@@ -13,7 +13,7 @@ BEGIN{
             t = "eliminado"
         if (s == "M ")
             t = "modificado"
-        if (s == "??" && !(n ~ ".swp"))
+        if (s == "??" && !(n ~ ".swp$"))
             d[n]++
         if (t){
             gsub("^ *", "", $2)
