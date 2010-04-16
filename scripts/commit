@@ -2,21 +2,22 @@
 #Para aplicar cambios interactivamente permitiendo un comentario por fichero
 awk '
 BEGIN{
-    FS=":"
-    comando = "git commit -a --dry-run"
+    comando = "git commit -a --dry-run --short"
     while (comando|getline){
+        s = substr($0, 1, 2)
+        n = substr($0, 4)
         t = 0
-        if ($1~"modified")
+        if (s == "A ")
+            t = "añadido"
+        if (s == "M ")
             t = "modificado"
-        if ($1~"new file")
-            t = "creado"
-        if ($1~"deleted")
-            t = "eliminado"
+        if (s == "? " && !(n ~ ".swp"))
+            t = "desconocido"
         if (t){
             gsub("^ *", "", $2)
             printf "Mensaje para \"%s\" que fue %s: ", $2, t
             getline mensaje
-            a[$2] = mensaje
+            a[n] = mensaje
         }
     }
     close(commando)
