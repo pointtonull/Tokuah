@@ -24,11 +24,11 @@ class Menu(engine.State):
         self.levels = levels.LEVELS
         
         self.items = [
-            ('play the game!','start'),
-            ('select <L>','play'),
-            ('help','help'),
-            ('credits','credits'),
-            ('quit','quit'),
+            ('Jugar!','start'),
+            ('Seleccionar Nivel <L>','play'),
+            ('Ayuda','help'),
+            ('Creditos','credits'),
+            ('Salir','quit'),
             ]
         self.rects = []
         
@@ -95,7 +95,7 @@ class Menu(engine.State):
             y += 12
             
             
-        text = 'www.imitationpickles.org'
+        text = 'www.tokuah.com.ar'
         c = (0x00,0x00,0x00)
         img = fnt.render(text,1,c)
         x = (SW-img.get_width())/2
@@ -450,16 +450,17 @@ class Help(engine.State):
         fnt = self.game.fonts['help']
         x,y = 8,10
         for text in [
-            'Help',
+            'Ayuda',
             '',
-            'Use your arrow keys to',
-            'move the seahorse.',
-            'Button 1 - Jump',
-            'Button 2 - Shoot',
+            'Usa las flechas para',
+            'mover el personaje.',
+            'Tecla z - Salta',
+            'Tecla x - Dispara',
             '',
-            'Enemies take 3 shots unless',
-            'you are powered up!  You can',
-            'ride enemy bubbles.',
+            'Se necesitan 3 disparos para',
+            'derrotar a un enemigo. A menos',
+            'que tengas el poder.',
+            'Puedes montar las burbujas!',
             ]:
             c = (255,255,255)
             img = fnt.render(text,1,(0,0,0))
