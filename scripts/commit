@@ -23,12 +23,12 @@ BEGIN{
         }
     }
     close(commando)
-    for (i in d)
-        ds = ", " i
-    if (ds)
-        ds = substr(ds, 3)
+    if (length(d)){
         print "Estos archivos son desconocidos para git:", ds
+        for (i in d)
+            print " ", i
         print "Puede añadirlos ejecutando \"git add fichero\""
+    }
     if (length(a)){
         for (i in a){
             errorcommit += system("git commit -qm \"" a[i] "\" \"" i "\"")
