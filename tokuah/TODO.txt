@@ -2,17 +2,12 @@
 
 - Verificar niveles por la capacidad de saltar a lo más alto (no se debería golpear
     un bloque invisible al menos que se suponga que haya uno allí)
-
 - Empaquetado py2exe o py2app:
   - obtener lib.data.filepath y usar os.path.join (no comprendí)
 - f2 = habilita/deshabilita sonido
-
-- in boss level if you jump at the top of the screen you can
-    go to part 2 w/o the boss
-- make pandas killable with like 100 shots and if you kill one, you go to a secret
-  level
-- fix Tee's level - no win 
-- add clear "Exit" signs to the end of levels
+- Hacer que los pandas sean matables con muchos tiros y que, al matar uno, se vaya
+  a un nivel especial.
+- Añadir una señal "Salida" al final de los niveles (puede ser simbolica)
 - overworld map ??
 - every n points get the big hair
 - add temp invincibility when you upgrade to new hair
