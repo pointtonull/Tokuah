@@ -4,7 +4,7 @@ awk '
 BEGIN{
     comando = "git commit -a --dry-run --short"
     while (comando|getline){
-        if (!($0 ~ ".pyc$" || $0 ~ ".swp$")){
+        if (!($0 ~ ".pyc$" || $0 ~ ".swp$")){ #FIXME: Esto está hardcodeado...
             s = substr($0, 1, 2)
             n = substr($0, 4)
             t = 0
