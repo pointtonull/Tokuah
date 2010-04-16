@@ -1,0 +1,82 @@
+#!/bin/sh
+#Para aplicar cambios interactivamente permitiendo un comentario por fichero
+awk '
+BEGIN{
+    comando = "git commit -a --dry-run --short"
+    while (comando|getline){
+        s = substr($0, 1, 2)
+        n = substr($0, 4)
+        t = 0
+        if (s == "A ")
+            t = "añadido"
+        if (s == "D ")
+            t = "eliminado"
+        if (s == "R "){
+            t = "renombrado"
+            split(" -> ", a, n)
+            n = a[2]
+            print n
+        }
+        if (s == "M ")
+            t = "modificado"
+        if (s == "??" && !(n ~ ".swp$"))
+            d[n]++
+        if (t){
+            gsub("^ *", "", $2)
+            printf "Mensaje para \"%s\" que fue %s: ", $2, t
+            getline mensaje
+            a[n] = mensaje
+        }
+    }
+    close(commando)
+    if (length(d)){
+        print "Estos archivos son desconocidos para git:", ds
+        for (i in d)
+            print " ", i
+        print "Puede añadirlos ejecutando \"git add archivo\""
+    }
+    if (length(a)){
+        for (i in a){
+            errorcommit += system("git commit -qm \"" a[i] "\" \"" i "\"")
+        }
+        if (errorcommit){
+            print "El commit no se realizó con exito, ¿escribió los mensajes?"
+            exit 1
+        }
+        else {
+            print "Commit exitoso"
+        }
+
+        print "Intentando push"
+        errorpush = system("git push -q")
+        if (errorpush){
+            print "No se ha podido push directo, intentando pull"
+            errorpull = system("git pull -q origin master")
+            if (errorpull){
+                print "No se ha podido pullear, intervención manual requerida"
+                exit 1
+            }
+            else {
+                print "Hemos podido pull, ahora intentaremos push"
+                errorpush = system("git push -q")
+                if (errorpush){
+                    print "Esto si que es raro... push falló..."
+                    exit 2
+                }
+                else{
+                    print "Hemos pull/pusheado con exito!"
+                    exit 0
+                }
+            }
+        }
+        else{
+            print "Ese fue un push limpio y en toda regla..."
+            exit 0
+        }
+    }
+    else{
+        print "No hay cambios que aplicar"
+        exit 0
+    }
+}
+'
