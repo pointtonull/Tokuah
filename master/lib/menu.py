@@ -25,7 +25,7 @@ class Menu(engine.State):
         
         self.items = [
             ('Jugar!','start'),
-            ('Seleccionar Nivel <L>','play'),
+            ('Nivel <L>','play'),
             ('Ayuda','help'),
             ('Creditos','credits'),
             ('Salir','quit'),
