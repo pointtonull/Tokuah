@@ -11,6 +11,11 @@ BEGIN{
             t = "añadido"
         if (s == "D ")
             t = "eliminado"
+        if (s == "R "){
+            t = "renombrado"
+            split(" -> ", a, n)
+            n = a[2]
+        }
         if (s == "M ")
             t = "modificado"
         if (s == "??" && !(n ~ ".swp$"))
