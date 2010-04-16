@@ -1,5 +1,5 @@
 #!/bin/sh
-#Para aplicar los cambios interactivamente permitiendo comentario por fichero
+#Para aplicar cambios interactivamente permitiendo un comentario por fichero
 awk '
 BEGIN{
     FS=":"
@@ -13,9 +13,17 @@ BEGIN{
         }
     close(commando)
     if (length(a)){
-        for (i in a)
-            system("git commit -m \"" a[i] "\" \"" i "\"")
-        print "Commit finalizado"
+        for (i in a){
+            errorcommit += system("git commit -m \"" a[i] "\" \"" i "\"")
+        }
+        if (errorcommit){
+            print "El commit no se realizó con exito, ¿escribió los mensajes?"
+            exit 1
+        }
+        else {
+            print "Commit exitoso"
+        }
+
         print "Intentando push"
         errorpush = system("git push")
         if (errorpush){
@@ -42,6 +50,10 @@ BEGIN{
             print "Ese fue un push limpio y en regla..."
             exit 0
         }
+    }
+    else{
+        print "No hay cambios que aplicar"
+        exit 0
     }
 }
 '
