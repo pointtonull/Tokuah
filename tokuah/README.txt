@@ -1,54 +1,32 @@
-Bubble Kong
-===========
+** TOKUAH **
 
-Entry in PyWeek #4  <http://www.pyweek.org/4/>
-Team: The Olde Battleaxe
-Members: philhassey, pekuja, tim, drpetter, gerry
+Este juego está basado en barbie, una creación nacida de PyWeek #4 por:
+ * philhassey
+ * pekuja
+ * tim
+ * drpetter
+ * gerry
 
-(for the original source, and level editor)
-svn://www.imitationpickles.org/pyweek4/trunk
+Las fuentes del original se encuentran en:
+* svn://www.imitationpickles.org/pyweek4/trunk
 
-DEPENDENCIES:
+** Dependencias **
 
-You might need to install some of these before running the game:
+ * Python (¿que esperabas?)  http://www.python.org/
+ * PyGame                    http://www.pygame.org/
 
-  Python:     http://www.python.org/
-  PyGame:     http://www.pygame.org/
+** Ejecutando el juego **
 
+Esto debería funcionar en cualquier plataforma donde hayas podido instalar las 
+dependencias:
+                  python run_game.py
 
-RUNNING THE GAME:
+** MISC **
 
-On Windows or Mac OS X, locate the "run_game.pyw" file and double-click it.
+Presiona 'd' en el menú principal para entrar a modo 'debug' y obtener una lista de
+todos los niveles en la carpeta data/levels/.  De este modo podrás jugar niveles en
+desarrollo o totalmente rotos/rechazados.
 
-Othewise open a terminal / console and "cd" to the game directory and run:
-
-  python run_game.py
-
--full : to run in windows mode
--scale2x : use the scale2x scaler
--lowres : to run in 320x240
--tv : to do a silly scanline effect
-
-level.tga : to play a certain level
-
-HOW TO PLAY THE GAME:
-
-Use your arrow keys to
-move the seahorse.
-Button 1 - Jump 
-Button 2 - Shoot
-            
-Enemies take 3 shots unless
-you are powered up!  You can
-ride enemy bubbles.
-
-
-MISC:
-
-press 'd' on the main menu to enter 'debug' mode and have a list of all
-levels in the data/levels/ folder.  That way you can play in development
-or totally broken / reject levels.
-
-LICENSE:
+** LICENCIA **
 
 (c) 2007 The Olde Battleaxe & Friends
