@@ -15,6 +15,7 @@ BEGIN{
             t = "renombrado"
             split(" -> ", a, n)
             n = a[2]
+            print n
         }
         if (s == "M ")
             t = "modificado"
