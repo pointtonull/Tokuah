@@ -239,15 +239,15 @@ def pan_screen(g,s):
     # adjust the view 
     border = pygame.Rect(s.rect)
     #pad = 100
-    pad = (SW/2)-TW
+    pad = (SW/2) - TW
     border.x -= pad
-    border.w += pad*2
+    border.w += pad * 2
     #pad = 80
     pad = (SH/2)-TH
     if s.looking:
-        pad = TH*2
+        pad = TH * 2
     border.y -= pad
-    border.h += pad*2
+    border.h += pad * 2
     
     dest = pygame.Rect(g.view)
     dest.top = min(dest.top,border.top)
@@ -273,7 +273,8 @@ def powerup(g,s):
             g.game.powerup = True
     
 def damage(g,s):
-    if s.god_mode: return
+    if s.god_mode:
+        return
     
     if s.door_timer != None:
         return
@@ -287,11 +288,11 @@ def damage(g,s):
     elif s.powerup_transition == 0 and s.flash_counter == 0:
         s.kill(g,s)
         
-def kill(g,s,no_explode = False):
+def kill(g, s, no_explode=False):
     if hasattr(g.game, 'powerup'):
         g.game.powerup = False
     s.flash_counter = 10
     s.no_explode = no_explode
-    g.game.music_play('death',1)
-    s.death_counter = int(FPS*2.25)
+    g.game.music_play('death', 1)
+    s.death_counter = int(FPS * 2.25)
     
