@@ -31,7 +31,7 @@ BEGIN{
         print "Puede añadirlos ejecutando \"git add fichero\""
     if (length(a)){
         for (i in a){
-            errorcommit += system("git commit -m \"" a[i] "\" \"" i "\"")
+            errorcommit += system("git commit -qm \"" a[i] "\" \"" i "\"")
         }
         if (errorcommit){
             print "El commit no se realizó con exito, ¿escribió los mensajes?"
