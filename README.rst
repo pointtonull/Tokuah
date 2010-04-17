@@ -2,6 +2,9 @@
 TOKUAH
 ======
 
+.. figure:: master/data/title.png
+   :width: 57%
+
 Descripción
 ===========
 
