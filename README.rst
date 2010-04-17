@@ -48,8 +48,9 @@ Integrantes
 Ayuda y desarrollo
 ==================
 
-Si quieres colaborar puedes clonar el proyecto en http://github.com/whitmo/loaf o
-reportar cualquier error/deseo en http://github.com/loaf/loaf/issues .
+Si quieres colaborar puedes clonar el proyecto en
+http://github.com/pointtonull/Tokuah o reportar cualquier error/deseo en
+http://github.com/pointtonull/Tokuah/issues .
 
 
 .. _Barbie Seahorse Adventure: http://www.imitationpickles.org/barbie/
