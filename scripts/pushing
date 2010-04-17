@@ -2,7 +2,7 @@
 #Para aplicar cambios interactivamente permitiendo un comentario por fichero
 gawk '
 BEGIN{
-    comando = "git commit -a --dry-run --short"
+    comando = "git status -s"
     while (comando|getline){
         if (!($0 ~ ".pyc$" || $0 ~ ".swp$")){ #FIXME: Esto está hardcodeado...
             s = substr($0, 1, 2)
@@ -15,6 +15,7 @@ BEGIN{
             if (s == "R "){
                 t = "renombrado"
                 split(n, a, " -> ")
+                print n
                 n = a[2]
             }
             if (s == "M ")
