@@ -27,12 +27,12 @@ Para que el juego pueda funcionar deberás tener instalados estos programas:
  * `Python`_
  * `PyGame`_
 
-** Ejecutando el juego **
+Ejecutando el juego
+-------------------
 
 Esto debería funcionar en cualquier plataforma donde hayas podido instalar las
-dependencias:
+dependencias::
                   python run_game.py
-
 
 
 Integrantes
