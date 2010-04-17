@@ -4,23 +4,24 @@ gawk '
 BEGIN{
     comando = "git status -s"
     while (comando|getline){
-        if (!($0 ~ ".pyc$" || $0 ~ ".swp$")){ #FIXME: Esto está hardcodeado...
+        if (!($0 ~ ".pyc$" || $0 ~ ".swp$")){
             s = substr($0, 1, 2)
             n = substr($0, 4)
             t = 0
-            if (s == "A ")
+            if (s == "A " || s == " A")
                 t = "añadido"
-            if (s == "D ")
+            if (s == "D " || s == " D")
                 t = "eliminado"
-            if (s == "R "){
+            if (s == "R " || s == " R"){
                 t = "renombrado"
                 split(n, a, " -> ")
+                print $0
+                n = a[1]
                 print n
-                n = a[2]
             }
-            if (s == "M ")
+            if (s == "M " || s == " M")
                 t = "modificado"
-            if (s == "??" && !(n ~ ".swp$"))
+            if (s == "??")
                 d[n]++
             if (t){
                 gsub("^ *", "", $2)
