@@ -17,7 +17,8 @@ BEGIN{
                 print n
                 split(" -> ", a, n)
                 n = a[1]
-                print n
+                m = a[2]
+                print n, m
             }
             if (s == "M ")
                 t = "modificado"
