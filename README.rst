@@ -1,9 +1,5 @@
-======
-TOKUAH
-======
 
 .. figure:: http://github.com/pointtonull/Tokuah/raw/master/master/data/title.png
-   :width: 57%
 
 Descripción
 ===========
