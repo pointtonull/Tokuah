@@ -1,6 +1,6 @@
 #!/bin/sh
 #Para aplicar cambios interactivamente permitiendo un comentario por fichero
-awk '
+gawk '
 BEGIN{
     comando = "git commit -a --dry-run --short"
     while (comando|getline){
