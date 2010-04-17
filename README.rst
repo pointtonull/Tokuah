@@ -10,26 +10,18 @@ Nacional de Salta (UNSa), basado en el proyecto `Barbie Seahorse Adventure`_
 Instalación
 ===========
 
-Descargarlo
------------
+Puedes descargarlo como comprimido tar o zip desde http://github.com/pointtonull/Tokuah/archives/master u obtener la versión actual con git ejecutando::
 
- * TAR / ZIP: http://github.com/pointtonull/Tokuah/archives/master
- * git: git clone git://github.com/pointtonull/Tokuah.git
+    git clone git://github.com/pointtonull/Tokuah.git
 
-Dependencias
-------------
-
-Para que el juego pueda funcionar deberás tener instalados estos programas:
+También debes instalar las dependencias:
 
  * `Python`_
  * `PyGame`_
 
-Ejecutando el juego
--------------------
+Tras lo anterior deberías poder jugar ejecutando::
 
-Esto debería funcionar en cualquier plataforma donde hayas podido instalar las
-dependencias::
-                  python run_game.py
+    python run_game.py
 
 
 Integrantes
