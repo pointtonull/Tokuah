@@ -15,7 +15,7 @@ BEGIN{
             if (s == "R "){
                 t = "renombrado"
                 print n
-                split(" -> ", a, n)
+                split(n, a, " -> ")
                 n = a[1]
                 m = a[2]
                 print n, m
