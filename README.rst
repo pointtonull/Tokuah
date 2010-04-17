@@ -15,9 +15,7 @@ Descargarlo
 -----------
 
  * TAR / ZIP: http://github.com/pointtonull/Tokuah/archives/master
- * git::
-
- git clone git://github.com/pointtonull/Tokuah.git
+ * git: git clone git://github.com/pointtonull/Tokuah.git
 
 Dependencias
 ------------
