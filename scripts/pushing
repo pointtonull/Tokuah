@@ -14,11 +14,8 @@ BEGIN{
                 t = "eliminado"
             if (s == "R "){
                 t = "renombrado"
-                print n
                 split(n, a, " -> ")
-                n = a[1]
-                m = a[2]
-                print n, m
+                n = a[2]
             }
             if (s == "M ")
                 t = "modificado"
