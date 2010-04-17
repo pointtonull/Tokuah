@@ -14,8 +14,9 @@ BEGIN{
                 t = "eliminado"
             if (s == "R "){
                 t = "renombrado"
+                print n
                 split(" -> ", a, n)
-                n = a[2]
+                n = a[1]
                 print n
             }
             if (s == "M ")
