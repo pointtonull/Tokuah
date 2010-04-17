@@ -7,6 +7,7 @@ BEGIN{
         if (!($0 ~ ".pyc$" || $0 ~ ".swp$")){
             s = substr($0, 1, 2)
             n = substr($0, 4)
+            m = ""
             t = 0
             if (s == "A " || s == " A")
                 t = "añadido"
@@ -15,17 +16,20 @@ BEGIN{
             if (s == "R " || s == " R"){
                 t = "renombrado"
                 split(n, a, " -> ")
-                print $0
                 n = a[1]
-                print n
+                m = a[2]
             }
             if (s == "M " || s == " M")
                 t = "modificado"
             if (s == "??")
                 d[n]++
+
+            n = n " " m
+            gsub("^ *", "", n)
+            gsub(" *$", "", n)
+
             if (t){
-                gsub("^ *", "", $2)
-                printf "Mensaje para \"%s\" que fue %s: ", $2, t
+                printf "Mensaje para \"%s\" que fue %s: ", n, t
                 getline mensaje
                 a[n] = mensaje
             }
