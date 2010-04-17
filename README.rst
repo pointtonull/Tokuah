@@ -2,7 +2,7 @@
 TOKUAH
 ======
 
-.. figure:: master/data/title.png
+.. figure:: http://github.com/pointtonull/Tokuah/blob/master/master/data/title.pnghttp://github.com/pointtonull/Tokuah/blob/master/master/data/title.png
    :width: 57%
 
 Descripción
