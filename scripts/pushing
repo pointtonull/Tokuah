@@ -4,11 +4,17 @@ gawk '
 BEGIN{
     comando = "git status -s"
     while (comando|getline){
+
         if (!($0 ~ ".pyc$" || $0 ~ ".swp$")){
+            if (!mostrado){
+                print "Deje el mensaje en blanco para postergar un commit"
+                mostrado++
+            }
             s = substr($0, 1, 2)
             n = substr($0, 4)
             m = ""
             t = 0
+
             if (s == "A " || s == " A")
                 t = "añadido"
             if (s == "D " || s == " D")
@@ -31,10 +37,14 @@ BEGIN{
             if (t){
                 printf "Mensaje para \"%s\" que fue %s: ", n, t
                 getline mensaje
-                a[n] = mensaje
+                if (!mensaje)
+                    printf "Se postergó el commit de \"%s\"\n", n
+                else
+                    a[n] = mensaje
             }
         }
     }
+
     close(commando)
     if (length(d)){
         print "Estos archivos son desconocidos para git:", ds
@@ -46,12 +56,15 @@ BEGIN{
     for (i in a){
         errorcommit += system("git commit -qm \"" a[i] "\" \"" i "\"")
     }
-    if (errorcommit){
-        print "El commit no se realizó con exito, ¿escribió los mensajes?"
-        exit 1
-    }
-    else {
-        print "Commit exitoso"
+
+    if (length(a)){
+        if (errorcommit){
+            print "El commit no se realizó con exito, ¿escribió los mensajes?"
+            exit 1
+        }
+        else {
+            print "Commit exitoso"
+        }
     }
 
     print "Intentando push"
