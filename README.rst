@@ -1,5 +1,6 @@
 
 .. figure:: http://github.com/pointtonull/Tokuah/raw/master/master/data/title.png
+   :align: right
 
 Descripción
 ===========
