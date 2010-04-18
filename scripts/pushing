@@ -42,47 +42,42 @@ BEGIN{
             print " ", i
         print "Puede añadirlos ejecutando \"git add archivo\""
     }
-    if (length(a)){
-        for (i in a){
-            errorcommit += system("git commit -qm \"" a[i] "\" \"" i "\"")
-        }
-        if (errorcommit){
-            print "El commit no se realizó con exito, ¿escribió los mensajes?"
+
+    for (i in a){
+        errorcommit += system("git commit -qm \"" a[i] "\" \"" i "\"")
+    }
+    if (errorcommit){
+        print "El commit no se realizó con exito, ¿escribió los mensajes?"
+        exit 1
+    }
+    else {
+        print "Commit exitoso"
+    }
+
+    print "Intentando push"
+    errorpush = system("git push -q")
+    if (errorpush){
+        print "No se ha podido push directo, intentando pull"
+        errorpull = system("git pull -q origin master")
+        if (errorpull){
+            print "No se ha podido pullear, intervención manual requerida"
             exit 1
         }
         else {
-            print "Commit exitoso"
-        }
-
-        print "Intentando push"
-        errorpush = system("git push -q")
-        if (errorpush){
-            print "No se ha podido push directo, intentando pull"
-            errorpull = system("git pull -q origin master")
-            if (errorpull){
-                print "No se ha podido pullear, intervención manual requerida"
-                exit 1
+            print "Hemos podido pull, ahora intentaremos push"
+            errorpush = system("git push -q")
+            if (errorpush){
+                print "Esto si que es raro... push falló..."
+                exit 2
             }
-            else {
-                print "Hemos podido pull, ahora intentaremos push"
-                errorpush = system("git push -q")
-                if (errorpush){
-                    print "Esto si que es raro... push falló..."
-                    exit 2
-                }
-                else{
-                    print "Hemos pull/pusheado con exito!"
-                    exit 0
-                }
+            else{
+                print "Hemos pull/pusheado con exito!"
+                exit 0
             }
-        }
-        else{
-            print "Ese fue un push limpio y en toda regla..."
-            exit 0
         }
     }
     else{
-        print "No hay cambios que aplicar"
+        print "Ese fue un push limpio y en toda regla..."
         exit 0
     }
 }
