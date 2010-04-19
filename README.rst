@@ -37,6 +37,7 @@ Integrantes
  * Padilla, Martin Sebastian
  * Quiroga, Ricardo Daniel
  * Tolaba, Miguel Néstor
+ * Yunes, Oscar
 
 Ayuda y desarrollo
 ==================
