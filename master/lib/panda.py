@@ -6,7 +6,7 @@ import sprite
 import player
 
 def init(g, r, n, facing, *params):
-    s = sprite.Sprite3(g, r, 'panda-%s' % (facing), (1, 1, 31, 45))
+    s = sprite.Sprite3(g, r, 'panda-%s' % (facing), (0, 0, 31, 45))
     s.rect.bottom = r.bottom
     s.rect.centerx = r.centerx
     s.groups.add('solid')
