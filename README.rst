@@ -1,4 +1,3 @@
-
 .. figure:: http://github.com/pointtonull/Tokuah/raw/master/master/data/title.png
    :align: right
 
@@ -30,7 +29,7 @@ Integrantes
 
  * Cabrera, Carlos Marcelo
  * Canchi Ramos, Luis Elbio Saúl
- * Marco Antonio Mansilla
+ * Mansilla, Marco Antonio
  * Maza, Roberto Ariel
  * Novoa Gundel, Matias Alberto
  * Padilla, José Tomás
