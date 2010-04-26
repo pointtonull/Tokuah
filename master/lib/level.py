@@ -373,7 +373,7 @@ class Level:
                 # you really won!!!
                 self.game.music_play('finish')
                 next = menu.Transition(self.game,self.parent)
-                return menu.Pause(self.game,'CONGRATULATIONS!',next)
+                return menu.Pause(self.game,'Felicidades!!!',next)
                 
             else:
                 self.game.music_play('lvlwin',1)
@@ -388,7 +388,7 @@ class Level:
                 return menu.Transition(self.game,Level(self.game,self.fname,self.parent))
             else:
                 next = menu.Transition(self.game,self.parent) 
-                return menu.Pause(self.game,'game over',next)
+                return menu.Pause(self.game,'Juego Terminado',next)
         elif self.status == 'transition':
             self.status = None
             return menu.Transition(self.game,self)
