@@ -366,7 +366,7 @@ class Level:
                 self.status = 'first'
         elif self.status == 'first':
             self.status = None
-            return menu.Pause(self.game,'get ready',self)
+            return menu.Pause(self.game,'Listo',self)
         elif self.status == 'exit':
             self.game.lcur = (self.game.lcur + 1) % len(levels.LEVELS)
             if self.game.lcur == 0:
@@ -400,7 +400,7 @@ class Level:
         #if e.type is KEYDOWN and e.key in (K_ESCAPE,):
         if e.type is USEREVENT and e.action == 'exit':
             next = menu.Transition(self.game,self.parent)
-            return menu.Prompt(self.game,'quit? y/n',next,self)
+            return menu.Prompt(self.game,'Salir? s/n',next,self)
         
         if self.player != None:
             self.player.event(self,self.player,e)
