@@ -9,7 +9,7 @@ import tiles
 import player
 
 def init(g, r, n, vx, *params):
-    s = sprite.Sprite3(g, r, 'frog/walk-right-0', (8, 4, 8, 18)) #(1,1,22,22))
+    s = sprite.Sprite3(g, r, 'frog/walk-left-0', (8, 4, 8, 18)) #(1,1,22,22))
     s.rect.bottom = r.bottom
     s.rect.centerx = r.centerx
     s.groups.add('solid')
@@ -40,20 +40,20 @@ def loop(g,s):
     if s.walking:
         if s._prev != None:
             if (s.rect.x == s._prev.x
-            or sprite.get_code(g,s,sign(s.vx),0) == CODE_FROG_TURN):
+                or sprite.get_code(g,s,sign(s.vx),0) == CODE_FROG_TURN):
                 s.vx = -s.vx
                 s.next_frame = 1
 
         if (s.standing != None
         and sprite.get_code(g, s, sign(s.vx), 1) == CODE_FROG_JUMP):
             #s.vy_jump = -4.0
-            s.vy_jump = -1.8
+            s.vy_jump = -1
             if sprite.get_code(g, s, sign(s.vx) * 2, 1) == CODE_FROG_JUMP:
                 #s.vy_jump = -6.5
-                s.vy_jump = -3.0
+                s.vy_jump = -2
                 if sprite.get_code(g, s, sign(s.vx) * 3, 1) == CODE_FROG_JUMP:
                     #s.vy_jump = -8.5
-                    s.vy_jump = -4.1
+                    s.vy_jump = -2.2
 
             s.jumping = True
             s.walking = False
