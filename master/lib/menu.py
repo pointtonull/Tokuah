@@ -386,7 +386,8 @@ class Credits(engine.State):
             #return Transition(self.game,Intro2(self.game,self.next))
         
     def event(self,e):
-        if e.type is KEYDOWN or (e.type is USEREVENT and e.action in ('jump','bubble','menu','exit')):
+        if e.type is KEYDOWN or (e.type is USEREVENT and e.action in ('jump',
+            'bubble','menu','exit')):
             return Transition(self.game,self.next)
         
     def paint(self,screen):
@@ -397,7 +398,7 @@ class Credits(engine.State):
         fnt = self.game.fonts['help']
         x,y = 8,10
         for text in [
-            'Core Team',
+            'Equipo de desarrollo',
             '',
             'philhassey - director, code, levels',
             'trick - tiles, sprites',
