@@ -366,7 +366,7 @@ class Level:
                 self.status = 'first'
         elif self.status == 'first':
             self.status = None
-            return menu.Pause(self.game,'Listo',self)
+            return menu.Pause(self.game,'Listo?',self)
         elif self.status == 'exit':
             self.game.lcur = (self.game.lcur + 1) % len(levels.LEVELS)
             if self.game.lcur == 0:
