@@ -7,7 +7,7 @@ import player
 from cnst import *
 
 def init(g,r,n,*params):
-    s = sprite.Sprite3(g,r,'blob',(0,0,13,11))
+    s = sprite.Sprite3(g,r,'blob',(0,0,16,15))
     s.rect.bottom = r.bottom
     s.rect.centerx = r.centerx
     s.groups.add('solid')
