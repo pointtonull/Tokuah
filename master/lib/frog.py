@@ -47,7 +47,7 @@ def loop(g,s):
         if (s.standing != None
         and sprite.get_code(g, s, sign(s.vx), 1) == CODE_FROG_JUMP):
             #s.vy_jump = -4.0
-            s.vy_jump = -1
+            s.vy_jump = -1.8
             if sprite.get_code(g, s, sign(s.vx) * 2, 1) == CODE_FROG_JUMP:
                 #s.vy_jump = -6.5
                 s.vy_jump = -2
