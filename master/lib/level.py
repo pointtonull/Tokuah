@@ -379,7 +379,7 @@ class Level:
                 self.game.music_play('lvlwin',1)
                 l2 = Level(self.game,self.fname,self.parent)
                 next = menu.Transition(self.game,l2)
-                return menu.Pause(self.game,'good job!',next)
+                return menu.Pause(self.game,'Bien Hecho!',next)
                 
                 
         elif self.status == 'dead':
