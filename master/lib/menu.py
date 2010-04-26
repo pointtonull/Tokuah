@@ -320,7 +320,7 @@ class Prompt(engine.State):
         self.bkgr = self.game.screen.convert()
         
     def event(self,e):
-        if e.type is KEYDOWN and e.key == K_y:
+        if e.type is KEYDOWN and e.key == K_s:
             return self.yes
         if e.type is KEYDOWN and e.key == K_n:
             return self.no
