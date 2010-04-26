@@ -452,15 +452,17 @@ class Help(engine.State):
         for text in [
             'Ayuda',
             '',
+            'Ayuda a Tokuah a salvar',
+            'el pueblo Wichi',
+            'superando las pruebas...',
+            '',
+            'Controles',
+            '',
             'Usa las flechas para',
             'mover el personaje.',
             'Tecla z - Salta',
             'Tecla x - Dispara',
             '',
-            'Se necesitan 3 disparos para',
-            'derrotar a un enemigo. A menos',
-            'que tengas el poder.',
-            'Puedes montar las burbujas!',
             ]:
             c = (255,255,255)
             img = fnt.render(text,1,(0,0,0))

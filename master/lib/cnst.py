@@ -6,7 +6,7 @@ FPS = 60
 IROTATE = 64
 #FPS = 10
 
-TITLE = "Barbie Seahorse Adventures" #"Barbie Seahorse Adventures" #"Bubble Kong" # #"The Volcanic Rollercoaster Ride!"
+TITLE = "Tokuah" #"Tokuah en el desafio de los ajat"
 
 SCALE2X = False  #use the scale2x scaler to make things look hi-res
 LOWRES = False #keep it in 320x240 mode
