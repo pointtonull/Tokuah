@@ -1,31 +1,7 @@
 <?xml version="1.0"?>
 <todo version="0.1.20">
-    <note priority="veryhigh" time="1271922166">
-        Definir requerimientos
-        <note priority="medium" time="1271922188">
-            materiales
-            <note priority="medium" time="1271924760">
-                lugar, oficina
-            </note>
-        </note>
-        <note priority="medium" time="1271922209" done="1271924704">
-            logisticos
-            <comment>
-                no son necesario
-            </comment>
-        </note>
-        <note priority="medium" time="1271922378">
-            personal auxiliar
-        </note>
-    </note>
     <note priority="veryhigh" time="1271922544">
         preparar demo
-    </note>
-    <note priority="high" time="1271922425" done="1272282844">
-        preparar curriculum y papeles
-        <comment>
-            los enviamos
-        </comment>
     </note>
     <note priority="medium" time="1271922448">
         leer código
@@ -41,11 +17,50 @@
         <note priority="high" time="1271922680">
             personalizar aspecto
         </note>
+        <note priority="high" time="1272296941">
+            mini juegos
+        </note>
+        <note priority="high" time="1272297055">
+            permitir ajustar nivel de dificultad del juego
+        </note>
+        <note priority="high" time="1272297099">
+            empaquetado
+            <note priority="medium" time="1272297112">
+                py2exe
+            </note>
+            <note priority="medium" time="1272297117">
+                py2app
+            </note>
+            <note priority="medium" time="1272297124">
+                setup.py
+            </note>
+            <note priority="medium" time="1272297133">
+                save-locator
+            </note>
+            <note priority="medium" time="1272297142">
+                iconos
+            </note>
+        </note>
         <note priority="medium" time="1271922670">
             implementar intermedios animados
         </note>
         <note priority="medium" time="1271922718">
             capacidad de puzles
+        </note>
+        <note priority="medium" time="1272296958">
+            implementar pause, quit y otras cosas necesarias
+        </note>
+        <note priority="medium" time="1272297037">
+            convertir los pandas a cactus
+        </note>
+        <note priority="medium" time="1272297078">
+            F2 para habilitar/deshabilitar sonido
+        </note>
+        <note priority="verylow" time="1272296974">
+            mejorar menus
+        </note>
+        <note priority="verylow" time="1272296989">
+            powers up contextuales
         </note>
     </note>
 </todo>

@@ -1,22 +1,21 @@
-#TODO: LIST
-
-- Empaquetado:
-  - py2exe
-  - py2app
-  - setup.py
-  - save-locator.py y esas cosas
-  - iconos!!!
-- f2 = habilita/deshabilita sonido
-- Ajustar el nivel de dificultad del juego
-- Hacer que los pandas sean matables con muchos tiros y que, al matar uno, se vaya
-  a un nivel especial.
-- Verificar niveles por la capacidad de saltar a lo más alto (no se debería golpear
-    un bloque invisible al menos que se suponga que haya uno allí)
-- Añadir una señal "Salida" al final de los niveles (puede ser simbolica)
-- Añadir mapas especiales 
-- Añadir item de invisibilidad
-- Más poderes especiales
-- Mejorar menus
-- Implementar pause, quit y otras cosas necesarias
-- Mini-juegos
-- Doble background
+  1.preparar demo
+  2.leer código
+  3.escribir modificaciones de convención
+  4.escribir modificaciones reales
+      1.introducir personajes propios
+      2.personalizar aspecto
+      3.mini juegos
+      4.permitir ajustar nivel de dificultad del juego
+      5.empaquetado
+          1.py2exe
+          2.py2app
+          3.setup.py
+          4.save-locator
+          5.iconos
+      6.implementar intermedios animados
+      7.capacidad de puzles
+      8.implementar pause, quit y otras cosas necesarias
+      9.convertir los pandas a cactus
+     10.F2 para habilitar/deshabilitar sonido
+     11.mejorar menus
+     12.powers up contextuales
