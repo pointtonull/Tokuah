@@ -74,7 +74,7 @@ from pygame.locals import *
 # the following line is not needed if pgu is installed
 import os
 import sys; sys.path.insert(0, os.path.join('lib'))
-
+import pgu
 from pgu import gui, html, tilevid, isovid, hexvid
 
 
