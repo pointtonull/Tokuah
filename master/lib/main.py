@@ -18,13 +18,16 @@ from pgu import engine
 from cnst import *
 import data
 
+import menu
+import level
+
 class Input:
     def __init__(self):
         self.up = False
         self.down = False
         self.left = False
         self.right = False
-        
+
 class Sound:
     def __init__(self,fname):
         self.sound = None
@@ -46,10 +49,10 @@ class Game(engine.Game):
         self.lives = 2
         self.coins = 0
         self.powerup = False
-        
+
     def init(self):
         self.random = 0
-        
+
         self.init_play()
         self.lcur = 0
 
@@ -74,46 +77,41 @@ class Game(engine.Game):
 
         pygame.joystick.init()
         joy_count = pygame.joystick.get_count()
+
         for joynum in range(joy_count):
             joystick = pygame.joystick.Joystick(joynum)
             joystick.init()
-            
+
         self.input = Input()
-        
+
         if not self.lowres:
             self._screen = self.screen
             self.screen = self._screen.convert().subsurface(0,0,SW,SH)
-            
+
         pygame.font.init()
-        
+
         f_main = data.filepath(os.path.join('fonts','04B_20__.TTF'))
         f_scale = 0.35
-        #f_main = data.filepath(os.path.join('fonts','04B_25__.TTF'))
-        #f_scale = 0.75
-        #f_main = data.filepath(os.path.join('fonts','04B_11__.TTF'))
-        #f_scale = 0.67
-        
-        self.fonts = {}
-        self.fonts['intro'] = pygame.font.Font(f_main,int(36*f_scale))
-        #self.fonts['intro2'] = pygame.font.Font(data.filepath(os.path.join('fonts','vectroid.ttf')),72)
 
-        #self.fonts['title'] = pygame.font.Font(data.filepath(os.path.join('fonts','vectroid.ttf')),32)
+        self.fonts = {}
+        self.fonts['intro'] = pygame.font.Font(f_main,int(36 * f_scale))
+
         self.fonts['help'] = pygame.font.Font(f_main,int(24*f_scale))
-        
-        self.font = self.fonts['menu'] = pygame.font.Font(f_main,int(24*f_scale))
-        
+
+        self.font = self.fonts['menu'] = pygame.font.Font(
+            f_main,int(24 * f_scale))
+
         self.fonts['level'] = pygame.font.Font(f_main,int(24*f_scale))
-        
+
         self.fonts['pause'] = pygame.font.Font(f_main,int(36*f_scale))
-        
+
         import level
         level.pre_load()
-        
+
         try:
-            
-            
-            if '-nosound' in sys.argv: 1/0
-            
+            if '-nosound' in sys.argv:
+                1 / 0
+
             # stop crackling sound on some windows XP machines.
             if os.name == 'posix' or 1:
                 try:
@@ -123,25 +121,29 @@ class Game(engine.Game):
             else:
                 pygame.mixer.pre_init()
 
-            
+
             pygame.mixer.init()
         except:
             print 'mixer not initialized'
-        
+
         self._music_name = None
-        
+
         self.sfx = {}
+
         for name in ['bubble','capsule','coin','hit','item','powerup',
             'pop','jump','explode','door','fally','boss_explode']:
-            self.sfx[name] = Sound(data.filepath(os.path.join('sfx','%s.wav'%name)))
-        
+            self.sfx[name] = Sound(data.filepath(
+                os.path.join('sfx','%s.wav'%name)))
+
+
     def tick(self):
         r = self.timer.tick()
         if r != None: print r
-        
+
+
     def flip(self):
         if not self.lowres:
-            
+
             if self.scale2x:
                 tmp = pygame.transform.scale2x(self.screen)#,(SW*2,SH*2))
                 self._screen.blit(tmp,(0,0))
@@ -152,20 +154,21 @@ class Game(engine.Game):
                 # else
                 tmp = pygame.transform.scale(self.screen,(SW*2,SH*2))
                 self._screen.blit(tmp,(0,0))
-                
+
             # silly TV effect ...
             if '-tv' in sys.argv:
                 for y in xrange(0,SH*2,2):
                     self._screen.fill((0,0,0),(0,y,SW*2,1))
-            
+
         pygame.display.flip()
-        
-    def music_play(self,name,n=-1):
+
+
+    def music_play(self, name, n=-1):
         if self._music_name == name: return
         self._music_name = name
-        
+
         if not pygame.mixer.get_init(): return
-        
+
         for ext in ['wav','ogg']:
             fname = data.filepath(os.path.join('music','%s.%s'%(name,ext)))
             ok = False
@@ -184,11 +187,11 @@ class Game(engine.Game):
                 #import traceback; traceback.print_exc()
                 pass
             if ok: break
-        
+
     def event(self,e):
         # The keys, buttons and axis for the input can be changed in cnst.py
 
-        self.random += 1 + self.random % 100 # this will generate pseudo random numbers
+        self.random += 1 + self.random % 100
 
         event = None
         action = None
@@ -255,24 +258,24 @@ class Game(engine.Game):
             action = 'menu'
         elif e.type is JOYBUTTONDOWN and e.button in MENU_BUTTONS:
             action = 'menu'
-        
+
         if action != None:
             event = pygame.event.Event(USEREVENT, action=action)
 
             self.fnc('event', event)
             return True
-            
-        if e.type is QUIT: 
+
+        if e.type is QUIT:
             self.state = engine.Quit(self)
             return 1
-        
+
         #if e.type is KEYDOWN and e.key == K_ESCAPE:
             #self.state = engine.Quit(self)
             #return 1
-            
-        
+
+
         if e.type is KEYDOWN and e.key == K_F4: #K_F12:
-            
+
             try:
                 dname = '.'
                 if not os.path.exists(dname):
@@ -296,20 +299,18 @@ class Game(engine.Game):
 def main():
     #print "Hello from your game's main()"
     #print data.load('sample.txt').read()
-    
+
     fname = None #data.filepath(os.path.join('levels','test.tga'))
     for v in sys.argv:
         if '.tga' in v:
             fname = v
-            
-    g = Game()
-    g.init()
-    import menu
-    l = l2 = menu.Menu(g)
+
+    game = Game()
+    game.init()
+    l = l2 = menu.Menu(game)
     #l = menu.Intro(g,l2)
     if fname != None:
-        import level
-        l = level.Level(g,fname,engine.Quit(g))
-        
-    g.run(l)
+        l = level.Level(game, fname,engine.Quit(game))
+
+    game.run(l)
     pygame.quit()
