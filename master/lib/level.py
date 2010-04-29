@@ -350,7 +350,7 @@ class Level:
             
         # more frames
         self.frame += 1
-        if (self.frame%FPS)==0:
+        if (self.frame % FPS) == 0:
             pass
             #print self.player.rect.bottom
             #print '' 
@@ -373,34 +373,34 @@ class Level:
                 # you really won!!!
                 self.game.music_play('finish')
                 next = menu.Transition(self.game,self.parent)
-                return menu.Pause(self.game,'Felicidades!!!',next)
+                return menu.Pause(self.game,'Felicidades!!!', next)
                 
             else:
-                self.game.music_play('lvlwin',1)
-                l2 = Level(self.game,self.fname,self.parent)
-                next = menu.Transition(self.game,l2)
-                return menu.Pause(self.game,'Bien Hecho!',next)
+                self.game.music_play('lvlwin', 1)
+                l2 = Level(self.game, self.fname,self.parent)
+                next = menu.Transition(self.game, l2)
+                return menu.Pause(self.game, 'Bien Hecho!', next)
                 
                 
         elif self.status == 'dead':
             if self.game.lives:
                 self.game.lives -= 1
-                return menu.Transition(self.game,Level(self.game,self.fname,self.parent))
+                return menu.Transition(self.game, Level(self.game, self.fname,
+                    self.parent))
             else:
                 next = menu.Transition(self.game,self.parent) 
-                return menu.Pause(self.game,'Juego Terminado',next)
+                return menu.Pause(self.game, 'Juego Terminado', next)
         elif self.status == 'transition':
             self.status = None
             return menu.Transition(self.game,self)
             
             
-        
-    
+
     def event(self,e):
         #if e.type is KEYDOWN and e.key in (K_ESCAPE,):
         if e.type is USEREVENT and e.action == 'exit':
             next = menu.Transition(self.game,self.parent)
-            return menu.Prompt(self.game,'Salir? s/n',next,self)
+            return menu.Prompt(self.game,'Salir? S/N', next, self)
         
         if self.player != None:
             self.player.event(self,self.player,e)
@@ -413,31 +413,40 @@ class Level:
         top_y = pad
         
         blit = screen.blit
-        text = '%05d'%self.game.score
-        c = (0,0,0)
-        img = fnt.render(text,1,c)
-        x,y = 0+pad,top_y
-        #blit(img,(x-1,y)); blit(img,(x+1,y)) ; blit(img,(x,y-1)); blit(img,(x-1,y+1))
-        blit(img,(x+1,y+1))
-        c = (255,255,255)
-        img = fnt.render(text,1,c)
+        text = '%05d' % self.game.score
+        c = (0, 0, 0)
+        img = fnt.render(text, 1, c)
+        x, y = 0 + pad, top_y
+
+#        blit(img, (x - 1, y))
+#        blit(img, (x + 1, y))
+#        blit(img, (x, y - 1))
+#        blit(img, (x - 1, y + 1))
+
+        blit(img, (x + 1, y + 1))
+
+        c = (255, 255, 255)
+        img = fnt.render(text, 1, c)
         blit(img,(x,y)) ; blit(img,(x,y))
         
-        #text = 'LIVES: %d'%self.game.lives
+#        text = 'LIVES: %d' % self.game.lives
+
         for i in xrange(self.game.lives):
             img = self.images[0x0C] # the extra life tile
             x,y = SW-1.05*img.get_width()*i - img.get_width() - pad, pad
             blit(img, (x, y))
-        #text = '%d . %02d'%(self.game.lives,self.game.coins)
-        #c = (0,0,0)
-        #img = fnt.render(text,1,c)
-        #x,y = SW-img.get_width()-pad,0
-        #blit(img,(x-1,y)); blit(img,(x+1,y)) ; blit(img,(x,y-1)); blit(img,(x-1,y+1))
-        #blit(img,(x+1,y+1))
-        #c = (255,255,255)
-        #img = fnt.render(text,1,c)
-        #blit(img,(x,y)) ; blit(img,(x,y))
-        
+
+#        text = '%d . %s'%(self.game.lives, self.game.timer)
+#        c = (0,0,0)
+#        img = fnt.render(text,1,c)
+#        x,y = SW-img.get_width()-pad,0
+#        blit(img,(x-1,y)); blit(img,(x+1,y))
+#        blit(img,(x,y-1)); blit(img,(x-1,y+1))
+#        blit(img,(x+1,y+1))
+#        c = (255,255,255)
+#        img = fnt.render(text,1,c)
+#        blit(img,(x,y)) ; blit(img,(x,y))
+                
         text = '%02d'%self.game.coins
         c = (0,0,0)
         img = fnt.render(text,1,c)
