@@ -2,7 +2,7 @@ from pygame.locals import *
 
 SW,SH = 320,240
 TW,TH = 16,16
-FPS = 60
+FPS = 99
 IROTATE = 64
 #FPS = 10
 
