@@ -70,7 +70,7 @@ class Game(engine.Game):
         if FULL: mode |= FULLSCREEN
         if '-full' in sys.argv:
             mode ^= FULLSCREEN
-        self.screen = pygame.display.set_mode((sw,sh),mode)
+        self.screen = pygame.display.set_mode((sw,sh), mode, 16)
         pygame.display.set_caption(TITLE)
         self.timer = timer.Timer(FPS)
         #self.timer = timer.Speedometer()
@@ -145,20 +145,16 @@ class Game(engine.Game):
         if not self.lowres:
 
             if self.scale2x:
-                tmp = pygame.transform.scale2x(self.screen)#,(SW*2,SH*2))
-                self._screen.blit(tmp,(0,0))
+                tmp = pygame.transform.scale2x(self.screen)
+                self._screen.blit(tmp, (0, 0))
             else:
-                # test version of pygame ..
-                # if 1.8.x
-                # pygame.transform.scale(self.screen,(SW*2,SH*2),self._screen)
-                # else
-                tmp = pygame.transform.scale(self.screen,(SW*2,SH*2))
-                self._screen.blit(tmp,(0,0))
+                tmp = pygame.transform.scale(self.screen, (SW * 2, SH * 2))
+                self._screen.blit(tmp, (0, 0))
 
             # silly TV effect ...
             if '-tv' in sys.argv:
-                for y in xrange(0,SH*2,2):
-                    self._screen.fill((0,0,0),(0,y,SW*2,1))
+                for y in xrange(0, SH * 2, 2):
+                    self._screen.fill((0, 0, 0), (0, y, SW*2, 1))
 
         pygame.display.flip()
 
