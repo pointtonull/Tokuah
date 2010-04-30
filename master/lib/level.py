@@ -26,9 +26,12 @@ def load_level(fname):
     return l
 
 def load_tiles(fname):
-    img = pygame.image.load(fname).convert_alpha()
-    w,h = img.get_width()/TW,img.get_height()/TH
-    return [img.subsurface((n%w)*TW,(n/w)*TH,TW,TH) for n in xrange(0,w*h)]
+#    img = pygame.image.load(fname).convert_alpha()
+    img = pygame.image.load(fname).convert()
+#    img.set_alpha(False)
+    print "weee"
+    w, h = img.get_width()/TW,img.get_height()/TH
+    return [img.subsurface((n%w)*TW,(n/w)*TH,TW,TH) for n in xrange(0, w * h)]
 
 def load_images(dname):
     r = {}
@@ -96,7 +99,6 @@ class Level:
         self.images[None] = img
         for n in xrange(0,len(self._tiles)): self.images[n] = self._tiles[n]
 
-        import tiles
         self._images = []
         for m in xrange(0,IROTATE):
             r = dict(self.images)
