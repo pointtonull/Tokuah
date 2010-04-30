@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 #-*- coding: UTF-8 -*-
-
 import os
 
 import pygame
 from pygame.locals import *
 
 from cnst import *
-from decoradores import Cache
+from decoradores import Cache, Verbose
 
 import data
 
@@ -18,7 +17,6 @@ import levels
 
 def load_level(fname):
     img = pygame.image.load(fname)
-    #return [[[img.get_at((x,y))[n] for x in xrange(0,img.get_width())] for y in xrange(0,img.get_height())] for n in xrange(0,4)]
     w,h = img.get_width(),img.get_height()
     l = [[[0 for x in xrange(0,w)] for y in xrange(0,h)] for n in xrange(0,3)]
     for y in xrange(0,h):
@@ -31,15 +29,18 @@ def load_level(fname):
 
 #Cache no debería ser necesario ni funcionar al menos que algo esté muy mal
 #escrito. Ergo, algo está muy mal escrito ¬¬
+@Verbose(VERBOSE)
 @Cache(10)
 def load_tiles(fname):
+    'Carga los tiles, debería ser llamada una unica vez... pero no es así ¬¬'
     img = pygame.image.load(fname).convert_alpha()
 #    img = pygame.image.load(fname).convert()
     img.set_alpha(False)
-    print "weee" ## Porqué esto se ejecuta dos veces?
     w, h = img.get_width()/TW,img.get_height()/TH
     return [img.subsurface((n%w)*TW,(n/w)*TH,TW,TH) for n in xrange(0, w * h)]
 
+@Verbose(VERBOSE)
+@Cache(10)
 def load_images(dname):
     r = {}
     for root, dirs, files in os.walk(dname):
@@ -89,7 +90,6 @@ class Level:
         self.parent = parent
 
     def init(self):
-        #self._tiles = load_tiles(data.filepath('tiles.tga'))
         self._tiles = Level._tiles
         fname = self.fname
         if fname == None:
