@@ -184,10 +184,6 @@ class Cache:
 
     def flush(self):
 
-#        for i in self.cache.iteritems():
-#            if time.time() - i[1][0] > self.limite:
-#                del(self.cache[i[0]])
-
         if self.ruta:
             try:
                 f = open(self.ruta, "rb")
@@ -246,7 +242,7 @@ class Retry:
         return call
 
 
-def Verbose(level):
+def Verbose(level=1):
     def decorador(func):
         @wraps(func)
         def dfunc(*args, **kwargs):
@@ -266,8 +262,6 @@ def Verbose(level):
             return result
         return dfunc
     return decorador
-
-
 
 
 class MetaSingleton(type):
