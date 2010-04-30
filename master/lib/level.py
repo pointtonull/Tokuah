@@ -1,9 +1,13 @@
+#!/usr/bin/env python
+#-*- coding: UTF-8 -*-
+
 import os
 
 import pygame
 from pygame.locals import *
 
 from cnst import *
+from decoradores import Cache
 
 import data
 
@@ -25,11 +29,14 @@ def load_level(fname):
             l[2][y][x] = b
     return l
 
+#Cache no debería ser necesario ni funcionar al menos que algo esté muy mal
+#escrito. Ergo, algo está muy mal escrito ¬¬
+@Cache(10)
 def load_tiles(fname):
-#    img = pygame.image.load(fname).convert_alpha()
-    img = pygame.image.load(fname).convert()
-#    img.set_alpha(False)
-    print "weee"
+    img = pygame.image.load(fname).convert_alpha()
+#    img = pygame.image.load(fname).convert()
+    img.set_alpha(False)
+    print "weee" ## Porqué esto se ejecuta dos veces?
     w, h = img.get_width()/TW,img.get_height()/TH
     return [img.subsurface((n%w)*TW,(n/w)*TH,TW,TH) for n in xrange(0, w * h)]
 
