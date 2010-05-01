@@ -3,7 +3,6 @@
 import cPickle
 import time
 import signal
-import multiprocessing
 import inspect
 from debug import debug
 from functools import wraps
@@ -64,38 +63,13 @@ def signaltimeout(timeout, func, *args, **kwargs):
 
     return result
 
-def mptimeout(timeout, func, *args, **kwargs):
-    assert inspect.isfunction(func) or inspect.ismethod(func)
-
-    @wraps(func)
-    def newfunc(queue, args, kwargs):
-        return queue.put(func(*args, **kwargs))
-
-    queue = multiprocessing.Queue()
-    proc = multiprocessing.Process(None, newfunc, newfunc.func_name,
-        (queue, args, kwargs))
-    proc.start()
-    proc.join(timeout)
-
-    try:
-        return queue.get()
-    except:
-        return None
-
-
-#    if proc.is_alive():
-#        proc.terminate()
-#        raise TimeoutExc()
-#    else:
-#        return queue.get()
-
 
 def Timeout(time, default=None):
     def decorator(func):
         def decorated(*args, **kwargs):
 
             try:
-                return mptimeout(time, func, *args, **kwargs)
+                return signaltimeout(time, func, *args, **kwargs)
             except TimeoutExc:
                 return default
 
