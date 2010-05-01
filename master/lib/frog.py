@@ -9,7 +9,7 @@ import tiles
 import player
 
 def init(g, r, n, vx, *params):
-    s = sprite.Sprite3(g, r, 'frog/walk-left-0', (8, 4, 18, 19)) #(1,1,22,22))
+    s = sprite.Sprite3(g, r, 'frog/walk-left-0', (8, 4, 18, 19))
     s.rect.bottom = r.bottom
     s.rect.centerx = r.centerx
     s.groups.add('solid')
