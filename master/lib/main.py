@@ -21,6 +21,9 @@ import data
 import menu
 import level
 
+from debug import debug
+from decoradores import Verbose
+
 class Input:
     def __init__(self):
         self.up = False
@@ -50,6 +53,7 @@ class Game(engine.Game):
         self.coins = 0
         self.powerup = False
 
+    @Verbose(VERBOSE)
     def init(self):
         self.random = 0
 
@@ -124,7 +128,7 @@ class Game(engine.Game):
 
             pygame.mixer.init()
         except:
-            print 'mixer not initialized'
+            debug('mixer not initialized')
 
         self._music_name = None
 
@@ -302,7 +306,7 @@ def main():
             fname = v
 
     game = Game()
-    game.init()
+#    game.init() ## WTF!
     l = l2 = menu.Menu(game)
     #l = menu.Intro(g,l2)
     if fname != None:
