@@ -15,6 +15,8 @@ import codes
 import menu
 import levels
 
+@Cache(60*60*10)
+@Verbose(VERBOSE)
 def load_level(fname):
     img = pygame.image.load(fname)
     w,h = img.get_width(),img.get_height()
@@ -29,8 +31,8 @@ def load_level(fname):
 
 #Cache no debería ser necesario ni funcionar al menos que algo esté muy mal
 #escrito. Ergo, algo está muy mal escrito ¬¬
+@Cache(60)
 @Verbose(VERBOSE)
-@Cache(10)
 def load_tiles(fname):
     'Carga los tiles, debería ser llamada una unica vez... pero no es así ¬¬'
     img = pygame.image.load(fname).convert_alpha()
@@ -39,8 +41,8 @@ def load_tiles(fname):
     w, h = img.get_width()/TW,img.get_height()/TH
     return [img.subsurface((n%w)*TW,(n/w)*TH,TW,TH) for n in xrange(0, w * h)]
 
-@Verbose(VERBOSE)
 @Cache(10)
+@Verbose(VERBOSE)
 def load_images(dname):
     r = {}
     for root, dirs, files in os.walk(dname):
