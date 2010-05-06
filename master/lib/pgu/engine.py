@@ -76,16 +76,12 @@ class Game:
         s = self.state
         if not hasattr(s,f): return 0
         f = getattr(s,f)
-        #try:
-    	if v != None: r = f(v)
-	else: r = f()
-   	if r != None:
-	    self.state = r
-   	    self.state._paint = 1
-	    return 1
-        #except:
-        #    import traceback; traceback.print_exc()
-            
+        if v != None: r = f(v)
+        else: r = f()
+        if r != None:
+            self.state = r
+            self.state._paint = 1
+            return 1
         return 0
         
     def run(self,state,screen=None):
