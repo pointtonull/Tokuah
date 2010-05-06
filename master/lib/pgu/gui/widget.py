@@ -2,7 +2,14 @@
 """
 import pygame
 
+import pguglobals
 import style
+
+class SignalCallback:
+    # The function to call
+    func = None
+    # The parameters to pass to the function (as a list)
+    params = None
 
 class Widget:
     """Template object - base for all widgets.
@@ -45,6 +52,9 @@ class Widget:
             return 256,256
     </code>
     """
+
+    # The name of the widget (or None if not defined)
+    name = None
     
     def __init__(self,**params): 
         #object.Object.__init__(self) 
@@ -78,12 +88,13 @@ class Widget:
         self.pcls = ""
         
         if params['decorate'] != False:
-            import app
-            if not hasattr(app.App,'app'):
+            if (not pguglobals.app):
+                # TODO - fix this somehow
+                import app
                 print 'gui.widget: creating an App'
-                app.App.app = app.App()
-            app.App.app.theme.decorate(self,params['decorate'])
-            
+                app.App()
+            pguglobals.app.theme.decorate(self,params['decorate'])
+
     def focus(self):
         """Focus this Widget.
         
@@ -92,24 +103,32 @@ class Widget:
         if getattr(self,'container',None) != None: 
             if self.container.myfocus != self:  ## by Gal Koren
                 self.container.focus(self)
+
     def blur(self): 
         """Blur this Widget.
         
         <pre>Widget.blur()</pre>
         """
         if getattr(self,'container',None) != None: self.container.blur(self)
+
     def open(self):
         """Open this Widget as a modal dialog.
         
         <pre>Widget.open()</pre>
         """
-        if getattr(self,'container',None) != None: self.container.open(self)
-    def close(self): 
+        #if getattr(self,'container',None) != None: self.container.open(self)
+        pguglobals.app.open(self)
+
+    def close(self, w=None):
         """Close this Widget (if it is a modal dialog.)
         
         <pre>Widget.close()</pre>
         """
-        if getattr(self,'container',None) != None: self.container.close(self)
+        #if getattr(self,'container',None) != None: self.container.close(self)
+        if (not w):
+            w = self
+        pguglobals.app.close(w)
+
     def resize(self,width=None,height=None):
         """Template method - return the size and width of this widget.
 
@@ -125,6 +144,7 @@ class Widget:
         <p>If not overridden, will return self.style.width, self.style.height</p>
         """
         return self.style.width, self.style.height
+
     def chsize(self):
         """Change the size of this widget.
         
@@ -137,11 +157,11 @@ class Widget:
         if not hasattr(self,'_painted'): return
         
         if not hasattr(self,'container'): return
-        import app
         
-        if hasattr(app.App,'app'):
-            if app.App.app._chsize: return
-            app.App.app.chsize()
+        if pguglobals.app:
+            if pguglobals.app._chsize:
+                return
+            pguglobals.app.chsize()
             return
             
         #if hasattr(app.App,'app'):
@@ -218,7 +238,7 @@ class Widget:
         
         <pre>Widget.get_abs_rect(): return pygame.Rect</pre>
         """
-        x, y = self.rect.x , self.rect.y
+        x, y = self.rect.x, self.rect.y
         x += self._rect_content.x
         y += self._rect_content.y
         c = getattr(self,'container',None)
@@ -231,10 +251,10 @@ class Widget:
             c = getattr(c,'container',None)
         return pygame.Rect(x, y, self.rect.w, self.rect.h)
 
-    def connect(self,code,fnc,*values):
+    def connect(self,code,func,*params):
         """Connect a event code to a callback function.
         
-        <p>There may only be one callback per event code.</p>
+        <p>There may be multiple callbacks per event code.</p>
         
         <pre>Object.connect(code,fnc,value)</pre>
         
@@ -258,9 +278,38 @@ class Widget:
         w.connect(gui.CLICK,onclick,'PGU Button Clicked')
         </code>
         """
-        
-        self.connects[code] = {'fnc':fnc,'values':values}
-    
+        if (not code in self.connects):
+            self.connects[code] = []
+        for cb in self.connects[code]:
+            if (cb.func == func):
+                # Already connected to this callback function
+                return
+        # Wrap the callback function and add it to the list
+        cb = SignalCallback()
+        cb.func = func
+        cb.params = params
+        self.connects[code].append(cb)
+
+    # Remove signal handlers from the given event code. If func is specified,
+    # only those handlers will be removed. If func is None, all handlers
+    # will be removed.
+    def disconnect(self, code, func=None):
+        if (not code in self.connects):
+            return
+        if (not func):
+            # Remove all signal handlers
+            del self.connects[code]
+        else:
+            # Remove handlers that call 'func'
+            n = 0
+            callbacks = self.connects[code]
+            while (n < len(callbacks)):
+                if (callbacks[n].func == func):
+                    # Remove this callback
+                    del callbacks[n]
+                else:
+                    n += 1
+
     def send(self,code,event=None):
         """Send a code, event callback trigger.
         
@@ -271,16 +320,16 @@ class Widget:
         <dt>event<dd>event
         </dl>
         """
-        if code in self.connects:
-            con = self.connects[code]
-            #con['fnc'](*con['values'])
-        
-            fnc = con['fnc']
-            values = list(con['values'])
-            
-            nargs = fnc.func_code.co_argcount
-            names = list(fnc.func_code.co_varnames)[:nargs]
-            if hasattr(fnc,'im_class'): names.pop(0)
+        if (not code in self.connects):
+            return
+        # Trigger all connected signal handlers
+        for cb in self.connects[code]:
+            func = cb.func
+            values = list(cb.params)
+
+            nargs = func.func_code.co_argcount
+            names = list(func.func_code.co_varnames)[:nargs]
+            if hasattr(func,'im_class'): names.pop(0)
             
             args = []
             magic = {'_event':event,'_code':code,'_widget':self}
@@ -292,7 +341,7 @@ class Widget:
                 else:
                     break
             args.extend(values)
-            fnc(*args)
+            func(*args)
     
     def _event(self,e):
         if self.disabled: return
@@ -317,3 +366,12 @@ class Widget:
         """
         
         return
+
+    # Returns the top-level widget (usually the Desktop) by following the
+    # chain of 'container' references.
+    def get_toplevel(self):
+        top = self
+        while (getattr(top, "container", None)):
+            top = top.container
+        return top
+
