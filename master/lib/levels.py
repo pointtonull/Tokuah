@@ -4,7 +4,7 @@ LEVELS = [
     ('tim_2.tga',       'Jungle - 3',),
     ('phil_2.tga',      'Jungle - 4',),
     ('phil_13.tga',     'Jungle - 5',),
-    
+    ('prueba.tga',     'prueba',),
     
     ('pekuja_3.tga',    'Volcano - 1',),
     ('tim_4.tga',       'Volcano - 2',),
