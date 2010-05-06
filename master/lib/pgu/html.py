@@ -1,5 +1,7 @@
 """a html renderer
 """
+
+import sys
 import htmllib
 import re
 import pygame
@@ -9,6 +11,14 @@ from pgu import gui
 
 _amap = {'left':-1,'right':1,'center':0,None:None,'':None,}
 _vamap = {'top':-1,'bottom':1,'center':0,'middle':0,None:None,'':None,}
+
+# Used by the HTML parser to load external resources (like images). This 
+# class loads content from the local file system. But you can pass your own 
+# resource loader to the HTML parser to find images by other means.
+class ResourceLoader(object):
+    # Loads an image and returns it as a pygame image
+    def load_image(this, path):
+        return pygame.image.load(path)
 
 class _dummy:
     pass
@@ -45,9 +55,14 @@ class _hr(gui.Color):
         #self.rect.w = 1
 
 class _html(htmllib.HTMLParser):
-    def init(self,doc,font,color,_globals,_locals):
+    def init(self,doc,font,color,_globals,_locals,loader=None):
         self.mystack = []
         self.document = doc
+        if (loader):
+            self.loader = loader
+        else:
+            # Use the default resource loader
+            self.loader = ResourceLoader()
         self.myopen('document',self.document)
         
         self.myfont = self.font = font
@@ -116,9 +131,11 @@ class _html(htmllib.HTMLParser):
         
         params = {'style':{}}
         style = params['style']
-        
-        if 'bgcolor' in r: style['background'] = pygame.Color(r['bgcolor'])
-        if 'background' in r: style['background'] = pygame.image.load(r['background'])
+
+        if 'bgcolor' in r: 
+            style['background'] = gui.parse_color(r['bgcolor'])
+        if 'background' in r: 
+            style['background'] = self.loader.load_image(r['background'])
         if 'border' in r: style['border'] = int(r['border'])
             
         for k in ['width','height','colspan','rowspan','size','min','max']:
@@ -144,7 +161,7 @@ class _html(htmllib.HTMLParser):
                     k = k.replace(" ","")
                     v = v.replace(" ","")
                     if k == 'color' or k == 'border_color' or k == 'background':
-                        v = pygame.Color(v)
+                        v = gui.parse_color(v)
                     else:
                         v = int(anum.sub("",v))
                     style[k] = v
@@ -182,6 +199,7 @@ class _html(htmllib.HTMLParser):
         if 'cls' in params: params['cls'] = t+"."+params['cls']
         else: params['cls'] = t
         b = gui.Document(**params)
+        b.style.font = self.item.style.font
         if 'align' in params:
             align = params['align']
         self.item.block(align)
@@ -402,7 +420,7 @@ class _html(htmllib.HTMLParser):
         
     def handle_image(self,src,alt,ismap,align,width,height):
         try:
-            w = gui.Image(pygame.image.load(src))
+            w = gui.Image(self.loader.load_image(src))
             if align != '':
                 self.item.add(w,_amap[align])
             else:
@@ -453,12 +471,16 @@ class HTML(gui.Document):
     <dt>data <dd>html data
     <dt>globals <dd>global variables (for scripting)
     <dt>locals <dd>local variables (for scripting)
+    <dt>loader <dd>the resource loader
     </dl>
     
     <p>you may access html elements that have an id via widget[id]</p>
     """
-    def __init__(self,data,globals=None,locals=None,**params):
+    def __init__(self,data,globals=None,locals=None,loader=None,**params):
         gui.Document.__init__(self,**params)
+        # This ensures that the whole HTML document is left-aligned within
+        # the rendered surface.
+        self.style.align = -1
         
         _globals,_locals = globals,locals
         
@@ -469,7 +491,8 @@ class HTML(gui.Document):
         
         #font = gui.theme.get("label","","font")
         p = _html(htmllib.AS_IS,0)
-        p.init(self,self.style.font,self.style.color,_globals,_locals)
+        p.init(self,self.style.font,self.style.color,_globals,_locals,
+               loader=loader)
         p.feed(data) 
         p.close() 
         p.mydone()
@@ -478,59 +501,71 @@ class HTML(gui.Document):
     def __getitem__(self,k):
         return self._locals[k]
 
-def render(font,rect,text,aa,color,bgcolor=(0,0,0,0)):
-    """render some html
+    # Returns a box (pygame rectangle) surrounding all widgets in this document
+    def get_bounding_box(this):
+        minx = miny = sys.maxint
+        maxx = maxy = -sys.maxint
+        for e in this.layout.widgets:
+            minx = min(minx, e.rect.left)
+            miny = min(miny, e.rect.top)
+            maxx = max(maxx, e.rect.right+1)
+            maxy = max(maxy, e.rect.bottom+1)
+        return pygame.Rect(minx, miny, maxx-minx, maxy-miny)
+
+
+def render_ext(font, rect, text, aa, color, bgcolor=(0,0,0,0), **params):
+    """Renders some html and returns the rendered surface, plus the
+    HTML instance that produced it.
+    """
+
+    htm = HTML(text, font=font, color=color, **params)
+
+    if (rect == -1):
+        # Make the surface large enough to fit the rendered text
+        htm.resize(width=sys.maxint)
+        (width, height) = htm.get_bounding_box().size
+        # Now set the proper document width (computed from the bounding box)
+        htm.resize(width=width)
+    elif (type(rect) == int):
+        # Fix the width of the document, while the height is variable
+        width = rect
+        height = htm.resize(width=width)[1]
+    else:
+        # Otherwise the width and height of the document is fixed
+        (width, height) = rect.size
+        htm.resize(width=width)
+
+    # Now construct a surface and paint to it
+    surf = pygame.Surface((width, height)).convert_alpha()
+    surf.fill(bgcolor)
+    htm.paint(surf)
+    return (surf, htm)
+
+def render(font, rect, text, aa, color, bgcolor=(0,0,0,0), **params):
+    """Renders some html
     
     <pre>render(font,rect,text,aa,color,bgcolor=(0,0,0,0))</pre>
     """
-    fnt,r,txt,a,fg,bg = font,rect,text,aa,color,bgcolor
-    
-    e = HTML(txt,font=fnt,color=fg)
-    e.resize(width=rect.w)
-    s = pygame.Surface((e.rect.w,e.rect.h),SWSURFACE|SRCALPHA,32)
-    s.fill(bg)
-    e.paint(s)
-    
-    return s
+    return render_ext(font, rect, text, aa, color, bgcolor, **params)[0]
 
-def rendertrim(font,rect,text,aa,color,bgcolor=(0,0,0,0)):
+def rendertrim(font,rect,text,aa,color,bgcolor=(0,0,0,0),**params):
     """render html, and make sure to trim the size
     
-    <pre>rendertrim(font,rect,text,aa,color,bgcolor=(0,0,0,0))</pre>
+    rendertrim(font,rect,text,aa,color,bgcolor=(0,0,0,0))
     """
-    fnt,r,txt,a,fg,bg = font,rect,text,aa,color,bgcolor
-    #print r
-    w = HTML(txt,font=fnt,color=fg)
-    w.resize(width=rect.w)
-    s = pygame.Surface((w.rect.w,w.rect.h),SWSURFACE|SRCALPHA,32)
-    s.fill(bg)
-    w.paint(s)
-    
-    minx,miny,maxx,maxy = 1024,1024,-1024,-1024
-    for e in w.layout.widgets:
-        x,y,w,h = e.rect.x,e.rect.y,e.rect.w,e.rect.h
-        minx = min(minx,x)
-        miny = min(miny,y)
-        x,y = x+w,y+h
-        maxx = max(maxx,x)
-        maxy = max(maxy,y)
-        
-    r = pygame.Rect(minx,miny,maxx-minx,maxy-miny)
-        
-    return s.subsurface((r))
+    # Render the HTML
+    (surf, htm) = render_ext(font, rect, text, aa, color, bgcolor, **params)
+    return surf.subsurface(htm.get_bounding_box())
 
     
-def write(s,font,rect,text,aa=0,color=(0,0,0)):
+def write(s,font,rect,text,aa=0,color=(0,0,0), **params):
     """write html to a surface
     
-    <pre>write(s,font,rect,text,aa=0,color=(0,0,0))</pre>
+    write(s,font,rect,text,aa=0,color=(0,0,0))
     """
-    fnt,r,txt,a,fg = font,rect,text,aa,color
-
-    e = HTML(txt)
-    
-    e.resize(width=rect.w)
+    htm = HTML(text, font=font, color=color, **params)
+    htm.resize(width=rect.w)
     s = s.subsurface(rect)
-    e.paint(s)
+    htm.paint(s)
     
 # vim: set filetype=python sts=4 sw=4 noet si :
