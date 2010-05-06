@@ -2,6 +2,7 @@
 """
 import os
 
+import pguglobals
 from const import *
 import surface
 import container, table
@@ -46,8 +47,7 @@ class SlideBox(container.Container):
         #if not hasattr(self,'surface'):
         self.surface = pygame.Surface((self.max_rect.w,self.max_rect.h),0,s)
         #self.surface.fill((0,0,0,0))
-        import app
-        app.App.app.theme.render(self.surface,self.style.background,pygame.Rect(0,0,self.max_rect.w,self.max_rect.h))
+        pguglobals.app.theme.render(self.surface,self.style.background,pygame.Rect(0,0,self.max_rect.w,self.max_rect.h))
         self.bkgr = pygame.Surface((s.get_width(),s.get_height()),0,s)
         self.bkgr.blit(s,(0,0))
         container.Container.paint(self,self.surface)
@@ -215,8 +215,7 @@ class ScrollArea(table.Table):
 #             hs.rect.w,hs.rect.h = hs.resize()
 #             box.style.height = self.style.height - hs.rect.h
 
-        import app
-        xt,xr,xb,xl  = app.App.app.theme.getspacing(box)
+        xt,xr,xb,xl  = pguglobals.app.theme.getspacing(box)
         
 
         if self.vscrollbar:
@@ -302,7 +301,26 @@ class ScrollArea(table.Table):
         if not hasattr(self.hscrollbar,'value'): return
         self.hscrollbar.value = percents #min(max(percents*10, 0), 1000)
         self._hscrollbar_changed(None)
-        
+
+    def event(self, e):
+         #checking for event recipient
+         if (table.Table.event(self, e)):
+             return True
+
+         #mouse wheel scrolling
+         if self.vscrollbar:
+             if not hasattr(self.vscrollbar,'value'): 
+                 return False
+ 
+             if e.type == pygame.locals.MOUSEBUTTONDOWN:
+                 if e.button == 4: #wheel up
+                     self.vscrollbar._click(-1)
+                     return True
+                 elif e.button == 5: #wheel down
+                     self.vscrollbar._click(1)
+                     return True
+         return False
+
         
 
 
