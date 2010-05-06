@@ -1,8 +1,19 @@
 #!/bin/sh
 #Para aplicar cambios interactivamente permitiendo un comentario por fichero
 gawk '
+function get_branch(){
+    commando = "git branch"
+    while (commando | getline){
+        if ($1 == "*")
+            branch = $2
+    }
+    close(comando)
+    return branch
+}
+
 BEGIN{
     comando = "git status -s"
+    branch = get_branch()
     while (comando|getline){
 
         if (!($0 ~ ".pyc$" || $0 ~ ".swp$")){
@@ -68,17 +79,17 @@ BEGIN{
     }
 
     print "Intentando push"
-    errorpush = system("git push -q")
+    errorpush = system("git push -q origin " branch)
     if (errorpush){
         print "No se ha podido push directo, intentando pull"
-        errorpull = system("git pull -q origin master")
+        errorpull = system("git pull -q origin " branch)
         if (errorpull){
             print "No se ha podido pullear, intervención manual requerida"
             exit 1
         }
         else {
             print "Hemos podido pull, ahora intentaremos push"
-            errorpush = system("git push -q")
+            errorpush = system("git push -q origin " branch)
             if (errorpush){
                 print "Esto si que es raro... push falló..."
                 exit 2
