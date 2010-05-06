@@ -6,6 +6,31 @@ import pygame
 from const import *
 import widget
 
+# Turns a descriptive string or a tuple into a pygame color
+def parse_color(desc):
+    if (is_color(desc)):
+        # Already a color
+        return desc
+    elif (desc and desc[0] == "#"):
+        # Because of a bug in pygame 1.8.1 we need to explicitly define the 
+        # alpha value otherwise it will default to transparent.
+        if (len(desc) == 7):
+            desc += "FF"
+    return pygame.Color(desc)
+
+# Determines if the given object is a pygame-compatible color or not
+def is_color(col):
+    # In every version of pygame (up to 1.8.1 so far) will interpret
+    # a tuple as a color.
+    if (type(col) == tuple):
+        return col
+    if (hasattr(pygame, "Color") and type(pygame.Color) == type):
+        # This is a recent version of pygame that uses a proper type
+        # instance for colors.
+        return (isinstance(col, pygame.Color))
+    # Otherwise, this version of pygame only supports tuple colors
+    return False
+
 class Spacer(widget.Widget):
     """A invisible space.
     
@@ -42,7 +67,8 @@ class Color(widget.Widget):
         if hasattr(self,'value'): s.fill(self.value)
     
     def __setattr__(self,k,v):
-        if k == 'value' and type(v) == str: v = pygame.Color(v)
+        if k == 'value' and type(v) == str:
+            v = parse_color(v)
         _v = self.__dict__.get(k,NOATTR)
         self.__dict__[k]=v
         if k == 'value' and _v != NOATTR and _v != v: 
