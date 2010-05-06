@@ -65,7 +65,7 @@ return - toggle fullscreen
 </pre>
 """
 
-import os,sys    
+import os, sys
 from optparse import OptionParser
 from ConfigParser import ConfigParser
 import pygame
@@ -73,7 +73,7 @@ from pygame.locals import *
 
 # the following line is not needed if pgu is installed
 import os
-import sys; sys.path.insert(0, os.path.join('lib'))
+import sys; sys.path.insert(0, os.path.join('../lib'))
 import pgu
 from pgu import gui, html, tilevid, isovid, hexvid
 
@@ -96,7 +96,7 @@ class _app(gui.Container):
             self.screen_h), SWSURFACE)
 
         self.fname = cfg['fname']
-        
+
         k = cfg['class']
         parts = k.split(".")
         n = ".".join(parts[:-1])
@@ -107,8 +107,8 @@ class _app(gui.Container):
         #self.level = pygame.image.load(self.level_fname)
         #self.level = tilevid.Tilevid()
         #g = self.level = isovid.Isovid()
-        
-    
+
+
         if self.fname != None:
             self.level.tga_load_level(self.fname,1)
         else:
@@ -120,23 +120,23 @@ class _app(gui.Container):
         self.codes_last_ctime = None
 
         self.load_tiles_and_codes()
-        
 
 
 
-        
-        
+
+
+
         self.tile = 0
         self.code = 0
-        
+
         self.mode = 'tile'
         self.clipboard = None
         self.history = []
         #self.modrect = pygame.Rect(0xffff,0xffff,-0xffff,-0xffff)
-        
+
         self.changes = []
         self.dirty = 0
-        
+
 
     def load_tiles_and_codes(self):
         #
@@ -173,11 +173,11 @@ class _app(gui.Container):
             self.codes = pygame.image.load(self.codes_fname)
         else:
             self.codes = hex_image(self)
-                        
+
         self.codes_w, self.codes_h = (self.codes.get_width(),
             self.codes.get_height())
 
-        
+
         tmp = self.level.tiles
         self.level.tiles = [None for i in xrange(0,256)]
         self.level.tga_load_tiles(self.codes,(self.tile_w,self.tile_h))
@@ -192,64 +192,64 @@ class _app(gui.Container):
     def mod(self,rect):
         self.dirty = 1
         self.changes.append((pygame.Rect(rect),self.copy(rect)))
-    
 
-    def view_init(self,dw,dh):        
-        
+
+    def view_init(self,dw,dh):
+
         self.view_w = dw #/ self.tile_w
         self.view_h = dh #/ self.tile_h
-        
+
         if 'view_w' in cfg and cfg['view_w'] != 0:
             self.view_w = min(self.view_w, cfg['view_w'])
         if 'view_h' in cfg and cfg['view_h'] != 0:
             self.view_h = min(self.view_h, cfg['view_h'])
-        
+
         #self.view_w = min(self.level.size[0],self.view_w)
         #self.view_h = min(self.level.size[1],self.view_h)
-        
+
         #print self.view_w,self.view_h
-        
+
         #self.view = self.level.subsurface((0,0,self.view_w,self.view_h))
         self.select = Rect(0,0,self.level.size[0],self.level.size[1]) #self.view_w,self.view_h)
-        
+
     def fill(self,rect,v):
         lvl = self.level
         w,h = lvl.size
-        
+
         for layer,n in [ (lvl.tlayer,0), (lvl.blayer,1), (lvl.clayer,2) ]:
             for y in range(0,rect.h):
                 for x in range(0,rect.w):
                     tx,ty = x+rect.x,y+rect.y
                     if tx >= 0 and tx < w and ty >= 0 and ty < h: layer[ty][tx] = v[n]
-        
+
     def copy(self,rect):
-        data = [[[None for x in range(0,rect.w)] for y in range(0,rect.h)] for l in range(0,4)] 
+        data = [[[None for x in range(0,rect.w)] for y in range(0,rect.h)] for l in range(0,4)]
 
         lvl = self.level
         w,h = lvl.size
-        
+
         for layer,n in [ (lvl.tlayer,0), (lvl.blayer,1), (lvl.clayer,2) ]:
             for y in range(0,rect.h):
                 for x in range(0,rect.w):
                     tx,ty = x+rect.x,y+rect.y
                     if tx >= 0 and tx < w and ty >= 0 and ty < h: data[n][y][x] = layer[ty][tx]
         return data
-                
+
     def paste(self,rect,data):
         lvl = self.level
         w,h = lvl.size
-        
+
         for layer,n in [ (lvl.tlayer,0), (lvl.blayer,1), (lvl.clayer,2) ]:
             for y in range(0,rect.h):
                 for x in range(0,rect.w):
                     tx,ty = x+rect.x,y+rect.y
                     v = data[n][y][x]
                     if v != None and tx >= 0 and tx < w and ty >= 0 and ty < h: layer[ty][tx] = v
-        
-        
+
+
     def archive(self):
         if not len(self.changes): return
-        
+
         self.dirty = 1
         h = self.history
         if len(h) >= 32:
@@ -257,53 +257,53 @@ class _app(gui.Container):
         #c = pygame.Surface((self.view_w,self.view_h),SWSURFACE,self.view)
         #c.fill((0,0,0,0))
         #c.blit(self.view,(0,0))
-        
+
         lvl = self.level
         #ox,oy = lvl.screen_to_tile((0,0))
         #bx,by = lvl.screen_to_tile((self.vdraw.rect.w,self.vdraw.rect.h))
-        
+
         #rect = pygame.Rect(ox,oy,bx-ox,by-oy)
         #print self.modrect
-        
+
         h.append(self.changes)
         self.changes = []
-        
+
     def undo(self):
         if len(self.changes): self.archive()
-            
+
         if len(self.history) == 0: return
-        
+
         self.dirty = 1
         changes = self.history.pop()
-        
+
         changes.reverse()
         for rect,data in changes:
             self.paste(rect,data)
-            
+
         self.vdraw.repaint()
         self.tpicker.repaint() #huh?
-        
+
         self.changes = []
         return
-        
+
         self.level.fill((0,0,0,0),(off[0],off[1],self.view_w,self.view_h))
         self.level.blit(c,off)
         self.vdraw.repaint()
         self.tpicker.repaint()
-        
+
     def __setattr__(self,k,v):
         self.__dict__[k] = v
-        
+
         if k == 'view':
             if hasattr(self,'vdraw'): self.vdraw.repaint()
-        
+
         if k == 'tile':
             if hasattr(self,'tpicker'): self.tpicker.repaint()
-                
+
         if k == 'code':
             if hasattr(self,'cpicker'): self.cpicker.repaint()
-        
-            
+
+
     def event(self,e):
         if e.type is KEYDOWN:
             for key,cmd,value in keys:
@@ -311,7 +311,7 @@ class _app(gui.Container):
                     cmd(value)
                     return
         return gui.Container.event(self,e)
-    
+
 
 def hex_image(self):
     if not hasattr(self,'tiles_w'): self.tiles_w = 256
@@ -340,7 +340,7 @@ class tpicker(gui.Widget):
         gui.Widget.__init__(self)
         self.style.width = app.tiles_w
         self.style.height = app.tiles_h
-        
+
     def paint(self,s):
         s.fill((128,128,128))
         s.blit(app.tiles,(0,0))
@@ -348,7 +348,7 @@ class tpicker(gui.Widget):
         x,y = app.tile%w,app.tile/w
         off = x*app.tile_w,y*app.tile_h
         pygame.draw.rect(s,(255,255,255),(off[0],off[1],app.tile_w,app.tile_h),2)
-        
+
     def event(self,e):
         if (e.type is MOUSEBUTTONDOWN and e.button == 1) or (e.type is MOUSEMOTION and e.buttons[0] == 1 and self.container.myfocus == self):
             w = app.tiles_w/app.tile_w
@@ -357,7 +357,7 @@ class tpicker(gui.Widget):
             self.set(n)
             if app.mode not in ('tile','bkgr'):
                 app.tools['tile'].click()
-    
+
     def set(self,n):
         if n < 0 or n >= len(app.level.tiles) or app.level.tiles[n] == None: return
         app.tile = n
@@ -368,7 +368,7 @@ class cpicker(gui.Widget):
         gui.Widget.__init__(self)
         self.style.width = app.codes_w
         self.style.height = app.codes_h
-        
+
     def paint(self,s):
         s.fill((128,128,128))
         s.blit(app.codes,(0,0))
@@ -376,7 +376,7 @@ class cpicker(gui.Widget):
         x,y = app.code%w,app.code/w
         off = x*app.tile_w,y*app.tile_h
         pygame.draw.rect(s,(255,255,255),(off[0],off[1],app.tile_w,app.tile_h),2)
-        
+
     def event(self,e):
         if (e.type is MOUSEBUTTONDOWN and e.button == 1) or (e.type is MOUSEMOTION and e.buttons[0] == 1 and self.container.myfocus == self):
             w = app.codes_w/app.tile_w
@@ -384,7 +384,7 @@ class cpicker(gui.Widget):
             n = x+y*w
             self.set(n)
             app.tools['code'].click()
-    
+
     def set(self,n):
         if n < 0 or n >= len(app.level.codes) or app.level.codes[n] == None: return
         app.code = n
@@ -397,16 +397,16 @@ class vwrap(gui.Table):
         self.style.width = app.view_w #* app.tile_w
         self.style.height = app.view_h #* app.tile_h
         w,h = self.rect.w,self.rect.h = self.style.width,self.style.height
-        
+
         sw = 16
-        
+
         self.vdraw = e = vdraw(width=w-sw,height=h-sw)
         self.add(e,0,0)
-        
+
         rect = pygame.Rect(0,0,app.level.size[0],app.level.size[1])
-        tcorners = [rect.topleft,rect.topright,rect.bottomright,rect.bottomleft] 
+        tcorners = [rect.topleft,rect.topright,rect.bottomright,rect.bottomleft]
         corners = [app.level.tile_to_view(tcorners[n]) for n in range(0,4)]
-        
+
         minx,miny,maxx,maxy = 0xffff,0xffff,-0xffff,-0xffff
         for x,y in corners:
             minx,miny,maxx,maxy = min(minx,x),min(miny,y),max(maxx,x),max(maxy,y)
@@ -415,43 +415,43 @@ class vwrap(gui.Table):
         maxx -= w/2
         miny -= h/2
         maxy -= h/2
-        
+
         self.vs = e = gui.VSlider(0,miny,maxy,sw*4,width=sw,height=h-sw)
         self.add(e,1,0)
         e.connect(gui.CHANGE,self.move_y,e)
-        
+
         self.hs = e = gui.HSlider(0,minx,maxx,sw*4,width=w-sw,height=sw)
         self.add(e,0,1)
         e.connect(gui.CHANGE,self.move_x,e)
-        
+
     def move_x(self,value):
         v = value.value
         if app.level.view.x != v:
             app.level.view.x = v
             app.vdraw.repaint()
-    
+
     def move_y(self,value):
         v = value.value
         if app.level.view.y != v:
             app.level.view.y = v
             app.vdraw.repaint()
-        
+
     def adjust(self):
         self.vs.value = app.level.view.y
         self.hs.value = app.level.view.x
-        
+
 
 class vdraw(gui.Widget):
     def repaint(self):
         self.container.adjust()
         gui.Widget.repaint(self)
-        
+
     def __init__(self,**params):
         gui.Widget.__init__(self,**params)
         #self.style.width = app.view_w #* app.tile_w
         #self.style.height = app.view_h #* app.tile_h
         self.rect.w,self.rect.h = self.style.width,self.style.height
-        
+
         s = pygame.Surface((self.rect.w,self.rect.h))
         clrs = [(148,148,148),(108,108,108)]
         inc = 7
@@ -467,10 +467,10 @@ class vdraw(gui.Widget):
         for y in range(0,app.view_h):
             pygame.draw.line(s,(0,0,0),(0,self.rect.h*y/app.view_h),(self.rect.w,self.rect.h*y/app.view_h))
         self.grid = s
-        
+
         self.pos = 0,0
 
-        
+
     def paint(self,s):
         #print s
         #print s.get_width(),s.get_height(),s.get_clip()
@@ -480,49 +480,49 @@ class vdraw(gui.Widget):
         #make sure to clamp the bounds
         if app.level.bounds != None:
             app.level.view.clamp_ip(app.level.bounds)
-        
-        #draw border        
+
+        #draw border
         rect = pygame.Rect(0,0,app.level.size[0],app.level.size[1])
         tcorners = [rect.topleft,rect.topright,rect.bottomright,rect.bottomleft]
         corners = [app.level.tile_to_screen(tcorners[n]) for n in range(0,4)]
         pygame.draw.lines(s,(255,255,0),1,corners,2)
 
-        
+
         #s.fill((0,0,0))
         #0/0
         app.level.paint(s)
-        
+
         tmp_tiles = app.level.tiles
         tmp_tlayer = app.level.tlayer
         tmp_blayer = app.level.blayer
-        
+
         app.level.tiles = app.level.codes
         app.level.tlayer = app.level.clayer
         app.level.blayer = None
-        
+
         app.level.paint(s)
-        
+
         app.level.tiles = tmp_tiles
         app.level.tlayer = tmp_tlayer
         app.level.blayer = tmp_blayer
-        
+
         rect = pygame.Rect(self.pos[0],self.pos[1],1,1)
         tcorners = [rect.topleft,rect.topright,rect.bottomright,rect.bottomleft]
         corners = [app.level.tile_to_screen(tcorners[n]) for n in range(0,4)]
         pygame.draw.lines(s,(196,196,196),1,corners,2)
 
-        rect = pygame.Rect(app.select.x,app.select.y,app.select.w,app.select.h) 
+        rect = pygame.Rect(app.select.x,app.select.y,app.select.w,app.select.h)
         tcorners = [rect.topleft,rect.topright,rect.bottomright,rect.bottomleft]
         corners = [app.level.tile_to_screen(tcorners[n]) for n in range(0,4)]
         pygame.draw.lines(s,(255,255,255),1,corners,2)
 
 
-                
-        
+
+
         #s.blit(self.grid,(0,0))
         #r = app.select
         #pygame.draw.rect(s,(255,255,255,128),Rect(r.x*self.rect.w/app.view_w,r.y*self.rect.h/app.view_h,r.w*self.rect.w/app.view_w,r.h*self.rect.h/app.view_h),4)
-        
+
     def event(self,e):
         if e.type is MOUSEMOTION:
             self.getpos(e)
@@ -542,57 +542,57 @@ class vdraw(gui.Widget):
             self.move_down(e)
         if e.type is MOUSEMOTION and e.buttons[1] and self.container.myfocus == self:
             self.move_drag(e)
-    
+
     #move
     def move_down(self,e):
         self.moff = app.level.view.x,app.level.view.y
         self.m1 = e.pos
-        
+
     def move_drag(self,e):
         m1 = self.m1
         m2 = e.pos
         #app.view = app.level.subsurface((x,y,app.view_w,app.view_h))
         app.level.view.x,app.level.view.y = self.moff[0] + m1[0]-m2[0], self.moff[1]+m1[1]-m2[1]
         self.repaint()
-            
+
     #picker
     def picker_down(self,e):
         pos = self.getpos(e)
         #tx,ty = app.level.screen_to_tile(e.pos)
         #r,g,b,a = app.view.get_at(pos)
-        if pos == None: return 
+        if pos == None: return
         tx,ty = pos
-        
+
         if app.mode == 'tile':
             app.tile = app.level.tlayer[ty][tx]
         if app.mode == 'bkgr':
             app.tile = app.level.blayer[ty][tx]
         app.code = app.level.clayer[ty][tx]
-        
-    
-    
+
+
+
     #tile
     def tile_down(self,e):
         app.archive()
         self.tile_drag(e)
-    
+
     def tile_drag(self,e):
         pos = self.getpos(e)
         #r,g,b,a = app.view.get_at(pos)
         #r = app.tile
         #app.view.set_at(pos,(r,g,b))
-        
+
         if pos == None: return
         tx,ty = pos
         app.mod(pygame.Rect(tx,ty,1,1))
         app.level.tlayer[ty][tx] = app.tile
         self.repaint()
-        
+
     #bkgr
     def bkgr_down(self,e):
         app.archive()
         self.bkgr_drag(e)
-    
+
     def bkgr_drag(self,e):
         pos = self.getpos(e)
         #r,g,b,a = app.view.get_at(pos)
@@ -603,13 +603,13 @@ class vdraw(gui.Widget):
         app.mod(pygame.Rect(tx,ty,1,1))
         app.level.blayer[ty][tx] = app.tile
         self.repaint()
-        
-        
+
+
     #code
     def code_down(self,e):
         app.archive()
         self.code_drag(e)
-    
+
     def code_drag(self,e):
         pos = self.getpos(e)
         #r,g,b,a = app.view.get_at(pos)
@@ -620,12 +620,12 @@ class vdraw(gui.Widget):
         app.mod(pygame.Rect(tx,ty,1,1))
         app.level.clayer[ty][tx] = app.code
         self.repaint()
-        
+
     #eraser
     def eraser_down(self,e):
         app.archive()
         self.eraser_drag(e)
-    
+
     def eraser_drag(self,e):
         pos = self.getpos(e)
         if pos == None: return
@@ -636,41 +636,41 @@ class vdraw(gui.Widget):
         app.level.clayer[ty][tx] = 0
         #app.view.set_at(pos,(0,0,0))
         self.repaint()
-        
+
     def getpos(self,e):
         tx,ty = app.level.screen_to_tile(e.pos)
-        
+
         if tx < 0 or ty < 0 or tx >= app.level.size[0] or ty >= app.level.size[1]: return None
-        
+
         if (tx,ty) != self.pos:
             self.pos = tx,ty
             self.repaint()
         return tx,ty
-        
+
         x,y = e.pos[0]/app.tile_w,e.pos[1]/app.tile_h
         x = min(max(0,x),app.view_w-1)
         y = min(max(0,y),app.view_h-1)
         return x,y
-    
+
     def getpos2(self,e):
         tx,ty = app.level.screen_to_tile(e.pos)
-        
+
         return tx+1,ty+1
-        
+
         w = app.tile_w
         h = app.tile_h
         x,y = (e.pos[0]+w/2)/app.tile_w,(e.pos[1]+h/2)/app.tile_h
         x = min(max(0,x),app.view_w)
         y = min(max(0,y),app.view_h)
         return x,y
-    
+
     #select
     def select_down(self,e):
         pos = self.getpos2(e)
         pos = pos[0]-1,pos[1]-1
         app.select = Rect(pos[0],pos[1],1,1)
         self.repaint()
-        
+
     def select_drag(self,e):
         pos = self.getpos2(e)
         app.select = Rect(app.select.x,app.select.y,pos[0]-app.select.x,pos[1]-app.select.y)
@@ -678,15 +678,15 @@ class vdraw(gui.Widget):
         app.select.h = max(1,app.select.h)
 
         self.repaint()
-        
+
 
 def cmd_all(value):
     app.select = Rect(0,0,app.level.size[0],app.level.size[1])
     app.vdraw.repaint()
-    
+
     #print 'deprecated in v0.5'
-    
-def cmd_shrink(value):    
+
+def cmd_shrink(value):
     if app.select.w <= 2 or app.select.h <= 2: return
     app.select.x += 1
     app.select.y += 1
@@ -695,42 +695,42 @@ def cmd_shrink(value):
 
 def cmd_undo(value):
     app.undo()
-    
+
 def cmd_redo(value):
     pass
-    
+
 def cmd_copy(value):
     #next version of pygame?
     #app.clipboard = app.tile.subsurface(app.select).copy()
-    
+
     data = app.copy(app.select)
     app.clipboard = pygame.Rect(app.select),data
     return
-    
+
     #s = app.view.subsurface(app.select)
     #app.clipboard = pygame.Surface((app.select.w,app.select.h),SWSURFACE,s)
     #app.clipboard.fill((0,0,0,0))
     #app.clipboard.blit(s,(0,0))
-    
+
     print app.clipboard.get_at((0,0))
-    
+
 def cmd_paste(value):
     if app.clipboard != None:
         app.archive()
         #app.view.fill((0,0,0,0),(app.select[0],app.select[1],app.clipboard.get_width(),app.clipboard.get_height()))
         #app.view.blit(app.clipboard,app.select)
         #app.vdraw.repaint()
-        
+
         rect,data = app.clipboard
         rect = pygame.Rect(app.select.x,app.select.y,rect.w,rect.h)
-        
+
         app.mod(rect)
         app.paste(rect,data)
         app.vdraw.repaint()
 
 class Restart(Exception):
     pass
-    
+
 def _dirty(fnc,v):
     dialog = DirtyDialog()
     def onchange(value):
@@ -742,15 +742,15 @@ def _dirty(fnc,v):
 def cmd_new(value):
     if app.dirty: _dirty(_cmd_new,value)
     else: _cmd_new(value)
-    
+
 def _cmd_new(value):
     dialog = NewDialog()
-    
+
     def onchange(value):
         value.close()
         vv = value.value
         ok = 0
-        try:        
+        try:
             width,height,tile_w,tile_h,codes,tiles,klass = int(vv['width'].value),int(vv['height'].value),int(vv['tile_w'].value),int(vv['tile_h'].value),vv['codes'].value,vv['tiles'].value,vv['class'].value
             global cfg
             cfg['fname'] = None
@@ -766,25 +766,25 @@ def _cmd_new(value):
             ErrorDialog("New failed.",v).open()
         if ok:
             raise Restart()
-    
+
     dialog.connect(gui.CHANGE,onchange,dialog)
     dialog.open()
 
-    
+
 def cmd_open(value):
     if app.dirty: _dirty(_cmd_open,value)
     else: _cmd_open(value)
 
 def _cmd_open(value):
     dialog = OpenDialog()
-    
+
     def onchange(value):
         value.close()
         vv = value.value
         ok = 0
-        
-        try:        
-            
+
+        try:
+
             fname,tile_w,tile_h,codes,tiles,klass = vv['fname'].value,int(vv['tile_w'].value),int(vv['tile_h'].value),vv['codes'].value,vv['tiles'].value,vv['class'].value
             global cfg
             cfg['fname'] = fname
@@ -794,20 +794,20 @@ def _cmd_open(value):
             cfg['tiles'] = tiles
             cfg['class'] = klass
 
-            
+
             ok = 1
         except Exception,v:
             ErrorDialog("Open failed.",v).open()
-            
+
         if ok: raise Restart()
 
-    
+
     dialog.connect(gui.CHANGE,onchange,dialog)
     dialog.open()
 
 def cmd_saveas(value):
     dialog = SaveAsDialog()
-    
+
     def onchange(value):
         value.close()
         vv = value.value
@@ -818,24 +818,24 @@ def cmd_saveas(value):
         global cfg
         app.fname = cfg['fname'] = fname
         return cmd_save(None)
-        
+
     dialog.connect(gui.CHANGE,onchange,dialog)
     dialog.open()
-        
+
 def cmd_cut(value):
     cmd_copy(value)
     cmd_delete(value)
 
 def cmd_fullscreen(value):
     pygame.display.toggle_fullscreen()
-    
+
 def cmd_delete(value):
     app.archive()
     #app.view.fill((0,0,0,0),app.select)
     app.mod(app.select)
     app.fill(app.select,(0,0,0,0))
     app.vdraw.repaint()
-        
+
 #NOTE: this function is a temporary HACK, to be replaced
 #with layer editing in the future, maybe.
 def cmd_tswitch(value):
@@ -847,17 +847,17 @@ def cmd_tswitch(value):
             blayer[ty][tx] = tlayer[ty][tx]
             tlayer[ty][tx] = tmp
     app.vdraw.repaint()
-    
+
 
 def cmd_fill(value):
     pass
 
 def cmd_pick(value):
     dx,dy = value
-    
+
     mods = pygame.key.get_mods()
-    
-    
+
+
     if (mods&KMOD_SHIFT) != 0:
         app.level.view.x += dx*app.vdraw.rect.w/8
         app.level.view.y += dy*app.vdraw.rect.h/8
@@ -868,7 +868,7 @@ def cmd_pick(value):
         #x = min(max(x,0),app.level_w-app.view_w)
         #y = min(max(y,0),app.level_h-app.view_h)
         #app.view = app.level.subsurface((x,y,app.view_w,app.view_h))
-        
+
     elif (mods&KMOD_CTRL) != 0:
         app.level.view.x += dx*app.vdraw.rect.w
         app.level.view.y += dy*app.vdraw.rect.h
@@ -879,8 +879,8 @@ def cmd_pick(value):
         #x = min(max(x,0),app.level_w-app.view_w)
         #y = min(max(y,0),app.level_h-app.view_h)
         #app.view = app.level.subsurface((x,y,app.view_w,app.view_h))
-        
-    
+
+
     else:
         w = app.tiles_w/app.tile_w
         if app.mode == 'code':
@@ -889,7 +889,7 @@ def cmd_pick(value):
         else:
             n = app.tile + dx + dy*w
             app.tpicker.set(n)
-        
+
 def cmd_mode(value):
     mode = value
     app.mode = mode
@@ -904,7 +904,7 @@ def _cmd_load(value):
         return
     raise Restart()
 
-    
+
 def cmd_save(value):
     if app.fname == None:
         return cmd_saveas(value)
@@ -917,7 +917,7 @@ def cmd_save(value):
         ErrorDialog("Save failed.",v).open()
         return
 
-    
+
 import os
 def cmd_preview(value):
     app.level.tga_save_level("_preview.tga")
@@ -928,14 +928,14 @@ def cmd_preview(value):
 	cmd = "preview.py _preview.tga"
     print cmd
     os.system(cmd)
-    
+
 def cmd_quit(value):
     if app.dirty: _dirty(_cmd_quit,value)
     else: _cmd_quit(value)
 
 def _cmd_quit(value):
-    app.top.quit()    
-    
+    app.top.quit()
+
 def cmd_refreshtiles(value):
     app.load_tiles_and_codes()
 
@@ -961,7 +961,7 @@ menus = [
     #('Edit/Redo',None,None,None),
     #('Edit/Cut',None,None,None),
     #('Edit/Fill',cmd_fill,None),
-    
+
     ]
 
 keys = [
@@ -978,17 +978,17 @@ keys = [
     #('Edit/Cut',None,None,None),
     (K_DELETE,cmd_delete,None),
     #(K_f,cmd_fill,None),
-        
+
         (K_t,cmd_tswitch,None),
-    
+
     (K_F10,cmd_fullscreen,None),
-    
+
     (K_UP,cmd_pick,(0,-1)),
     (K_DOWN,cmd_pick,(0,1)),
     (K_LEFT,cmd_pick,(-1,0)),
     (K_RIGHT,cmd_pick,(1,0)),
     ]
-    
+
 
 tools = [
     ('tile','tile'),
@@ -998,13 +998,13 @@ tools = [
     ('eraser','eraser'),
     ]
 
-    
-    
+
+
 
 class NewDialog(gui.Dialog):
     def __init__(self,**params):
         title = gui.Label("New...")
-        
+
         doc = html.HTML(globals={'gui':gui,'dialog':self},data="""
 <form id='form'>
 
@@ -1045,13 +1045,13 @@ class NewDialog(gui.Dialog):
 
 </table>"""%ini_to_dict('None'))
         gui.Dialog.__init__(self,title,doc)
-        
+
         self.value = doc['form']
 
 class SaveAsDialog(gui.Dialog):
     def __init__(self,**params):
         title = gui.Label("Save As...")
-        
+
         doc = html.HTML(globals={'gui':gui,'dialog':self},data="""
 <form id='form'>
 
@@ -1065,30 +1065,30 @@ class SaveAsDialog(gui.Dialog):
 
 </table>""")
         gui.Dialog.__init__(self,title,doc)
-        
+
         self.value = doc['form']
 
 class OpenDialog(gui.Dialog):
     def __init__(self,**params):
         title = gui.Label("Open...")
-        
+
         def load_vals(fname,form):
             if not ini.has_section(fname): return
-            
+
             for k,v in ini.items(fname):
                 if k in form:
                     form[k].value = v
 
         doc = html.HTML(globals={'load_vals':load_vals,'ini':ini,'gui':gui,'dialog':self},data="""<form id='form'><table>
-        
+
         <tr><td align=right>File Name:&nbsp;<td  align=left><input type='file' size=20 name='fname' value='' onchange='load_vals(self.value,form)'>
 
         <tr><td align=right>Level&nbsp;<br>Type:&nbsp;
         <td align=left><input type=radio name='class' value='pgu.tilevid.Tilevid' checked> Tile<br><input type=radio name='class' value='pgu.isovid.Isovid'> Isometric<br><input type=radio name='class' value='pgu.hexvid.Hexvid'> Hexoganol
-        
+
         <tr><td align=right>Tiles:&nbsp;<td align=left><input type='text' size=20 name='tiles' value='%(tiles)s'>
         <tr><td align=right>Codes:&nbsp;<td align=left><input type='text' size=20 name='codes' value='%(codes)s'>
-        
+
         <tr><td align=right>Tile Width:&nbsp;<td align=left><input type='text' size='4' value='%(tile_w)s' name='tile_w'>
         <tr><td align=right>Tile Height:&nbsp;<td align=left><input type='text' size='4' value='%(tile_h)s' name='tile_h'>
 
@@ -1099,14 +1099,14 @@ class OpenDialog(gui.Dialog):
 
 </table>"""%ini_to_dict('None'))
         gui.Dialog.__init__(self,title,doc)
-        
+
         self.value = doc['form']
 
 class ErrorDialog(gui.Dialog):
     def __init__(self,tt,data,**params):
         title = gui.Label("Error: "+tt)
         data = str(data)
-        
+
         doc = html.HTML(globals={'gui':gui,'dialog':self},data="""
 <form id='form'>
 
@@ -1117,14 +1117,14 @@ class ErrorDialog(gui.Dialog):
 <tr><td colspan=2><input type='button' value='Okay' onclick='dialog.send(gui.CHANGE);dialog.close()'>
 </table>""")
         gui.Dialog.__init__(self,title,doc)
-        
+
         self.value = doc['form']
 
 class DirtyDialog(gui.Dialog):
     def __init__(self,**params):
         title = gui.Label("File not yet saved...")
         data = "Your file is not yet saved.<br>Are you sure you want to continue?"
-        
+
         doc = html.HTML(globals={'gui':gui,'dialog':self},data="""
 <form id='form'>
 
@@ -1135,12 +1135,12 @@ class DirtyDialog(gui.Dialog):
 <tr><td colspan=2><input type='button' value='Okay' onclick='dialog.send(gui.CHANGE)'> <input type='button' value='Cancel' onclick='dialog.close()'>
 </table>""")
         gui.Dialog.__init__(self,title,doc)
-        
+
         self.value = doc['form']
 
 
-    
-        
+
+
 def init_ini():
     ini.read([ini_fname])
 
@@ -1152,11 +1152,11 @@ def ini_save():
 
 def init_opts():
     ini.read([ini_fname])
-    
+
     usage = "usage: %prog level.tga [tiles.tga] [codes.tga] [tile_w] [tile_h]"
-    
+
     parser = OptionParser(usage)
-    
+
     parser.add_option("-t", "--tiles", dest="tiles",
         help="filename of the tiles image (level)")
     parser.add_option("-c", "--codes", dest="codes",
@@ -1167,14 +1167,14 @@ def init_opts():
 
     parser.add_option("--vw", dest="view_w", help="view width (level)", type='int')
     parser.add_option("--vh", dest="view_h", help="view height (level)", type='int')
-        
+
     parser.add_option("--sw", dest="screen_w", help="screen width (app)", type='int')
     parser.add_option("--sh", dest="screen_h", help="screen height (app)", type='int')
     parser.add_option("--class",dest="class",help="class (e.g. pgu.tilevid.Tilevid) (level)")
     parser.add_option("--tile",action="store_const",const="pgu.tilevid.Tilevid",dest="class",help="use pgu.tilevid.Tilevid")
     parser.add_option("--iso",action="store_const",const="pgu.isovid.Isovid",dest="class",help="use pgu.isovid.Isovid")
     parser.add_option("--hex",action="store_const",const="pgu.hexvid.Hexvid",dest="class",help="use pgu.hexvid.Hexvid")
-    
+
     parser.add_option("--width",dest="width",help="new width (level)",type='int')
     parser.add_option("--height",dest="height",help="new height (level)",type='int')
 
@@ -1182,12 +1182,12 @@ def init_opts():
 
     #parser.add_option("-a", "--app", dest="app",
     #    help="set application level defaults", action="store_true")
-    
+
     (opts, args) = parser.parse_args()
-    
+
     if len(args) not in (0,1,2,3,4,5):
         parser.error("incorrect number of arguments")
-    
+
     #parse arguments
     if len(args) == 0:
         opts.fname = "None"
@@ -1202,19 +1202,19 @@ def init_opts():
         try: opts.tile_w,opts.tile_h = int(args[n]),int(args[n+1])
         except: parser.error("width and height must be integers")
         if opts.tile_w < 1 or opts.tile_h < 1: parser.error("width and height must be greater than 0")
-        
+
     fname = opts.fname
-    
+
     #create all sections
     for k in [fname,"None","app"]:
         if not ini.has_section(k):
             ini.add_section(k)
-    
+
     #set app level defaults
     for k,v in [('screen_w',800),('screen_h',600)]:
         if not ini.has_option('app',k):
             ini.set('app',k,str(v))
-    
+
     #set app level values
     for k in ['screen_w','screen_h']:
         if hasattr(opts,k):
@@ -1225,26 +1225,26 @@ def init_opts():
     for k,v in [('width',40),('height',30),('tile_w',32),('tile_h',32),('tiles','tiles.tga'),('codes','codes.tga'),('class','pgu.tilevid.Tilevid')]:
         if not ini.has_option('None',k):
             ini.set('None',k,str(v))
-    
+
     #name of keys for normal stuff
     file_ks = ['class','tiles','codes','width','height','tile_w','tile_h']
-            
+
     #set default values
     if opts.defaults:
         for k in file_ks:
             if hasattr(opts,k):
                 v = getattr(opts,k)
                 if v != None: ini.set('None',k,str(v))
-    
+
     #set fname values
     for k in file_ks:
         if hasattr(opts,k):
             v = getattr(opts,k)
             if v != None: ini.set(fname,k,str(v))
-    
+
     #save the ini
     ini_save()
-            
+
     #convert ini to cfg stuff...
     ini_to_cfg(['app','None',fname])
     if fname == 'None': fname = None
@@ -1273,7 +1273,7 @@ def cfg_to_ini(ks,section):
         v = cfg[k]
         ini.set(section,k,str(v))
 
-        
+
 def init_gui():
     #themes = cfg['theme'].split(",")
 #    themes2 = []
@@ -1292,29 +1292,29 @@ def init_gui():
 def init_app():
     global app
     app = _app()
-    
+
     #
     ss = 8
-        
+
     #--- top
     x,y,h = 0,0,0
-        
+
     #menus
     e = gui.Menus(menus)
     e.rect.w,e.rect.h = e.resize()
     app.add(e,x,y)
     x,h = x+e.rect.w,max(h,e.rect.h)
     menus_height = e.rect.h
-        
+
     #--- row
     x,y,h = 0,y+h,0
-    
+
     #--- vspace
     y += ss
-    
+
     #--- hspace
     x += ss
-    
+
     #tools
     e = gui.Toolbox(tools,1,0,value='tile')#,"icons48")
     e.rect.w,e.rect.h = e.resize()
@@ -1324,25 +1324,25 @@ def init_app():
     app.tools = e.tools
     x,h = x+e.rect.w,max(h,e.rect.h)
     toolbox_width = e.rect.w
-    
+
     #--- hspace
     x += ss
-    
+
     #vdraw
     dw = app.screen_w - (toolbox_width+app.tiles.get_width()+ss*4)
     dh = app.screen_h - (menus_height+ss*2)
     app.view_init(dw,dh)
-    
-    
+
+
     e = app.vwrap = vwrap()
     app.vdraw = e.vdraw
     e.rect.w,e.rect.h = e.resize()
     app.add(e,x,y)
     x,h = x+e.rect.w,max(h,e.rect.h)
-    
+
     #--- hspace
     x += ss
-    
+
     #tpicker
     e = app.tpicker = tpicker()
     e.rect.w,e.rect.h = e.resize()
@@ -1351,7 +1351,7 @@ def init_app():
     app.add(e,x,y)
     x,h = x+e.rect.w,max(h,e.rect.h)
     tpicker_height = e.rect.h
-    
+
     #cpicker
     e = app.cpicker = cpicker()
     e.rect.w,e.rect.h = e.resize()
@@ -1359,12 +1359,12 @@ def init_app():
     x = app.screen_w-e.rect.w-ss
     app.add(e,x,y+tpicker_height+ss)
     x,h = x+e.rect.w,max(h,e.rect.h)
-    
+
 
 
 
     pygame.key.set_repeat(500,30)
-    
+
     app.screen.fill((255,255,255,255))
 
 
@@ -1380,7 +1380,7 @@ def main():
     init_ini()
     init_opts()
     init_gui()
-    
+
     restart = 1
     while restart:
         restart = 0
