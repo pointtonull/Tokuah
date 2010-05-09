@@ -2,19 +2,20 @@ from pygame.locals import *
 
 VERBOSE = 3
 
-SW, SH = 320, 240
+SW, SH = 640, 480
 TW, TH = 32, 32
 FPS = 60
-IROTATE = 64
+IROTATE = 60 # Speed of animated tiles
 
 TITLE = "Tokuah"
 
 SCALE2X = False  #use the scale2x scaler to make things look hi-res
-LOWRES = False #keep it in 320x240 mode
+LOWRES = True #keep it in 320x240 mode
 FULL = True #
 
 #INIT_BORDER = 100
 #DEINIT_BORDER = 200
+
 INIT_BORDER = TW * 2
 DEINIT_BORDER = TW * 8
 
@@ -22,18 +23,18 @@ DEINIT_BORDER = TW * 8
 # Input for keyboard:
 JUMP_KEYS = (K_SPACE, K_LCTRL, K_RCTRL, K_z)
 BUBBLE_KEYS = (K_LALT, K_RALT, K_x)
-LEFT_KEYS = (K_LEFT,)
-RIGHT_KEYS = (K_RIGHT,)
-UP_KEYS = (K_UP,)
-DOWN_KEYS = (K_DOWN,)
-MENU_KEYS = (K_RETURN,)
-EXIT_KEYS = (K_ESCAPE,)
+LEFT_KEYS = (K_LEFT, )
+RIGHT_KEYS = (K_RIGHT, )
+UP_KEYS = (K_UP, )
+DOWN_KEYS = (K_DOWN, )
+MENU_KEYS = (K_RETURN, )
+EXIT_KEYS = (K_ESCAPE, )
 
 # Input for joystick/gamepad: (indexing start at zero)
-JUMP_BUTTONS = (0,)
-BUBBLE_BUTTONS = (1,)
-HORIZONTAL_AXIS = (0,)
-VERTICAL_AXIS = (1,)
+JUMP_BUTTONS = (0, )
+BUBBLE_BUTTONS = (1, )
+HORIZONTAL_AXIS = (0, )
+VERTICAL_AXIS = (1, )
 MENU_BUTTONS = ()
 EXIT_BUTTONS = ()
 
@@ -48,7 +49,7 @@ CODE_ROBO_TURN = 0x59
 CODE_DOOR = 0x60
 CODE_DOOR_AUTO = 0x61
 CODE_DOOR_HIDDEN = 0x62
-DOOR_CODES = [CODE_DOOR,CODE_DOOR_AUTO,CODE_DOOR_HIDDEN]
+DOOR_CODES = [CODE_DOOR, CODE_DOOR_AUTO, CODE_DOOR_HIDDEN]
 CODE_BROBO_TURN = 0x6A
 CODE_BOUNDS = 0x70
 CODE_EXIT = 0x88
@@ -57,14 +58,11 @@ CODE_BOSS_TURN = 0xA1
 CODE_BOSS_PHASE2_BLOCK = 0xA2
 
 # Various constants:
-DOOR_DELAY = 10 # Delay when going through a door
+DOOR_DELAY = 10
 
 #HACK: to have this function handy without a bunch of module.sign() blah blah
 def sign(v):
-    if v < 0: return -1
-    if v > 0: return 1
-    return 0
-
-#HACK: some code to find out who's printing out trash
-#import sys
-#sys.stdout = None
+    if v < 0:
+        return - 1
+    else:
+        return 1
