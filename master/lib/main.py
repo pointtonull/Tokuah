@@ -72,7 +72,8 @@ class Game(engine.Game):
         if not self.lowres:
             sw,sh = sw * 2, sh * 2
         mode = 0
-        if FULL: mode |= FULLSCREEN
+        if FULL:
+            mode |= FULLSCREEN
         if '-full' in sys.argv:
             mode ^= FULLSCREEN
         self.screen = pygame.display.set_mode((sw,sh), mode, 16)
@@ -293,7 +294,8 @@ class Game(engine.Game):
             #return 1
 
 
-        if e.type is KEYDOWN and e.key == K_F4: #K_F12:
+        if e.type is KEYDOWN and e.key == K_F4:
+            #K_F12:
 
             try:
                 dname = '.'
@@ -305,7 +307,8 @@ class Game(engine.Game):
                 n = 1
                 while n < 1000:
                     fname = os.path.join(dname,'shot%03d.bmp'%n)
-                    if not os.path.exists(fname): break
+                    if not os.path.exists(fname):
+                        break
                     n += 1
                 self.flip()
                 pygame.image.save(self._screen,fname)
