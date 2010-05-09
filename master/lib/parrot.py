@@ -7,7 +7,7 @@ import sprite
 import player
 
 def init(g,r,n,vx,*params):
-    s = sprite.Sprite3(g,r,'parrot/left-0',(0,3,24,10)) #3
+    s = sprite.Sprite3(g, r, 'parrot/left-0', (0, 6, 48, 20)) #3
     #s.rect.bottom = r.bottom
     s.rect.centery = r.centery
     s.rect.centerx = r.centerx
