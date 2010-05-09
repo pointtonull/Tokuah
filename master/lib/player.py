@@ -72,7 +72,8 @@ def event(g, s, e):
             s.vx = 0
             s.vy = 0
             s.door_timer = DOOR_DELAY
-            if s.current_door != None: # It should never be None actually...
+            if s.current_door != None:
+                # It should never be None actually...
                 s.current_door.open = DOOR_DELAY
             s.image = None
             s.door_pos = s.rect.centerx / TW, s.rect.centery / TH
@@ -136,8 +137,6 @@ def loop(g, s):
 
     inpt = g.game.input
 
-    #if s.standing: s.rect.bottom = s.standing.rect.top
-
     #check if we hit the ceiling
     if not s.jumping and s.vy < 0 and s.rect.y == s._prev.y:
         s.vy = 0
@@ -172,9 +171,6 @@ def loop(g, s):
     s.rect.x += vx
     s.rect.y += sprite.myinc(g.frame,s.vy)
 
-
-    #if keys[K_UP]: vy -= 1
-    #if keys[K_DOWN]: vy += 1
 
     if s.vy < 0:
         s.image = 'player/%s-jump' % (s.facing)
@@ -224,8 +220,6 @@ def loop(g, s):
 
 
     #pan_screen(g,s)
-
-    #if (g.frame%FPS)==0: print 'player vy:',s.vy
 
     if hasattr(g, 'boss'):
         #print g.boss.phase, g.boss.phase_frames
