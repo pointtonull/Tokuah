@@ -46,6 +46,7 @@ class Sound:
             self.sound.play()
 
 class Game(engine.Game):
+    @Verbose(VERBOSE)
     def init_play(self):
         self.score = 0
         self.high = 0
@@ -67,9 +68,9 @@ class Game(engine.Game):
         if '-lowres' in sys.argv:
             self.lowres = not self.lowres
 
-        sw,sh = SW,SH
+        sw, sh = SW, SH
         if not self.lowres:
-            sw,sh = sw*2,sh*2
+            sw,sh = sw * 2, sh * 2
         mode = 0
         if FULL: mode |= FULLSCREEN
         if '-full' in sys.argv:
@@ -90,17 +91,17 @@ class Game(engine.Game):
 
         if not self.lowres:
             self._screen = self.screen
-            self.screen = self._screen.convert().subsurface(0,0,SW,SH)
+            self.screen = self._screen.convert().subsurface(0, 0, SW, SH)
 
         pygame.font.init()
 
-        f_main = data.filepath(os.path.join('fonts','04B_20__.TTF'))
+        f_main = data.filepath(os.path.join('fonts', '04B_20__.TTF'))
         f_scale = 0.35
 
         self.fonts = {}
-        self.fonts['intro'] = pygame.font.Font(f_main,int(36 * f_scale))
+        self.fonts['intro'] = pygame.font.Font(f_main, int(36 * f_scale))
 
-        self.fonts['help'] = pygame.font.Font(f_main,int(24*f_scale))
+        self.fonts['help'] = pygame.font.Font(f_main, int(24*f_scale))
 
         self.font = self.fonts['menu'] = pygame.font.Font(
             f_main,int(24 * f_scale))
@@ -112,32 +113,42 @@ class Game(engine.Game):
         import level
         level.pre_load()
 
-        try:
-            if '-nosound' in sys.argv:
-                1 / 0
-
-            # stop crackling sound on some windows XP machines.
-            if os.name == 'posix' or 1:
-                try:
-                    pygame.mixer.pre_init(44100,-16,2, 1024*3)
-                except:
+        
+        if not '-nosound' in sys.argv:
+            try:
+                if os.name == 'posix' or 1:
+                    try:
+                        pygame.mixer.pre_init(44100,-16,2, 1024*3)
+                    except:
+                        pygame.mixer.pre_init()
+                else:
                     pygame.mixer.pre_init()
-            else:
-                pygame.mixer.pre_init()
-
-
-            pygame.mixer.init()
-        except:
-            debug('mixer not initialized')
+                pygame.mixer.init()
+            except:
+                debug('E: No se pudo inicializar el sonido')
+        else:
+            debug('I: Sonido no inicializado')
 
         self._music_name = None
 
         self.sfx = {}
 
-        for name in ['bubble','capsule','coin','hit','item','powerup',
-            'pop','jump','explode','door','fally','boss_explode']:
-            self.sfx[name] = Sound(data.filepath(
-                os.path.join('sfx','%s.wav'%name)))
+        for name in [
+            'boss_explode.wav',
+            'bubble.wav',
+            'capsule.wav',
+            'coin.wav',
+            'door.ogg',
+            'explode.wav',
+            'fally.wav',
+            'hit.wav',
+            'item.wav',
+            'jump.wav',
+            'pop.wav',
+            'powerup.wav',
+            ]:
+            self.sfx[name.split(".")[0]] = Sound(data.filepath(
+                os.path.join('sfx', name)))
 
 
     def tick(self):
