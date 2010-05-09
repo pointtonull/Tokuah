@@ -103,6 +103,7 @@ class Level:
     def init(self):
         self._tiles = Level._tiles
         fname = self.fname
+
         if fname == None:
             fname,self.title = levels.LEVELS[self.game.lcur]
             fname = data.filepath(os.path.join('levels', fname))
@@ -115,11 +116,12 @@ class Level:
         img = pygame.Surface((1, 1)).convert_alpha()
         img.fill((0, 0, 0, 0))
         self.images[None] = img
+
         for n in xrange(len(self._tiles)):
             self.images[n] = self._tiles[n]
 
         self._images = []
-        for m in xrange(0, IROTATE):
+        for m in xrange(IROTATE):
             r = dict(self.images)
 
             for n, incs in tiles.TANIMATE:
@@ -128,6 +130,7 @@ class Level:
 
             for n1, n2 in tiles.TREPLACE:
                 r[n1] = self.images[n2]
+
             self._images.append(r)
 
         self.size = len(self.data[0][0]), len(self.data[0])
