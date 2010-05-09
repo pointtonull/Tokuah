@@ -9,7 +9,7 @@ import sprite
 import sprites
 import tiles
 
-def init(g,r,n,*params):
+def init(g, r, n, *params):
     s = sprite.Sprite3(g, r, 'player/right', (6, 8, 15 - 6, 27 - 8))
     s.rect.bottom = r.bottom
     s.rect.centerx = r.centerx
@@ -45,9 +45,9 @@ def init(g,r,n,*params):
     s._prev2 = pygame.Rect(s.rect)
     s.looking = False
 
-    sprite.init_bounds(g,s)
-    sprite.init_view(g,s)
-    sprite.init_codes(g,s)
+    sprite.init_bounds(g, s)
+    sprite.init_view(g, s)
+    sprite.init_codes(g, s)
     s.no_explode = False
 
     return s
@@ -59,9 +59,8 @@ def event(g, s, e):
 
     if (e.type is USEREVENT and e.action == 'jump' and s.standing != None and s.
             jumping == 0 and s.vy == 0):
-        sprite.stop_standing(g,s)
-        #s.vy = -1.8
-        s.vy = -0.5
+        sprite.stop_standing(g, s)
+        s.vy = - 0.5
         s.jumping = 1.4
         g.game.sfx['jump'].play()
 
@@ -69,40 +68,37 @@ def event(g, s, e):
         s.jumping = 0
 
     if e.type is USEREVENT and (e.action == 'up' or e.action == 'down'):
-        if sprite.get_code(g,s,0,0) in DOOR_CODES:
+        if sprite.get_code(g, s, 0, 0) in DOOR_CODES:
             s.vx = 0
             s.vy = 0
             s.door_timer = DOOR_DELAY
             if s.current_door != None: # It should never be None actually...
-                #print "door!"
                 s.current_door.open = DOOR_DELAY
             s.image = None
-            s.door_pos = s.rect.centerx/TW,s.rect.centery/TH
-            #tiles.t_put(g,(x,y), 0x32)
-            #tiles.t_put(g,(x,y-1), 0x22)
+            s.door_pos = s.rect.centerx / TW, s.rect.centery / TH
     if e.type is USEREVENT and e.action == 'bubble':
         if s.powered_up:
-            sprites.bubble.init(g,s.rect,s,big=True)
+            sprites.bubble.init(g, s.rect, s, big=True)
         else:
-            sprites.bubble.init(g,s.rect,s,big=False)
+            sprites.bubble.init(g, s.rect, s, big=False)
         s.shooting = 10
 
     if e.type is KEYDOWN and e.key == K_F10:
-        powerup(g,s)
+        powerup(g, s)
         s.god_mode = True
 
     #if e.type is KEYDOWN and e.key == K_F12:
         #1/0
 
 
-def loop(g,s):
+def loop(g, s):
     s._prev2 = pygame.Rect(s.rect)
 
     if s.death_counter > 0:
         s.groups = set()
         if not s.no_explode:
             s.exploded += 1
-            if s.exploded > FPS/2:
+            if s.exploded > FPS / 2:
                 s.image = None
         else:
             s.image = None
@@ -117,20 +113,20 @@ def loop(g,s):
             s.image = 'player/right'
         else:
             s.image = 'splayer/right'
-        s.exploded -=1
+        s.exploded -= 1
         return
 
 
 
-    sprite.apply_gravity(g,s)
-    sprite.apply_standing(g,s)
+    sprite.apply_gravity(g, s)
+    sprite.apply_standing(g, s)
 
     if s.door_timer != None:
         if s.door_timer == 0:
             x,y = s.door_pos#s.rect.centerx/TW,s.rect.centery/TH
             import door
             #door.hit(g,g.layer[y][x],s)
-            door.hit(g,(x,y),s)
+            door.hit(g, (x, y), s)
             #tiles.t_put(g,(x,y), 0x30)
             #tiles.t_put(g,(x,y-1), 0x20)
             s.door_timer = None
@@ -153,23 +149,26 @@ def loop(g,s):
     if s.jumping:
         #print s.vy
         s.vy -= s.jumping
-        s.jumping = max(0,s.jumping-0.2)
+        s.jumping = max(0, s.jumping - 0.2)
 
     inc = 0.5
     mx = 2
     if inpt.right and s.vx < mx:
         s.vx += inc
         s.facing = 'right'
-    elif not inpt.right and s.vx > 0:    s.vx -= inc
+    elif not inpt.right and s.vx > 0:
+        s.vx -= inc
     if inpt.left  and s.vx > -mx:
         s.vx -= inc
         s.facing = 'left'
-    elif not inpt.left and s.vx < 0:    s.vx += inc
+    elif not inpt.left and s.vx < 0:
+        s.vx += inc
 
 
     s._prev = pygame.Rect(s.rect)
 
-    vx,vy = s.vx,s.vy
+    vx = s.vx
+    vy = s.vy
     s.rect.x += vx
     s.rect.y += sprite.myinc(g.frame,s.vy)
 
@@ -245,28 +244,30 @@ def pan_screen(g,s):
     # adjust the view
     border = pygame.Rect(s.rect)
     #pad = 100
-    pad = (SW/2) - TW
+    pad = (SW / 2) - TW
     border.x -= pad
     border.w += pad * 2
     #pad = 80
-    pad = (SH/2)-TH
+    pad = (SH / 2) - TH
     if s.looking:
         pad = TH * 2
     border.y -= pad
     border.h += pad * 2
 
     dest = pygame.Rect(g.view)
-    dest.top = min(dest.top,border.top)
-    dest.right = max(dest.right,border.right)
-    dest.bottom = max(dest.bottom,border.bottom)
-    dest.left = min(dest.left,border.left)
+    dest.top = min(dest.top, border.top)
+    dest.right = max(dest.right, border.right)
+    dest.bottom = max(dest.bottom, border.bottom)
+    dest.left = min(dest.left, border.left)
 
     dx,dy = dest.x-g.view.x,dest.y-g.view.y
     #mx,my = 6,6
-    mx = max(2,abs(s._prev2.x-s.rect.x))
-    my = max(2,abs(s._prev2.y-s.rect.y))
-    if abs(dx) > mx: dx = sign(dx)*mx
-    if abs(dy) > my: dy = sign(dy)*my
+    mx = max(2, abs(s._prev2.x-s.rect.x))
+    my = max(2, abs(s._prev2.y-s.rect.y))
+    if abs(dx) > mx:
+        dx = sign(dx) * mx
+    if abs(dy) > my:
+        dy = sign(dy) * my
     g.view.x += dx
     g.view.y += dy
 
