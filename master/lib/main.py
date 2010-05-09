@@ -153,7 +153,8 @@ class Game(engine.Game):
 
     def tick(self):
         r = self.timer.tick()
-        if r != None: print r
+        if r != None:
+            print r
 
 
     def flip(self):
@@ -175,10 +176,12 @@ class Game(engine.Game):
 
 
     def music_play(self, name, n=-1):
-        if self._music_name == name: return
+        if self._music_name == name:
+            return
         self._music_name = name
 
-        if not pygame.mixer.get_init(): return
+        if not pygame.mixer.get_init():
+            return
 
         for ext in ['wav','ogg']:
             fname = data.filepath(os.path.join('music','%s.%s'%(name,ext)))
@@ -197,7 +200,8 @@ class Game(engine.Game):
             except:
                 #import traceback; traceback.print_exc()
                 pass
-            if ok: break
+            if ok:
+                break
 
     def event(self,e):
         # The keys, buttons and axis for the input can be changed in cnst.py
@@ -222,19 +226,23 @@ class Game(engine.Game):
                 value = False
             if e.key in LEFT_KEYS:
                 self.input.left = value
-                if value: self.input.right = False
+                if value:
+                    self.input.right = False
                 action = 'left'
             if e.key in RIGHT_KEYS:
                 self.input.right = value
-                if value: self.input.left = False
+                if value:
+                    self.input.left = False
                 action = 'right'
             if e.key in UP_KEYS:
                 self.input.up = value
-                if value: self.input.down = False
+                if value:
+                    self.input.down = False
                 action = 'up'
             if e.key in DOWN_KEYS:
                 self.input.down = value
-                if value: self.input.up = False
+                if value:
+                    self.input.up = False
                 action = 'down'
             if e.type == KEYUP:
                 action = None
