@@ -57,7 +57,7 @@ CODE_BOSS_TURN = 0xA1
 CODE_BOSS_PHASE2_BLOCK = 0xA2
 
 # Various constants:
-DOOR_DELAY = 20 # Delay when going through a door
+DOOR_DELAY = 10 # Delay when going through a door
 
 #HACK: to have this function handy without a bunch of module.sign() blah blah
 def sign(v):
