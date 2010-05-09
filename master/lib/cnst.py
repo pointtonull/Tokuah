@@ -3,7 +3,7 @@ from pygame.locals import *
 VERBOSE = 3
 
 SW, SH = 320, 240
-TW, TH = 16, 16
+TW, TH = 32, 32
 FPS = 60
 IROTATE = 64
 
