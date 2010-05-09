@@ -118,16 +118,16 @@ def get_code(g,s,ix,iy):
     if x < 0 or y < 0 or x >= g.size[0] or y >= g.size[1]: return 0
     return g.data[2][y][x]
 
-def myinc(f,i):
-    #f - the current frame
-    #i - a float to add to a number
+def myinc(frame, increment):
+    #frame - the current frame
+    #inc - a float to add to a number
     #returns - how much to add to your integer..
-    r = 0
-    s = sign(i)
-    r = int(i)
-    i -= r
-    i = abs(i)
+    returns = 0
+    s = sign(increment)
+    returns = int(increment)
+    increment -= returns
+    increment = abs(increment)
     c = 37 #an arbitrary prime number
-    n = int(f*c*i)%c<int(c*i)
-    r += s*n
-    return r
+    n = int(frame * c * increment) % c < int(c * increment)
+    returns += s * n
+    return returns
