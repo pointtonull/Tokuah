@@ -6,5 +6,5 @@
     git checkout experimental
     ./run_game.py -full -nosound
     echo "##############################"
-    sleep 5
+#    sleep 5
 #done
