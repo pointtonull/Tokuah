@@ -141,7 +141,7 @@ def loop(g, s):
         s.jumping = max(0, s.jumping - 0.2)
 
     inc = 2.0
-    mx = 2
+    mx = 4
     if inpt.right and s.vx < mx:
         s.vx += inc
         s.facing = 'right'
