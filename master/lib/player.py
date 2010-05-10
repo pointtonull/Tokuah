@@ -179,6 +179,7 @@ def loop(g, s):
             s.walk_frame = 1
     else:
         s.image = 'player/%s'%(s.facing)
+
     if s.flash_counter > 0:
         if s.flash_timer < 4:
             s.image = None
@@ -186,6 +187,7 @@ def loop(g, s):
             s.flash_timer = 8
             s.flash_counter -= 1
         s.flash_timer -= 1
+
     if s.image != None:
         if s.powerup_transition > 0:
             if (s.powerup_transition % 10) > 5:
@@ -202,16 +204,14 @@ def loop(g, s):
         g.view.y += 2
         s.looking = True
 
-    n = sprite.get_code(g,s,0,0)
+    n = sprite.get_code(g, s, 0, 0)
     if n == CODE_EXIT:
         g.status = 'exit'
     if n == CODE_DOOR_AUTO:
-        x,y = s.rect.centerx/TW,s.rect.centery/TH
+        x = s.rect.centerx / TW
+        y = s.rect.centery / TH
         import door
-        door.hit(g,(x,y),s)
-
-
-    #pan_screen(g,s)
+        door.hit(g, (x, y), s)
 
     if hasattr(g, 'boss'):
         #print g.boss.phase, g.boss.phase_frames
