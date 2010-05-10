@@ -9,7 +9,7 @@ import tiles
 import player
 
 def init(g, r, n, vx, *params):
-    s = sprite.Sprite3(g, r, 'frog/walk-left-0', (8, 4, 18, 19))
+    s = sprite.Sprite3(g, r, 'frog/walk-left-0', (16, 8, 36, 38))
     s.rect.bottom = r.bottom
     s.rect.centerx = r.centerx
     s.groups.add('solid')
@@ -21,7 +21,7 @@ def init(g, r, n, vx, *params):
     s.next_frame = 12
 
     s.frame = 0
-    s.vx = vx
+    s.vx = vx * 2
     s.vy = 0
     s.jumping = False
     s.walking = not s.jumping
@@ -33,27 +33,27 @@ def init(g, r, n, vx, *params):
     s.standing = None
     return s
 
-def loop(g,s):
+def loop(g, s):
     sprite.apply_gravity(g, s)
     sprite.apply_standing(g, s)
 
     if s.walking:
         if s._prev != None:
             if (s.rect.x == s._prev.x
-                or sprite.get_code(g,s,sign(s.vx),0) == CODE_FROG_TURN):
+            or sprite.get_code(g, s, sign(s.vx), 0) == CODE_FROG_TURN):
                 s.vx = -s.vx
                 s.next_frame = 1
 
         if (s.standing != None
         and sprite.get_code(g, s, sign(s.vx), 1) == CODE_FROG_JUMP):
             #s.vy_jump = -4.0
-            s.vy_jump = -1.8
+            s.vy_jump = -3.6
             if sprite.get_code(g, s, sign(s.vx) * 2, 1) == CODE_FROG_JUMP:
                 #s.vy_jump = -6.5
-                s.vy_jump = -3.0
+                s.vy_jump = -6.0
                 if sprite.get_code(g, s, sign(s.vx) * 3, 1) == CODE_FROG_JUMP:
                     #s.vy_jump = -8.5
-                    s.vy_jump = -4.1
+                    s.vy_jump = -8.1
 
             s.jumping = True
             s.walking = False
@@ -65,7 +65,7 @@ def loop(g,s):
 
         s._prev = pygame.Rect(s.rect)
 
-        s.rect.x += s.vx * 1
+        s.rect.x += s.vx
         s.rect.y += s.vy
     else:
         s._prev = pygame.Rect(s.rect)
@@ -74,7 +74,6 @@ def loop(g,s):
                 s.walking = True
                 s.jumping = not s.walking
                 s.next_frame = 1
-            #s.vx*1
             vx = s.vx * 1.5
             s.rect.x += sprite.myinc(g.frame, vx)
             s.rect.y += sprite.myinc(g.frame, s.vy)
@@ -98,5 +97,5 @@ def loop(g,s):
             elif s.vx < 0:
                 s.image = 'frog/walk-left-' + str(s.frame)
 
-def hit(g,a,b):
+def hit(g, a, b):
     player.damage(g, b)

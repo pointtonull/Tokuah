@@ -10,8 +10,8 @@ import player
 import math
 import random
 
-def init(g,r,n,*params):
-    s = sprite.Sprite3(g,r,'boss/left-0',(27,62,75,39)) #3
+def init(g, r, n, *params):
+    s = sprite.Sprite3(g, r, 'boss/left-0', (54, 124, 150, 78)) #3
     #s.rect.bottom = r.bottom
     s.rect.centery = r.centery
     s.rect.centerx = r.centerx

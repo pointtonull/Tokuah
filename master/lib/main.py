@@ -72,7 +72,8 @@ class Game(engine.Game):
         if not self.lowres:
             sw,sh = sw * 2, sh * 2
         mode = 0
-        if FULL: mode |= FULLSCREEN
+        if FULL:
+            mode |= FULLSCREEN
         if '-full' in sys.argv:
             mode ^= FULLSCREEN
         self.screen = pygame.display.set_mode((sw,sh), mode, 16)
@@ -153,7 +154,8 @@ class Game(engine.Game):
 
     def tick(self):
         r = self.timer.tick()
-        if r != None: print r
+        if r != None:
+            print r
 
 
     def flip(self):
@@ -161,24 +163,26 @@ class Game(engine.Game):
 
             if self.scale2x:
                 tmp = pygame.transform.scale2x(self.screen)
-                self._screen.blit(tmp, (0, 0))
+                self.screen.blit(tmp, (0, 0))
             else:
                 tmp = pygame.transform.scale(self.screen, (SW * 2, SH * 2))
-                self._screen.blit(tmp, (0, 0))
+                self.screen.blit(tmp, (0, 0))
 
-            # silly TV effect ...
-            if '-tv' in sys.argv:
-                for y in xrange(0, SH * 2, 2):
-                    self._screen.fill((0, 0, 0), (0, y, SW*2, 1))
+        # silly TV effect ...
+        if '-tv' in sys.argv:
+            for y in xrange(0, SH * 2, 2):
+                self._screen.fill((0, 0, 0), (0, y, SW*2, 1))
 
         pygame.display.flip()
 
 
     def music_play(self, name, n=-1):
-        if self._music_name == name: return
+        if self._music_name == name:
+            return
         self._music_name = name
 
-        if not pygame.mixer.get_init(): return
+        if not pygame.mixer.get_init():
+            return
 
         for ext in ['wav','ogg']:
             fname = data.filepath(os.path.join('music','%s.%s'%(name,ext)))
@@ -197,7 +201,8 @@ class Game(engine.Game):
             except:
                 #import traceback; traceback.print_exc()
                 pass
-            if ok: break
+            if ok:
+                break
 
     def event(self,e):
         # The keys, buttons and axis for the input can be changed in cnst.py
@@ -222,19 +227,23 @@ class Game(engine.Game):
                 value = False
             if e.key in LEFT_KEYS:
                 self.input.left = value
-                if value: self.input.right = False
+                if value:
+                    self.input.right = False
                 action = 'left'
             if e.key in RIGHT_KEYS:
                 self.input.right = value
-                if value: self.input.left = False
+                if value:
+                    self.input.left = False
                 action = 'right'
             if e.key in UP_KEYS:
                 self.input.up = value
-                if value: self.input.down = False
+                if value:
+                    self.input.down = False
                 action = 'up'
             if e.key in DOWN_KEYS:
                 self.input.down = value
-                if value: self.input.up = False
+                if value:
+                    self.input.up = False
                 action = 'down'
             if e.type == KEYUP:
                 action = None
@@ -285,7 +294,8 @@ class Game(engine.Game):
             #return 1
 
 
-        if e.type is KEYDOWN and e.key == K_F4: #K_F12:
+        if e.type is KEYDOWN and e.key == K_F4:
+            #K_F12:
 
             try:
                 dname = '.'
@@ -297,7 +307,8 @@ class Game(engine.Game):
                 n = 1
                 while n < 1000:
                     fname = os.path.join(dname,'shot%03d.bmp'%n)
-                    if not os.path.exists(fname): break
+                    if not os.path.exists(fname):
+                        break
                     n += 1
                 self.flip()
                 pygame.image.save(self._screen,fname)

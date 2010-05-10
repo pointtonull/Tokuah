@@ -4,11 +4,11 @@ from pygame.locals import *
 from cnst import *
 
 class Sprite:
-    def __init__(self,r,n):
+    def __init__(self, r, n):
         self.rect = pygame.Rect(r)
-        self.pos = r.centerx/TH,r.centery/TW
+        self.pos = r.centerx / TH, r.centery / TW
         self.image = n
-        self.shape = pygame.Rect(0,0,TW,TH)
+        self.shape = pygame.Rect(0, 0, TW, TH)
         self.exploded = 0
         self.loop = None
         
@@ -18,45 +18,43 @@ class Sprite:
         
         # needed for gravity to work / not work ... :)
         self.standing = None
-        
         self.active = True
-        
         self.deinit = deinit
-        
         self.auto_gc = True
         
-def Sprite2(g,r,n):
-    s = Sprite(r,n)
+def Sprite2(g, r, n):
+    s = Sprite(r, n)
     img = g.images[n]
     s.rect.w = s.shape.w = img.get_width()
     s.rect.h = s.shape.h = img.get_height()
     return s
 
-def Sprite3(g,r,n,shape):
+def Sprite3(g, r, n, shape):
     shape = pygame.Rect(shape)
-    s = Sprite(r,n)
-    s.shape.x, s.shape.y = shape.x,shape.y
+    s = Sprite(r, n)
+    s.shape.x, s.shape.y = shape.x, shape.y
     s.rect.w = s.shape.w = shape.w
     s.rect.h = s.shape.h = shape.h
     return s
 
-def apply_gravity(g,s):
+def apply_gravity(g, s):
     if s.standing != None:
         s.vy = 0 
         return
-    s.vy += 0.2
-    s.vy = min(s.vy,6)
+    s.vy += 0.3
+    s.vy = min(s.vy, 16)
     
 def apply_standing(g,s):
     if s.standing == None: return
     if not s.standing.active:
-        stop_standing(g,s)
+        stop_standing(g, s)
         return
-    a,b = s.rect,s.standing.rect
+
+    a,b = s.rect, s.standing.rect
     a.bottom = b.top
-    #if a.bottom != b.top or a.left > b.right or a.right < b.left:
+
     if a.left > b.right or a.right < b.left:
-        stop_standing(g,s)
+        stop_standing(g, s)
         s.rect.y += 1 #throw on a bit o' gravity
         return
         
@@ -99,7 +97,6 @@ def init_codes(g,s):
     g.view.clamp_ip(g.bounds)
     border = g.get_border(INIT_BORDER)
     g.run_codes(border)
-        
 
     
 def sign(v):
@@ -118,16 +115,16 @@ def get_code(g,s,ix,iy):
     if x < 0 or y < 0 or x >= g.size[0] or y >= g.size[1]: return 0
     return g.data[2][y][x]
 
-def myinc(f,i):
-    #f - the current frame
-    #i - a float to add to a number
+def myinc(frame, increment):
+    #frame - the current frame
+    #inc - a float to add to a number
     #returns - how much to add to your integer..
-    r = 0
-    s = sign(i)
-    r = int(i)
-    i -= r
-    i = abs(i)
+    returns = 0
+    s = sign(increment)
+    returns = int(increment)
+    increment -= returns
+    increment = abs(increment)
     c = 37 #an arbitrary prime number
-    n = int(f*c*i)%c<int(c*i)
-    r += s*n
-    return r
+    n = int(frame * c * increment) % c < int(c * increment)
+    returns += s * n
+    return returns
