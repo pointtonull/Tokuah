@@ -37,9 +37,9 @@ def loop(g,s):
     #s._prev = pygame.Rect(s.rect)
 
     if g.player.rect.centerx > s.rect.centerx:
-        s.vx += 0.05
+        s.vx += 0.1
     elif g.player.rect.centerx < s.rect.centerx:
-        s.vx -= 0.05
+        s.vx -= 0.1
 
     if s.vx > 0.0:
         s.image = 'robo-right'
@@ -49,8 +49,8 @@ def loop(g,s):
     if sprite.get_code(g,s,sign(s.vx),0) == CODE_ROBO_TURN:
         s.vx = 0.0
 
-    s.vx = min(2.0, s.vx)
-    s.vx = max(-2.0, s.vx)
+    s.vx = min(4.0, s.vx)
+    s.vx = max(-4.0, s.vx)
 
     s.rect.x += sprite.myinc(g.frame, s.vx)
     s.rect.y += sprite.myinc(g.frame, s.vy)
