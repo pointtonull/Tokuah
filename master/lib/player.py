@@ -61,7 +61,7 @@ def event(g, s, e):
             and s.jumping == 0 and s.vy == 0):
         sprite.stop_standing(g, s)
         s.vy = - 0.5
-        s.jumping = 2.8
+        s.jumping = 1.4
         g.game.sfx['jump'].play()
 
     if e.type is USEREVENT and e.action == 'stop-jump':
@@ -219,7 +219,7 @@ def loop(g, s):
             for y in xrange(len(g.layer)):
                 for x in xrange(len(g.layer[y])):
                     if g.data[2][y][x] == CODE_BOSS_PHASE2_BLOCK:
-                        tiles.t_put(g,(x,y),0x01) # solid tile
+                        tiles.t_put(g, (x, y), 0x01) # solid tile
         if g.boss.dead:
             g.status = 'exit'
             #pygame.mixer.music.load("
@@ -246,7 +246,8 @@ def pan_screen(g,s):
     dest.bottom = max(dest.bottom, border.bottom)
     dest.left = min(dest.left, border.left)
 
-    dx,dy = dest.x-g.view.x,dest.y-g.view.y
+    dx = dest.x-g.view.x
+    dy = dest.y-g.view.y
     #mx,my = 6,6
     mx = max(2, abs(s._prev2.x-s.rect.x))
     my = max(2, abs(s._prev2.y-s.rect.y))
@@ -267,7 +268,7 @@ def powerup(g,s):
             g.game.powerup = True
 
 
-def damage(g,s):
+def damage(g, s):
     if s.god_mode:
         return
 
