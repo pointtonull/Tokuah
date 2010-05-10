@@ -47,13 +47,14 @@ def apply_gravity(g, s):
 def apply_standing(g,s):
     if s.standing == None: return
     if not s.standing.active:
-        stop_standing(g,s)
+        stop_standing(g, s)
         return
-    a,b = s.rect,s.standing.rect
+
+    a,b = s.rect, s.standing.rect
     a.bottom = b.top
     #if a.bottom != b.top or a.left > b.right or a.right < b.left:
     if a.left > b.right or a.right < b.left:
-        stop_standing(g,s)
+        stop_standing(g, s)
         s.rect.y += 1 #throw on a bit o' gravity
         return
         
