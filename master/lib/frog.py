@@ -21,7 +21,7 @@ def init(g, r, n, vx, *params):
     s.next_frame = 12
 
     s.frame = 0
-    s.vx = vx
+    s.vx = vx * 2
     s.vy = 0
     s.jumping = False
     s.walking = not s.jumping
@@ -74,7 +74,7 @@ def loop(g, s):
                 s.walking = True
                 s.jumping = not s.walking
                 s.next_frame = 1
-            vx = s.vx * 3.0
+            vx = s.vx * 1.5
             s.rect.x += sprite.myinc(g.frame, vx)
             s.rect.y += sprite.myinc(g.frame, s.vy)
 
