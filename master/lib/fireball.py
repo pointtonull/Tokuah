@@ -5,8 +5,8 @@ import sprite
 import capsule
 import player
 
-def init(g,r,p, big=False):
-    s = sprite.Sprite3(g,r,'fireball',(0,0,16,16))
+def init(g, r, p, big=False):
+    s = sprite.Sprite3(g, r, 'fireball', (0, 0, 32, 32))
     s.big = big
     if p.facing == 'left':
         s.rect.centerx = r.x + 34 - 27
@@ -25,31 +25,29 @@ def init(g,r,p, big=False):
     s.standing = None
 
     s.bounces = 3
-    
-    s.vx = 0.2 
+
+    s.vx = 0.4
     if p.facing == 'left':
-        s.vx = -0.2
+        s.vx = -0.4
 
     s.vx += p.vx
     s.vy = 0
-    
-    #g.game.sfx['bubble'].play()
-    
+
     return s
 
-def loop(g,s):
-    sprite.apply_gravity(g,s)
-    sprite.apply_standing(g,s)
+def loop(g, s):
+    sprite.apply_gravity(g, s)
+    sprite.apply_standing(g, s)
 
     if s.bounces > 0 and s.standing:
-        sprite.stop_standing(g,s)
+        sprite.stop_standing(g, s)
         s.vy = -s.bounces * 0.75
         s.bounces -= 1
         if s.bounces == 0:
             s.vx = 0
 
-    s.rect.x += sprite.myinc(g.frame,s.vx)
-    s.rect.y += sprite.myinc(g.frame,s.vy)
+    s.rect.x += sprite.myinc(g.frame, s.vx)
+    s.rect.y += sprite.myinc(g.frame, s.vy)
 
     s.life -= 1
     if s.life == 0:
