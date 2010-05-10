@@ -7,8 +7,8 @@ from cnst import *
 
 import random
 
-def init(g,r,n,*params):
-    s = sprite.Sprite3(g,r,'fireguy-right-0',(0,0,14,23))
+def init(g, r, n, *params):
+    s = sprite.Sprite3(g,r,'fireguy-right-0',(0,0,28,46))
     s.rect.bottom = r.bottom
     s.rect.centerx = r.centerx
     s.groups.add('solid')
@@ -25,28 +25,29 @@ def init(g,r,n,*params):
     s.frame = 0
 
     s.facing = 'right'
-    
+
     s.vx = 0
     s.vy = 0
-    
+
     s._prev = pygame.Rect(s.rect)
     s.strength = 3
-    
+
     s.standing = None
     return s
-    
-def loop(g,s):
-    sprite.apply_gravity(g,s)
-    sprite.apply_standing(g,s)
-    
-    if s.moving and s.rect.x == s._prev.x or sprite.get_code(g,s,sign(s.vx),0) == CODE_FIREGUY_TURN:
+
+def loop(g, s):
+    sprite.apply_gravity(g, s)
+    sprite.apply_standing(g, s)
+
+    if (s.moving and s.rect.x == s._prev.x
+        or sprite.get_code(g,s,sign(s.vx), 0) == CODE_FIREGUY_TURN):
         s.vx = -s.vx
         if s.vx < 0:
             s.facing = 'left'
         else:
             s.facing = 'right'
     s._prev = pygame.Rect(s.rect)
-    
+
     s.rect.x += s.vx
     s.rect.y += s.vy
 
@@ -60,10 +61,10 @@ def loop(g,s):
             s.moving = 90
             #if g.game.random % 2 == 0:
             if random.randint(0,1):
-                s.vx = -1
+                s.vx = -2
                 s.facing = 'left'
             else:
-                s.vx = 1
+                s.vx = 2
                 s.facing = 'right'
     elif s.moving > 0:
         s.moving -= 1
@@ -72,11 +73,9 @@ def loop(g,s):
             s.vx = 0
     else:
         s.idling = 240
-        
+
     s.image = 'fireguy-%s-%s' % (s.facing, (s.frame / 5) % 2)
     s.frame += 1
 
-def hit(g,a,b):
-    player.damage(g,b)
-    #print 'youve been spikeys!'
-    pass
+def hit(g, a, b):
+    player.damage(g, b)
