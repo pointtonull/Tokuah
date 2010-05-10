@@ -2,11 +2,10 @@ LEVELS = [
     ('nivel1.tga',      'nivel1',),
     ('phil_7.tga',      'phil_7',),
     ('tim_2.tga',       'tim_2',),
-    ('phil_2.tga',      'phil_"',),
+    ('phil_2.tga',      'phil_2"',),
     ('phil_13.tga',     'phil_13',),
     ('prueba.tga',     'prueba',),
     ('phil_4.tga',     'phil_4',),
-    ('phil_11.tga',     'phil_11',),
     ('phil_15.tga',     'phil_15',),
     
     ('pekuja_3.tga',    'pekuja_3',),
