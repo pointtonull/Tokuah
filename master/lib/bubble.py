@@ -12,9 +12,9 @@ def init(g,r,p, big=False):
     g.bubble_count += 1
     #print 'new bubble', g.bubble_count
     if not big:
-        s = sprite.Sprite3(g,r,'bubble',(0,0,7,7))
+        s = sprite.Sprite3(g, r, 'bubble', (0, 0, 14, 14))
     else:
-        s = sprite.Sprite3(g,r,'big-bubble',(0,0,16,16))
+        s = sprite.Sprite3(g, r, 'big-bubble', (0, 0, 32, 32))
     s.big = big
     s.rect.centerx = r.centerx
     s.rect.centery = r.centery
