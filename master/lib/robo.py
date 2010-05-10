@@ -5,8 +5,8 @@ import sprite
 import player
 from cnst import *
 
-def init(g,r,n,*params):
-    s = sprite.Sprite3(g,r,'robo-left',(0,0,15,18))
+def init(g, r, n, *params):
+    s = sprite.Sprite3(g, r, 'robo-left', (0, 0, 30, 36))
     s.rect.bottom = r.bottom
     s.rect.centerx = r.centerx
     s.groups.add('solid')
@@ -18,28 +18,24 @@ def init(g,r,n,*params):
 
     s.x = float(s.rect.x)
     s.y = float(s.rect.y)
-    
+
     s.vx = 0.0
     s.vy = 0.0
-    
-    s._prev = pygame.Rect(-1,-1,0,0) #pygame.Rect(s.rect)
+
+    s._prev = pygame.Rect(-1, -1, 0, 0)
     s.strength = 3
-    
+
     s.standing = None
     return s
-    
-def loop(g,s):
-    sprite.apply_gravity(g,s)
-    sprite.apply_standing(g,s)
-    
-    #if s.rect.x == s._prev.x:
-    #    s.vx = -s.vx
-    #s._prev = pygame.Rect(s.rect)
+
+def loop(g, s):
+    sprite.apply_gravity(g, s)
+    sprite.apply_standing(g, s)
 
     if g.player.rect.centerx > s.rect.centerx:
-        s.vx += 0.1
+        s.vx += 0.2
     elif g.player.rect.centerx < s.rect.centerx:
-        s.vx -= 0.1
+        s.vx -= 0.2
 
     if s.vx > 0.0:
         s.image = 'robo-right'
@@ -54,7 +50,7 @@ def loop(g,s):
 
     s.rect.x += sprite.myinc(g.frame, s.vx)
     s.rect.y += sprite.myinc(g.frame, s.vy)
-    
+
 def hit(g,a,b):
     player.damage(g,b)
     #print 'youve been spikeys!'
