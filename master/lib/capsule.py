@@ -18,7 +18,7 @@ def init(g, r):
 
     s.life = 300
 
-    s.vx = (g.game.random % 05) / 10.0 - 0.5 #random.random() - 0.5
+    s.vx = (g.game.random % 10) / 5.0 - 0.5 #random.random() - 0.5
     s.vy = -1.0
     s.x = float(s.rect.x)
     #s.y = float(s.rect.y)
