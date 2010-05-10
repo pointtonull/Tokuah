@@ -42,7 +42,7 @@ def apply_gravity(g, s):
         s.vy = 0 
         return
     s.vy += 0.3
-    s.vy = min(s.vy, 12)
+    s.vy = min(s.vy, 16)
     
 def apply_standing(g,s):
     if s.standing == None: return
@@ -52,7 +52,7 @@ def apply_standing(g,s):
 
     a,b = s.rect, s.standing.rect
     a.bottom = b.top
-    #if a.bottom != b.top or a.left > b.right or a.right < b.left:
+
     if a.left > b.right or a.right < b.left:
         stop_standing(g, s)
         s.rect.y += 1 #throw on a bit o' gravity
@@ -97,7 +97,6 @@ def init_codes(g,s):
     g.view.clamp_ip(g.bounds)
     border = g.get_border(INIT_BORDER)
     g.run_codes(border)
-        
 
     
 def sign(v):
