@@ -6,8 +6,8 @@ from cnst import *
 import sprite
 import player
 
-def init(g,r,n,vx,*params):
-    s = sprite.Sprite3(g, r, 'parrot/left-0', (0, 6, 48, 20)) #3
+def init(g, r, n, vx, *params):
+    s = sprite.Sprite3(g, r, 'parrot/left-0', (0, 16, 48, 20)) #3
     #s.rect.bottom = r.bottom
     s.rect.centery = r.centery
     s.rect.centerx = r.centerx
@@ -35,7 +35,7 @@ def loop(g,s):
     
     if s._prev != None:
         if (s.rect.x == s._prev.x
-            or sprite.get_code(g,s,sign(s.vx), 0) == CODE_PARROT_TURN):
+            or sprite.get_code(g, s, sign(s.vx), 0) == CODE_PARROT_TURN):
             s.vx = -s.vx
             if s.vx > 0:
                 s.facing = 'right'
