@@ -1,5 +1,6 @@
 #!/bin/sh
 while true; do
+    pushing
     git checkout master
     ./run_game.py -full -nosound
     git checkout experimental
