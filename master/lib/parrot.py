@@ -18,7 +18,7 @@ def init(g, r, n, vx, *params):
     g.sprites.append(s)
     s.loop = loop
     
-    s.vx = vx
+    s.vx = vx * 2
     s.vy = 0
     
     s.facing = 'right'
