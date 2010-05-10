@@ -140,7 +140,7 @@ def loop(g, s):
         s.vy -= s.jumping
         s.jumping = max(0, s.jumping - 0.2)
 
-    inc = 2.0
+    inc = 1.0
     mx = 4
     if inpt.right and s.vx < mx:
         s.vx += inc
