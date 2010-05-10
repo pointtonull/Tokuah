@@ -9,7 +9,7 @@ import tiles
 import player
 
 def init(g, r, n, vx, *params):
-    s = sprite.Sprite3(g, r, 'frog/walk-left-0', (16, 16, 36, 38))
+    s = sprite.Sprite3(g, r, 'frog/walk-left-0', (16, 8, 36, 38))
     s.rect.bottom = r.bottom
     s.rect.centerx = r.centerx
     s.groups.add('solid')
@@ -33,7 +33,7 @@ def init(g, r, n, vx, *params):
     s.standing = None
     return s
 
-def loop(g,s):
+def loop(g, s):
     sprite.apply_gravity(g, s)
     sprite.apply_standing(g, s)
 
@@ -74,8 +74,7 @@ def loop(g,s):
                 s.walking = True
                 s.jumping = not s.walking
                 s.next_frame = 1
-            #s.vx*1
-            vx = s.vx * 1.5
+            vx = s.vx * 3.0
             s.rect.x += sprite.myinc(g.frame, vx)
             s.rect.y += sprite.myinc(g.frame, s.vy)
 
