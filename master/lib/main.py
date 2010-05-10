@@ -163,15 +163,15 @@ class Game(engine.Game):
 
             if self.scale2x:
                 tmp = pygame.transform.scale2x(self.screen)
-                self._screen.blit(tmp, (0, 0))
+                self.screen.blit(tmp, (0, 0))
             else:
                 tmp = pygame.transform.scale(self.screen, (SW * 2, SH * 2))
-                self._screen.blit(tmp, (0, 0))
+                self.screen.blit(tmp, (0, 0))
 
-            # silly TV effect ...
-            if '-tv' in sys.argv:
-                for y in xrange(0, SH * 2, 2):
-                    self._screen.fill((0, 0, 0), (0, y, SW*2, 1))
+        # silly TV effect ...
+        if '-tv' in sys.argv:
+            for y in xrange(0, SH * 2, 2):
+                self._screen.fill((0, 0, 0), (0, y, SW*2, 1))
 
         pygame.display.flip()
 
