@@ -32,23 +32,22 @@ def init(g,r,n,vx,*params):
     return s
     
 def loop(g,s):
-    #sprite.apply_gravity(g,s)
     
     if s._prev != None:
-        if s.rect.x == s._prev.x or sprite.get_code(g,s,sign(s.vx),0) == CODE_PARROT_TURN:
+        if (s.rect.x == s._prev.x
+            or sprite.get_code(g,s,sign(s.vx), 0) == CODE_PARROT_TURN):
             s.vx = -s.vx
-            if s.vx > 0: s.facing = 'right'
-            else:        s.facing = 'left'
+            if s.vx > 0:
+                s.facing = 'right'
+            else:
+                s.facing = 'left'
     s._prev = pygame.Rect(s.rect)
     
-    s.rect.x += s.vx*1
+    s.rect.x += s.vx
     s.rect.y += s.vy
     
-    s.image = 'parrot/%s-%d'%(s.facing,(g.frame/(FPS/8))%4)
-    
-    #sprite.check_standing(g,s)
+    s.image = 'parrot/%s-%d' % (s.facing, (g.frame / (FPS / 8)) % 4)
     
 
-def hit(g,a,b):
-    player.damage(g,b)
-    #print 'youve been spikeys!'
+def hit(g, a, b):
+    player.damage(g, b)
