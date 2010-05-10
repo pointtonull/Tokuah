@@ -60,7 +60,7 @@ def event(g, s, e):
     if (e.type is USEREVENT and e.action == 'jump' and s.standing != None
             and s.jumping == 0 and s.vy == 0):
         sprite.stop_standing(g, s)
-        s.vy = - 0.5
+        s.vy = -3.0
         s.jumping = 1.4
         g.game.sfx['jump'].play()
 
@@ -89,8 +89,6 @@ def event(g, s, e):
         powerup(g, s)
         s.god_mode = True
 
-    #if e.type is KEYDOWN and e.key == K_F12:
-        #1/0
 
 
 def loop(g, s):
@@ -142,7 +140,7 @@ def loop(g, s):
         s.vy -= s.jumping
         s.jumping = max(0, s.jumping - 0.2)
 
-    inc = 0.5
+    inc = 1.0
     mx = 2
     if inpt.right and s.vx < mx:
         s.vx += inc
