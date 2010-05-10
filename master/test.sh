@@ -1,5 +1,5 @@
 #!/bin/sh
-while true; do
+#while true; do
     pushing
     git checkout master
     ./run_game.py -full -nosound
@@ -7,4 +7,4 @@ while true; do
     ./run_game.py -full -nosound
     echo "##############################"
     sleep 5
-done
+#done
