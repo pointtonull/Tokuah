@@ -47,13 +47,13 @@ def loop(g, s):
         if (s.standing != None
         and sprite.get_code(g, s, sign(s.vx), 1) == CODE_FROG_JUMP):
             #s.vy_jump = -4.0
-            s.vy_jump = -3.6
+            s.vy_jump = -3.6 * 1.22
             if sprite.get_code(g, s, sign(s.vx) * 2, 1) == CODE_FROG_JUMP:
                 #s.vy_jump = -6.5
-                s.vy_jump = -6.0
+                s.vy_jump = -6.0 * 1.22
                 if sprite.get_code(g, s, sign(s.vx) * 3, 1) == CODE_FROG_JUMP:
                     #s.vy_jump = -8.5
-                    s.vy_jump = -8.1
+                    s.vy_jump = -8.1 * 1.22
 
             s.jumping = True
             s.walking = False
@@ -74,7 +74,7 @@ def loop(g, s):
                 s.walking = True
                 s.jumping = not s.walking
                 s.next_frame = 1
-            vx = s.vx * 1.5
+            vx = s.vx * 1.8
             s.rect.x += sprite.myinc(g.frame, vx)
             s.rect.y += sprite.myinc(g.frame, s.vy)
 
