@@ -98,5 +98,5 @@ def loop(g,s):
             elif s.vx < 0:
                 s.image = 'frog/walk-left-' + str(s.frame)
 
-def hit(g,a,b):
+def hit(g, a, b):
     player.damage(g, b)
