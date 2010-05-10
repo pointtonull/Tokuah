@@ -4,7 +4,7 @@ from pygame.locals import *
 from cnst import *
 
 class Sprite:
-    def __init__(self,r,n):
+    def __init__(self, r, n):
         self.rect = pygame.Rect(r)
         self.pos = r.centerx / TH, r.centery / TW
         self.image = n
@@ -29,7 +29,7 @@ def Sprite2(g, r, n):
     s.rect.h = s.shape.h = img.get_height()
     return s
 
-def Sprite3(g,r,n,shape):
+def Sprite3(g, r, n, shape):
     shape = pygame.Rect(shape)
     s = Sprite(r, n)
     s.shape.x, s.shape.y = shape.x, shape.y
@@ -41,7 +41,7 @@ def apply_gravity(g, s):
     if s.standing != None:
         s.vy = 0 
         return
-    s.vy += 0.2
+    s.vy += 0.4
     s.vy = min(s.vy, 6)
     
 def apply_standing(g,s):
