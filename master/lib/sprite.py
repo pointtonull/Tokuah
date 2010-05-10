@@ -6,9 +6,9 @@ from cnst import *
 class Sprite:
     def __init__(self,r,n):
         self.rect = pygame.Rect(r)
-        self.pos = r.centerx/TH,r.centery/TW
+        self.pos = r.centerx / TH, r.centery / TW
         self.image = n
-        self.shape = pygame.Rect(0,0,TW,TH)
+        self.shape = pygame.Rect(0, 0, TW, TH)
         self.exploded = 0
         self.loop = None
         
@@ -18,15 +18,12 @@ class Sprite:
         
         # needed for gravity to work / not work ... :)
         self.standing = None
-        
         self.active = True
-        
         self.deinit = deinit
-        
         self.auto_gc = True
         
-def Sprite2(g,r,n):
-    s = Sprite(r,n)
+def Sprite2(g, r, n):
+    s = Sprite(r, n)
     img = g.images[n]
     s.rect.w = s.shape.w = img.get_width()
     s.rect.h = s.shape.h = img.get_height()
@@ -34,18 +31,18 @@ def Sprite2(g,r,n):
 
 def Sprite3(g,r,n,shape):
     shape = pygame.Rect(shape)
-    s = Sprite(r,n)
-    s.shape.x, s.shape.y = shape.x,shape.y
+    s = Sprite(r, n)
+    s.shape.x, s.shape.y = shape.x, shape.y
     s.rect.w = s.shape.w = shape.w
     s.rect.h = s.shape.h = shape.h
     return s
 
-def apply_gravity(g,s):
+def apply_gravity(g, s):
     if s.standing != None:
         s.vy = 0 
         return
-    s.vy += 0.2
-    s.vy = min(s.vy,6)
+    s.vy += 0.1
+    s.vy = min(s.vy, 6)
     
 def apply_standing(g,s):
     if s.standing == None: return
