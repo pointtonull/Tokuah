@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+#-*- coding: UTF-8 -*-
 '''Game main module.
 
 Contains the entry point used by the run_game.py script.
@@ -114,7 +116,8 @@ class Game(engine.Game):
         import level
         level.pre_load()
 
-        
+
+
         if not '-nosound' in sys.argv:
             try:
                 if os.name == 'posix' or 1:
@@ -159,19 +162,20 @@ class Game(engine.Game):
 
 
     def flip(self):
-        if not self.lowres:
 
+        self.screen.blit(self.screen, (0, 0))
+
+        if not self.lowres:
             if self.scale2x:
                 tmp = pygame.transform.scale2x(self.screen)
                 self.screen.blit(tmp, (0, 0))
             else:
                 tmp = pygame.transform.scale(self.screen, (SW * 2, SH * 2))
                 self.screen.blit(tmp, (0, 0))
-
         # silly TV effect ...
         if '-tv' in sys.argv:
             for y in xrange(0, SH * 2, 2):
-                self._screen.fill((0, 0, 0), (0, y, SW*2, 1))
+                self._screen.fill((0, 0, 0), (0, y, SW * 2, 1))
 
         pygame.display.flip()
 
