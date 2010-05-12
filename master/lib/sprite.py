@@ -41,8 +41,8 @@ def apply_gravity(g, s):
     if s.standing != None:
         s.vy = 0
         return
-    s.vy += 0.535
-    s.vy = min(s.vy, 12)
+    s.vy += 0.2 * 2
+    s.vy = min(s.vy, 6 * 2)
 
 def apply_standing(g,s):
     if s.standing == None: return
