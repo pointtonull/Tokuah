@@ -14,67 +14,85 @@ function get_branch(){
 BEGIN{
     comando = "git status -s"
     branch = get_branch()
-    while (comando|getline){
+    while (comando|getline)
+        a[++n] = $0
+    close(comando)
 
-        if (!($0 ~ ".pyc$" || $0 ~ ".swp$")){
-            if (!mostrado){
-                print "Deje el mensaje en blanco para postergar un commit"
-                mostrado++
+    if (n){
+        print "Estas modificaciones fueron realizadas:"
+        for (i=1; i<=n; i++)
+            print a[i]
+        print "Escriba un mensaje para un commit general, deje en blanco si desea especificar un mensaje por fichero."
+        printf "Mensaje: "
+        getline mensaje
+        if (mensaje){
+                error = system("git commit -qam \"" mensaje "\"")
             }
-            s = substr($0, 1, 2)
-            n = substr($0, 4)
-            m = ""
-            t = 0
+        else{
+            print "Mensaje omitido, se procesaran los ficheros individualmente."
+            for (i=1; i<=n; i++){
+                f = a[i]
+#                print f
+                if (!(f ~ ".pyc$" || f ~ ".swp$")){
+                    if (!mostrado){
+                        print "Deje el mensaje en blanco para postergar un commit"
+                        mostrado++
+                    }
+                    s = substr(f, 1, 2)
+                    n = substr(f, 4)
+                    m = ""
+                    t = 0
 
-            if (s == "A " || s == " A")
-                t = "añadido"
-            if (s == "D " || s == " D")
-                t = "eliminado"
-            if (s == "R " || s == " R"){
-                t = "renombrado"
-                split(n, a, " -> ")
-                n = a[1]
-                m = a[2]
+                    if (s == "A " || s == " A")
+                        t = "añadido"
+                    if (s == "D " || s == " D")
+                        t = "eliminado"
+                    if (s == "R " || s == " R"){
+                        t = "renombrado"
+                        split(n, a, " -> ")
+                        n = a[1]
+                        m = a[2]
+                    }
+                    if (s == "M " || s == " M")
+                        t = "modificado"
+                    if (s == "??")
+                        d[n]++
+
+                    n = n " " m
+                    gsub("^ *", "", n)
+                    gsub(" *$", "", n)
+
+                    if (t){
+                        printf "Mensaje para \"%s\" que fue %s: ", n, t
+                        getline mensaje
+                        if (!mensaje)
+                            printf "Se postergó el commit de \"%s\"\n", n
+                        else
+                            a[n] = mensaje
+                    }
+
+                    if (length(d)){
+                        print "Estos archivos son desconocidos para git:", ds
+                        for (i in d)
+                            print " ", i
+                        print "Puede añadirlos ejecutando \"git add archivo\""
+                    }
+
+                    for (i in a){
+                        errorcommit += system("git commit -qm \"" a[i] "\" \"" i "\"")
+                    }
+
+                    if (length(a)){
+                        if (errorcommit){
+                            print "El commit no se realizó con exito, ¿escribió los mensajes?"
+                            exit 1
+                        }
+                        else {
+                            print "Commit exitoso"
+                        }
+                    }
+                }
             }
-            if (s == "M " || s == " M")
-                t = "modificado"
-            if (s == "??")
-                d[n]++
-
-            n = n " " m
-            gsub("^ *", "", n)
-            gsub(" *$", "", n)
-
-            if (t){
-                printf "Mensaje para \"%s\" que fue %s: ", n, t
-                getline mensaje
-                if (!mensaje)
-                    printf "Se postergó el commit de \"%s\"\n", n
-                else
-                    a[n] = mensaje
-            }
-        }
-    }
-
-    close(commando)
-    if (length(d)){
-        print "Estos archivos son desconocidos para git:", ds
-        for (i in d)
-            print " ", i
-        print "Puede añadirlos ejecutando \"git add archivo\""
-    }
-
-    for (i in a){
-        errorcommit += system("git commit -qm \"" a[i] "\" \"" i "\"")
-    }
-
-    if (length(a)){
-        if (errorcommit){
-            print "El commit no se realizó con exito, ¿escribió los mensajes?"
-            exit 1
-        }
-        else {
-            print "Commit exitoso"
         }
     }
 
