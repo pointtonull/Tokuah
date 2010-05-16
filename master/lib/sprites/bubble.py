@@ -4,65 +4,65 @@ from pygame.locals import *
 import sprite
 import capsule
 
-def init(g, r, p, big=False):
-    if not hasattr(g,'bubble_count'):
-        g.bubble_count = 0
-    if g.bubble_count >= 3:
-        return None
-    g.bubble_count += 1
-    #print 'new bubble', g.bubble_count
-    if big:
-        s = sprite.Sprite3(g, r, 'big-bubble', (0, 0, 32, 32))
-    else:
-        s = sprite.Sprite3(g, r, 'bubble', (0, 0, 14, 14))
-    s.big = big
-    s.rect.centerx = r.centerx
-    s.rect.centery = r.centery
-    s.groups.add('solid')
-    s.groups.add('bubble')
-    s.hit_groups.add('enemy')
-    s.hit = hit
-    g.sprites.append(s)
-    s.loop = loop
-    s.life = 30
-    s.strength = 1
-    s.deinit = deinit
-    if big:
-        s.strength = 3
+class Bubble(sprite.Sprite3):
+    def __init__(self, game, rect, p, big=False):
+        if not hasattr(game, 'bubble_count'):
+            game.bubble_count = 0
 
-    s.vx = 2
-    if p.facing == 'left':
-        s.vx = -2
-    s.vy = 0
-    s.rect.centerx += s.vx * (6 + s.rect.width / 2)
-    s.rect.centery -= 4
+        if game.bubble_count >= 3:
+            return None
 
-    g.game.sfx['bubble'].play()
+        game.bubble_count += 1
+        #print 'new bubble', g.bubble_count
+        if big:
+            sprite.Sprite3.__init__(self, game, rect, 'big-bubble',
+                (0, 0, 32, 32))
+        else:
+            sprite.Sprite3.__init__(self, game, rect, 'bubble',
+                (0, 0, 14, 14))
+        self.big = big
+        self.rect.centerx = rect.centerx
+        self.rect.centery = rect.centery
+        self.groups.add('solid')
+        self.groups.add('bubble')
+        self.hit_groups.add('enemy')
+        self.game.sprites.append(self)
+        self.life = 30
+        self.strength = 1
+        if big:
+            s.strength = 3
 
-    return s
+        self.vx = 2
+        if p.facing == 'left':
+            self.vx = -2
+        self.vy = 0
+        self.rect.centerx += self.vx * (6 + self.rect.width / 2)
+        self.rect.centery -= 4
 
-def deinit(g, s):
-    #print "bubble deinit"
-    g.bubble_count -= 1
+        self.game.game.sfx['bubble'].play()
 
-def loop(g, s):
-    s.rect.x += s.vx * 5
-    s.life -= 1
-    if s.life == 0:
-        s.active = False
+    def deinit(self):
+        #print "bubble deinit"
+        self.game.bubble_count -= 1
 
-def hit(g, a, b):
-    a.active = False
+    def loop(self):
+        self.rect.x += self.vx * 5
+        self.life -= 1
+        if self.life == 0:
+            self.active = False
 
-    b.strength -= a.strength
-    if b.strength <= 0:
-        b.active = False
-        code = None
-        if hasattr(b, '_code'):
-            code = b._code
-            delattr(b, '_code')
-        s = capsule.init(g, b.rect)
-        if code != None:
-            s._code = code
-    else:
-        g.game.sfx['hit'].play()
+    def hit(self, a, b):
+        a.active = False
+
+        b.strength -= a.strength
+        if b.strength <= 0:
+            b.active = False
+            code = None
+            if hasattr(b, '_code'):
+                code = b._code
+                delattr(b, '_code')
+            Capsule.__init__(self, self.game, b.rect)
+            if code != None:
+                self._code = code
+        else:
+            self.game.game.sfx['hit'].play()

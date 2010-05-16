@@ -5,80 +5,81 @@ from cnst import *
 
 import sprite
 
-def init(g, r, n, vx, vy):
+class Platform(sprite.Sprite3):
+    def init(self, game, rect, name, vx, vy):
 
-    x = r.centerx/TW
-    y = r.centery/TH
-    code = g.data[2][y][x]
-    min_x = x
-    max_x = x
+        x = rect.centerx / TW
+        y = rect.centery / TH
+        code = game.data[2][y][x]
+        min_x = x
+        max_x = x
 
-    for dx in xrange(1, 4):
-        if g.data[2][y][x + dx] != code:
-            break
-        max_x = x + dx
+        for dx in xrange(1, 4):
+            if g.data[2][y][x + dx] != code:
+                break
+            max_x = x + dx
 
-    for dx in xrange(-1, -4, -1):
-        if g.data[2][y][x+dx] != code:
-            break
-        min_x = x + dx
+        for dx in xrange(-1, -4, -1):
+            if g.data[2][y][x + dx] != code:
+                break
+            min_x = x + dx
 
-    iy = y
-    for ix in xrange(min_x, max_x + 1):
-        if (ix,iy) in g.codes:
+        iy = y
+        for ix in xrange(min_x, max_x + 1):
+            if (ix, iy) in g.codes:
+                return
+
+        w = (max_x - min_x + 1) * TW
+        h = TH
+        r = pygame.Rect(min_x * TW, iy * TH, w, h)
+
+        sprite.Sprite3(self, game, rect, 'platform/%d' % (max_x - min_x + 1),
+            (0, 0, w, h))
+        self.groups.add('solid')
+        self.hit_groups.add('player')
+        self.hit = hit
+        game.sprites.append(self)
+        self.loop = loop
+
+        self.vx = vx * 2
+        self.vy = vy * 2
+
+        self._prev = None
+        self.carrying = []
+
+
+    def loop(self, game):
+        #check if we hit a wall...
+        if s._prev != None:
+            if (self.rect.x == self._prev.x or sprite.get_code(game, 
+                    self, sign(self.vx), 0) == CODE_PLATFORM_TURN):
+                self.vx = - self.vx
+            if (self.rect.y == self._prev.y or sprite.get_code(game,
+                    self, 0, sign(self.vy)) == CODE_PLATFORM_TURN):
+                self.vy = - self.vy
+
+        self._prev = pygame.Rect(self.rect)
+
+        self.rect.x += self.vx
+        self.rect.y += self.vy
+
+        for b in self.carrying:
+            b.rect.x += self.vx
+            b.rect.y += self.vy
+
+
+    def hit(self, game, a, b):
+        if not hasattr(b, 'standing'):
             return
 
-    w = (max_x - min_x + 1) * TW
-    h = TH
-    r = pygame.Rect(min_x * TW, iy * TH, w, h)
+        rect = a.rect
+        aprev = a.prev
+        cur = b.rect
+        prev = b.prev
 
-    s = sprite.Sprite3(g, r, 'platform/%d' % (max_x - min_x + 1), (0, 0, w, h))
-    s.groups.add('solid')
-    s.hit_groups.add('player')
-    s.hit = hit
-    g.sprites.append(s)
-    s.loop = loop
+        if prev.bottom <= aprev.top and cur.bottom > rect.top:
+            cur.bottom = rect.top
+            b.standing = a
 
-    s.vx = vx * 2
-    s.vy = vy * 2
-
-    s._prev = None
-    s.carrying = []
-
-    return s
-
-
-def loop(g, s):
-    #check if we hit a wall...
-    if s._prev != None:
-        if (s.rect.x == s._prev.x
-            or sprite.get_code(g, s, sign(s.vx), 0) == CODE_PLATFORM_TURN):
-            s.vx = -s.vx
-        if (s.rect.y == s._prev.y
-            or sprite.get_code(g, s, 0, sign(s.vy)) == CODE_PLATFORM_TURN):
-            s.vy = -s.vy
-
-    s._prev = pygame.Rect(s.rect)
-
-    s.rect.x += s.vx
-    s.rect.y += s.vy
-
-    for b in s.carrying:
-        b.rect.x += s.vx
-        b.rect.y += s.vy
-
-
-def hit(g, a, b):
-    if not hasattr(b, 'standing'):
-        return
-
-    r = a.rect
-    aprev = a.prev
-    cur = b.rect
-    prev = b.prev
-
-    if prev.bottom <= aprev.top and cur.bottom > r.top:
-        cur.bottom = r.top
-        b.standing = a
-        if b not in a.carrying:
-            a.carrying.append(b)
+            if b not in a.carrying:
+                a.carrying.append(b)

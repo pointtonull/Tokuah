@@ -6,7 +6,6 @@ from pygame.locals import *
 
 #from cnst import *
 import sprite
-import sprites
 import tiles
 
 class Player(sprite.Sprite3):
@@ -17,7 +16,7 @@ class Player(sprite.Sprite3):
         self.rect.centerx = rect.centerx
         self.sprite.groups.add('player')
         self.sprite.groups.add('solid')
-        g.sprites.append(s)
+        game.sprites.append(s)
         self.sprite.loop = loop
         self.sprite.vx = 0
         self.sprite.vy = 0
@@ -28,20 +27,19 @@ class Player(sprite.Sprite3):
         self.sprite.flash_timer = 0
         self.sprite.shooting = 0
         self.sprite.powered_up = False
-        if hasattr(g.game, 'powerup'):
-            self.sprite.powered_up = g.game.powerup
+        if hasattr(game, 'powerup'):
+            self.sprite.powered_up = game.powerup
         self.sprite.powerup_transition = 0
         self.sprite.door_timer = None
         self.sprite.current_door = None
         self.sprite.door_pos = None
-        g.player = s
+        game.player = s
         self.sprite.event = event
         self.sprite.pan = pan_screen
         self.sprite.damage = damage
         self.sprite.kill = kill
         self.sprite.god_mode = False
         self.sprite.death_counter = -1
-
 
         self.sprite._prev = pygame.Rect(s.rect)
         self.sprite._prev2 = pygame.Rect(s.rect)
@@ -52,9 +50,7 @@ class Player(sprite.Sprite3):
         sprite.init_codes(g, s)
         self.sprite.no_explode = False
 
-        return s
-
-    def event(g, s, e):
+    def event(self, g, s, e):
         #print 'player.event',e
         if s.door_timer != None or s.exploded > 0:
             return
@@ -96,7 +92,7 @@ class Player(sprite.Sprite3):
 
 
 
-    def loop(g, s):
+    def loop(self, g, s):
         s._prev2 = pygame.Rect(s.rect)
 
         if s.death_counter > 0:

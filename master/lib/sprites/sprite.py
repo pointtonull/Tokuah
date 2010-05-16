@@ -29,13 +29,14 @@ def Sprite2(g, r, n):
     s.rect.h = s.shape.h = img.get_height()
     return s
 
-def Sprite3(g, r, n, shape):
-    shape = pygame.Rect(shape)
-    s = Sprite(r, n)
-    s.shape.x, s.shape.y = shape.x, shape.y
-    s.rect.w = s.shape.w = shape.w
-    s.rect.h = s.shape.h = shape.h
-    return s
+class Sprite3(Sprite):
+    def __init__(self, game, rect, name, shape):
+        shape = pygame.Rect(shape)
+        Sprite(self, rect, name)
+        self.shape.x = shape.x
+        self.shape.y = shape.y
+        self.rect.w = self.shape.w = shape.w
+        self.rect.h = self.shape.h = shape.h
 
 def apply_gravity(g, s):
     if s.standing != None:
