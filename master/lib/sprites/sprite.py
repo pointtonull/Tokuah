@@ -32,11 +32,44 @@ def Sprite2(g, r, n):
 class Sprite3(Sprite):
     def __init__(self, game, rect, name, shape):
         shape = pygame.Rect(shape)
-        Sprite(self, rect, name)
+        Sprite.__init__(self, rect, name)
         self.shape.x = shape.x
         self.shape.y = shape.y
         self.rect.w = self.shape.w = shape.w
         self.rect.h = self.shape.h = shape.h
+        self.game = game
+
+    def apply_gravity(self):
+        if self.standing != None:
+            self.vy = 0
+            return
+        self.vy += 0.2 * 2
+        self.vy = min(self.vy, 6 * 2)
+
+    def apply_standing(self):
+        if self.standing == None:
+            return
+
+        if not self.standing.active:
+            self.stop_standing()
+            return
+
+        a = self.rect
+        b = self.standing.rect
+        a.bottom = b.top
+
+        if a.left > b.right or a.right < b.left:
+            self.stop_standing()
+            self.rect.y += 1 #throw on a bit o' gravity
+            return
+
+    def stop_standing(self):
+        if hasattr(self.standing,'carrying'):
+            if self in self.standing.carrying:
+                self.standing.carrying.remove(self)
+        self.standing = None
+
+
 
 def apply_gravity(g, s):
     if s.standing != None:

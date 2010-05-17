@@ -5,38 +5,38 @@ import pygame
 import sprite
 import player
 
-def init(g, r, n, facing, *params):
-    s = sprite.Sprite3(g, r, 'panda-%s' % (facing), (0, 0, 40, 86))
-    s.rect.bottom = r.bottom
-    s.rect.centerx = r.centerx
-    s.groups.add('solid')
-    s.groups.add('enemy')
-    s.hit_groups.add('player')
-    s.hit = hit
-    g.sprites.append(s)
-    s.loop = loop
+class Panda(sprite.Sprite3):
+    def __init__(game, rect, name, facing, *args):
+        sprite.Sprite3.__init__(game, rect, 'panda-%s' % (facing),
+            (0, 0, 40, 86))
+        self.rect.bottom = r.bottom
+        self.rect.centerx = r.centerx
+        self.groups.add('solid')
+        self.groups.add('enemy')
+        self.hit_groups.add('player')
+        self.hit = hit
+        game.sprites.append(self)
+        self.loop = loop
 
-    s.vx = 0
-    s.vy = 0
+        self.vx = 0
+        self.vy = 0
 
-    s._prev = pygame.Rect(s.rect)
-    s.strength = 90000
+        self._prev = pygame.Rect(s.rect)
+        self.strength = 90000
 
-    s.standing = None
-    return s
+        self.standing = None
 
+    def loop(self):
+        self.apply_gravity()
+        self.apply_standing()
 
-def loop(g,s):
-    sprite.apply_gravity(g, s)
-    sprite.apply_standing(g, s)
+        if self.rect.x == self._prev.x:
+            self.vx = - self.vx
+            self._prev = pygame.Rect(self.rect)
 
-    if s.rect.x == s._prev.x:
-        s.vx = -s.vx
-        s._prev = pygame.Rect(s.rect)
-
-    s.rect.x += s.vx
-    s.rect.y += sprite.myinc(g.frame, s.vy)
+        self.rect.x += self.vx
+        self.rect.y += sprite.myinc(self.game.frame, self.vy)
 
 
-def hit(g, a, b):
-    player.damage(g, b)
+    def hit(self, a, b):
+        player.damage(game, b)

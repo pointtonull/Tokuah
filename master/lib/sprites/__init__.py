@@ -10,7 +10,8 @@ from platform import Platform
 from parrot import Parrot
 from bubble import Bubble
 from frog import Frog
-from tiles_basic import Tiles_basic
+#from tiles_basic import Tiles_basic
+import tiles_basic
 from panda import Panda
 from door import Door
 from fireguy import Fireguy
