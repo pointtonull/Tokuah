@@ -5,7 +5,6 @@ from pygame.locals import *
 
 from cnst import *
 
-import sprites
 import sprite
 import player
 

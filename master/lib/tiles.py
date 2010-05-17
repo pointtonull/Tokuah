@@ -4,157 +4,157 @@ from pygame.locals import *
 from cnst import *
 
 import tiles_basic
-from tile import *
+from spritesng.tile import *
 
-# NOTE: If you add new tiles, use t_init for regular tiles.
-#       tl_init and tr_init are for tiles that take up only half of the
+# NOTE: If you add new tiles, use Tile for regular tiles.
+#       Tile_left and Tile_rigth are for tiles that take up only half of the
 #       16x16 tile, on the left or right side respectively.
 
 TILES = {
 #general purpose tiles
-    0x00    :[t_init, [], None,],
-    0x01    :[t_init, ['solid'], tiles_basic.hit_block,1,1,1,1,],
-    0x02    :[t_init, ['solid'], tiles_basic.hit_breakable,1,1,1,1,],
-    0x03    :[t_init, ['player'], tiles_basic.hit_fire,],
-    0x04    :[t_init, [], None,], #black background tile
-    0x05    :[t_init, [], None,], #exit sign
-    0x10    :[t_init, ['solid'], tiles_basic.hit_block,1,1,1,1,],
-    0x11    :[t_init, ['solid'], tiles_basic.hit_block,1,0,0,0,],
-    0x12    :[t_init, ['solid'], tiles_basic.hit_fally,1,1,1,1,],
-    0x14    :[t_init, ['bubble'], tiles_basic.hit_replace,0x15,],
-    0x15    :[t_init, ['solid'], tiles_basic.hit_block,1,1,1,1,],
-    0x21    :[t_init, ['solid'], tiles_basic.hit_block,1,0,0,0,],
+    0x00: [Tile,        [], None],
+    0x01: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x02: [Tile,        ['solid'],  tiles_basic.hit_breakable, 1, 1, 1, 1],
+    0x03: [Tile,        ['player'], tiles_basic.hit_fire],
+    0x04: [Tile,        [], None], #black background tile
+    0x05: [Tile,        [], None], #exit sign
+    0x10: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x11: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0x12: [Tile,        ['solid'],  tiles_basic.hit_fally, 1, 1, 1, 1],
+    0x14: [Tile,        ['bubble'], tiles_basic.hit_replace, 0x15],
+    0x15: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x21: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
 
 #powerups and bonus items ...
-    0x08    :[t_init,['player'],tiles_basic.hit_power,], #power-up
-    0x0C    :[t_init,['player'],tiles_basic.hit_life,], #extra-life
-    0x18    :[t_init,['player'],tiles_basic.hit_item,100], #points
-    0x1A    :[t_init,['player'],tiles_basic.hit_item,250], #points
-    0x1C    :[t_init,['player'],tiles_basic.hit_item,500], #points
-    0x1E    :[t_init,['player'],tiles_basic.hit_item,1000], #points
-    0x28    :[t_init,['player'],tiles_basic.hit_coin,], #coin
+    0x08: [Tile,        ['player'], tiles_basic.hit_power], #power-up
+    0x0C: [Tile,        ['player'], tiles_basic.hit_life], #extra-life
+    0x18: [Tile,        ['player'], tiles_basic.hit_item, 100], #points
+    0x1A: [Tile,        ['player'], tiles_basic.hit_item, 250], #points
+    0x1C: [Tile,        ['player'], tiles_basic.hit_item, 500], #points
+    0x1E: [Tile,        ['player'], tiles_basic.hit_item, 1000], #points
+    0x28: [Tile,        ['player'], tiles_basic.hit_coin], #coin
 
 #jungle tiles (0x40...)
-    0x40	:[tr_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0x41	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0x42	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0x43	:[tl_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0x44	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0x45	:[tr_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-#0x51	:[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-#0x52	:[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x54	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0x55	:[tl_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-#0x61	:[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-#0x62	:[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x64	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0x65	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0x70	:[tr_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0x71	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0x72	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0x73	:[tl_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0x74	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0x75	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
+    0x40: [Tile_rigth,  ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0x41: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0x42: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0x43: [Tile_left,   ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0x44: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0x45: [Tile_rigth,  ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+#0x51: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+#0x52: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x54: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0x55: [Tile_left,   ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+#0x61: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+#0x62: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x64: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0x65: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0x70: [Tile_rigth,  ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0x71: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0x72: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0x73: [Tile_left,   ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0x74: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0x75: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
 
 #dirt floor set
-    0x47    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x48    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x49    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x57    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x58    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x59    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x67    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x68    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x69    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x77    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x78    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x79    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
+    0x47: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x48: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x49: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x57: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x58: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x59: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x67: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x68: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x69: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x77: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x78: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x79: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
 
 #dirt floor set #2
-    0x4A    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x4B    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x4C    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x5A    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x5B    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x5C    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x6A    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x6B    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x6C    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x7A    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x7B    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x7C    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
+    0x4A: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x4B: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x4C: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x5A: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x5B: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x5C: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x6A: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x6B: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x6C: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x7A: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x7B: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x7C: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
 
 #volcano tiles (0x80...)
-    0x80	:[tr_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0x81	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0x82	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0x83	:[tl_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0x84	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0x85	:[tr_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-#0x91	:[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-#0x92	:[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x94	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0x95	:[tl_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-#0xa1	:[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-#0xa2	:[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0xa4	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0xa5	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0xb0	:[tr_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0xb1	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0xb2	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0xb3	:[tl_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0xb4	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0xb5	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
+    0x80: [Tile_rigth,  ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0x81: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0x82: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0x83: [Tile_left,   ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0x84: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0x85: [Tile_rigth,  ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+#0x91: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+#0x92: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x94: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0x95: [Tile_left,   ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+#0xa1: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+#0xa2: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0xa4: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0xa5: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0xb0: [Tile_rigth,  ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0xb1: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0xb2: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0xb3: [Tile_left,   ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0xb4: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0xb5: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
 
 # volcano cave set
-    0x87    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x88    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x89    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x97    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x98    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0x99    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0xA7    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0xA8    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0xA9    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0xB7    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0xB8    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0xB9    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
+    0x87: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x88: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x89: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x97: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x98: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0x99: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0xA7: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0xA8: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0xA9: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0xB7: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0xB8: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0xB9: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
 
 #moon tiles (0xC0...)
-    0xc0	:[tr_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0xc1	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0xc2	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0xc3	:[tl_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0xc4	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0xc5	:[tr_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-#0xd1	:[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-#0xd2	:[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0xd4	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0xd5	:[tl_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-#0xe1	:[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-#0xe2	:[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0xe4	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0xe5	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0xf0	:[tr_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0xf1	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0xf2	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0xf3	:[tl_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0xf4	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
-    0xf5	:[t_init,['solid'],tiles_basic.hit_block,1,0,0,0,],
+    0xc0: [Tile_rigth,  ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0xc1: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0xc2: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0xc3: [Tile_left,   ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0xc4: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0xc5: [Tile_rigth,  ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+#0xd1: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+#0xd2: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0xd4: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0xd5: [Tile_left,   ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+#0xe1: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+#0xe2: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0xe4: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0xe5: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0xf0: [Tile_rigth,  ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0xf1: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0xf2: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0xf3: [Tile_left,   ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0xf4: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
+    0xf5: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
 
 # moon cave set
-    0xC7    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0xC8    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0xC9    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0xD7    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0xD8    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0xD9    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0xE7    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0xE8    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0xE9    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0xF7    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0xF8    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
-    0xF9    :[t_init,['solid'],tiles_basic.hit_block,1,1,1,1,],
+    0xC7: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0xC8: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0xC9: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0xD7: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0xD8: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0xD9: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0xE7: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0xE8: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0xE9: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0xF7: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0xF8: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
+    0xF9: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
 }
 
 
@@ -162,36 +162,55 @@ TANIMATE = [
 #(starting_tile, animated list of frames incs),
 # powerup
     (0x08,
-        (0,) * 23 +
-        (1,) * 3 +
-        (2,) * 3 +
-        (3,) * 3
+        (0, ) * 23 +
+        (1, ) * 3 +
+        (2, ) * 3 +
+        (3, ) * 3
     ),
 # extra life
     (0x0C,
-        (0,) * 7 +
-        (1,) * 3 +
-        (2,) * 3 +
-        (0,) * 17
+        (0, ) * 7 +
+        (1, ) * 3 +
+        (2, ) * 3 +
+        (0, ) * 17
     ),
 # veggies
     (0x18,
-        (1,) * 2 +
-        (0,) * 63
+        (1, ) * 2 +
+        (0, ) * 63
     ),
 # points
     (0x1A,
-        (0,) * 16 +
-        (1,) * 2 +
-        (0,) * 49
+        (0, ) * 16 +
+        (1, ) * 2 +
+        (0, ) * 49
     ),
-    (0x1C, [int(v) for v in
-    '0000000000000000000000000000000011000000000000000000000000000000']),
-(0x1E, [int(v) for v in
-    '0000000000000000000000000000000000000000000000001100000000000000']),
-(0x28, [int(v) for v in '00001111222233334444555566667777']), # coin
-(0x30, [int(v) for v in
-    '0111111111111111111111111111111111111111111111']), # door
+    (0x1C,
+        (0, ) * 33 +
+        (1, ) * 2 +
+        (0, ) * 30
+    ),
+    (0x1E, 
+        (0, ) * 48 +
+        (1, ) * 2 +
+        (0, ) * 14
+    ),
+# coin
+    (0x28,
+        (0, ) * 4 +
+        (1, ) * 4 +
+        (2, ) * 4 +
+        (3, ) * 4 +
+        (4, ) * 4 +
+        (5, ) * 4 +
+        (6, ) * 4 +
+        (7, ) * 4
+    ),
+# door
+    (0x30,
+        (0, ) * 1 +
+        (1, ) * 45
+    ),
 ]
 
 TREPLACE = [
@@ -202,10 +221,10 @@ TREPLACE = [
     (0x20, 0x00),
 ]
 
-def t_put(g, pos, n):
+def t_put(game, pos, name):
     x, y = pos
-    if n not in TILES:
-        t_init(g, pygame.Rect(x * TW, y * TH, TW, TH), n, [], None)
+    if name not in TILES:
+        t_init(game, pygame.Rect(x * TW, y * TH, TW, TH), name, [], None)
         return
-    v = TILES[n]
-    v[0](g, pygame.Rect(x * TW, y * TH, TW, TH), n, *v[1:])
+    v = TILES[name]
+    v[0](game, pygame.Rect(x * TW, y * TH, TW, TH), name, *v[1:])

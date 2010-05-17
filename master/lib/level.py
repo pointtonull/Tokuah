@@ -10,7 +10,7 @@ from decoradores import Cache, Verbose
 
 import data
 
-from spritesng import tiles
+import tiles
 import codes
 import menu
 import levels

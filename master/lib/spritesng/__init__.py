@@ -3,8 +3,7 @@
 import sys
 import os
 
-sys.path.insert(0, os.path.abspath("../lib"))
-print sys.path
+sys.path.insert(0, os.path.abspath("./lib"))
 
 from blob import Blob
 from boss import Boss

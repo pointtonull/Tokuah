@@ -1,37 +1,41 @@
-import pygame
-from pygame.locals import *
-
+#!/usr/bin/env python
+#-*- coding: UTF-8 -*-
 from cnst import *
-
+from pygame.locals import *
+import pygame
 import sprite
+import tiles
 
-def t_init(g, r, n, hit_groups, hit, *params):
-    t = sprite.Sprite(r, n)
-    for grp in hit_groups: t.hit_groups.add(grp)
-    def _hit(g, a, b):
-        return hit(g, a, b, *params)
-    t.hit = _hit
-    t.standable = 0
-    if len(params) > 0:
-        t.standable = params[0]
-    g.layer[r.centery / TH][r.centerx / TW] = t
-    return t
+class Tile(sprite.Sprite):
+    def __init__(self, game, rect, name, hit_groups, hit, *args):
+        sprite.Sprite.__init__(rect, name)
+
+        for group in hit_groups:
+            self.hit_groups.add(group)
+        t.standable = 0
+        if len(params) > 0:
+            t.standable = params[0]
+        g.layer[r.centery / TH][r.centerx / TW] = t
+        return t
+
+    def hit(self, a, b, *args): #WTF! (definición recursiva sin sentido)
+        return hit(game, a, b, *args)
 
 # tile that takes up half the space it normally would, and is on the left side
-def tl_init(g, r, n, hit_groups, hit, *params):
-    t = t_init(g, r, n, hit_groups, hit, *params)
-    t.rect.w = t.rect.w / 2
-    return t
+class Tile_left(Tile):
+    def __init__(self, game, rect, name, hit_groups, hit, *args):
+        Tile.__init__(self, game, rect, name, hit_groups, hit, *args)
+        self.rect.w = t.rect.w / 2
 
 # same as tl_init, but on the right side
-def tr_init(g, r, n, hit_groups, hit, *params):
-    t = tl_init(g, r, n, hit_groups, hit, *params)
-    t.rect.x += t.rect.w
-    return t
+class Tile_rigth(Tile):
+    def __init__(self, game, rect, name, hit_groups, hit, *args):
+        Tile_rigth.__init__(self, game, rect, name, hit_groups, hit, *args)
+        self.rect.x += self.rect.w
 
-def tile_to_sprite(g, s):
-    import tiles
-    x, y = s.rect.centerx / TW, s.rect.centery / TH
-    tiles.t_put(g, (x, y), 0)
 
-    g.sprites.append(s)
+def tile_to_sprite(game, sprite):
+    x, y = sprite.rect.centerx / TW, sprite.rect.centery / TH
+    tiles.t_put(game, (x, y), 0)
+
+    game.sprites.append(sprite)

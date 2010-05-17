@@ -2,8 +2,7 @@ import pygame
 
 from cnst import *
 import tiles
-import player
-import bubble
+from spritesng import Player, Bubble
 
 def hit_block(g,a,b,top=1,right=1,bottom=1,left=1):
     #print 'you hit a block'
