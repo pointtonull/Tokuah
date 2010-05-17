@@ -67,15 +67,16 @@ class Door(sprite.Sprite3):
         self = b
         self.rect.centerx = rect.centerx
         s.rect.bottom = rect.bottom
-        if s.standing != None:
-            sprite.stop_standing(g, s)
+
+        if self.standing != None:
+            self.stop_standing()
         
-        sprite.init_bounds(g, s)
-        sprite.init_view(g, s)
-        sprite.init_codes(g, s)
-        s.prev = pygame.Rect(s.rect)
-        s._prev = pygame.Rect(s.rect)
+        sprite.init_bounds(self.game, self)
+        sprite.init_view(self.game, self)
+        sprite.init_codes(self.game, self)
+        self.prev = pygame.Rect(self.rect)
+        self._prev = pygame.Rect(self.rect)
         
-        g.status = 'transition'
+        self.game.status = 'transition'
         
-        g.game.sfx['door'].play()
+        self.game.game.sfx['door'].play()

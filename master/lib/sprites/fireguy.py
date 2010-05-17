@@ -7,75 +7,75 @@ from cnst import *
 
 import random
 
-def init(g, r, n, *params):
-    s = sprite.Sprite3(g,r,'fireguy-right-0',(0,0,28,46))
-    s.rect.bottom = r.bottom
-    s.rect.centerx = r.centerx
-    s.groups.add('solid')
-    s.groups.add('enemy')
-    s.hit_groups.add('player')
-    s.hit = hit
-    g.sprites.append(s)
-    s.loop = loop
+class Fireguy(sprite.Sprite3):
+    def __init__(self, game, rect, name, *args):
+        sprite.Sprite3.__init__(game, rect, 'fireguy-right-0', (0, 0, 28, 46))
+        self.rect.bottom = rect.bottom
+        self.rect.centerx = rect.centerx
+        self.groups.add('solid')
+        self.groups.add('enemy')
+        self.hit_groups.add('player')
+        self.hit = hit
+        self.game.sprites.append(self)
 
-    s.moving = 0
-    #s.idling = 240
-    s.idling = random.randint(120,240)
+        self.moving = 0
+        self.idling = random.randint(120, 240)
 
-    s.frame = 0
+        self.frame = 0
 
-    s.facing = 'right'
+        self.facing = 'right'
 
-    s.vx = 0
-    s.vy = 0
+        self.vx = 0
+        self.vy = 0
 
-    s._prev = pygame.Rect(s.rect)
-    s.strength = 3
+        self._prev = pygame.Rect(self.rect)
+        self.strength = 3
 
-    s.standing = None
-    return s
+        self.standing = None
 
-def loop(g, s):
-    sprite.apply_gravity(g, s)
-    sprite.apply_standing(g, s)
+    def loop(self):
+        self.apply_gravity()
+        self.apply_standing()
 
-    if (s.moving and s.rect.x == s._prev.x
-        or sprite.get_code(g,s,sign(s.vx), 0) == CODE_FIREGUY_TURN):
-        s.vx = -s.vx
-        if s.vx < 0:
-            s.facing = 'left'
-        else:
-            s.facing = 'right'
-    s._prev = pygame.Rect(s.rect)
+        if (self.moving and self.rect.x == self._prev.x
+            or (sprite.get_code(self.game, self, sign(self.vx), 0)
+            == CODE_FIREGUY_TURN)):
+            self.vx = - self.vx
 
-    s.rect.x += s.vx
-    s.rect.y += s.vy
+            if self.vx < 0:
+                self.facing = 'left'
+            else:
+                self.facing = 'right'
+        s._prev = pygame.Rect(s.rect)
 
-    if s.idling > 0:
-        if s.idling % 120 > 60:
-            s.facing = 'left'
-        else:
-            s.facing = 'right'
-        s.idling -= 1
-        if s.idling == 0:
-            s.moving = 90
-            #if g.game.random % 2 == 0:
-            if random.randint(0,1):
-                s.vx = -2
+        s.rect.x += s.vx
+        s.rect.y += s.vy
+
+        if s.idling > 0:
+            if s.idling % 120 > 60:
                 s.facing = 'left'
             else:
-                s.vx = 2
                 s.facing = 'right'
-    elif s.moving > 0:
-        s.moving -= 1
-        if s.moving == 0:
+            s.idling -= 1
+            if s.idling == 0:
+                s.moving = 90
+                #if g.game.random % 2 == 0:
+                if random.randint(0,1):
+                    s.vx = -2
+                    s.facing = 'left'
+                else:
+                    s.vx = 2
+                    s.facing = 'right'
+        elif s.moving > 0:
+            s.moving -= 1
+            if s.moving == 0:
+                s.idling = 240
+                s.vx = 0
+        else:
             s.idling = 240
-            s.vx = 0
-    else:
-        s.idling = 240
 
-    s.image = 'fireguy-%s-%s' % (s.facing, (s.frame / 5) % 2)
-    s.frame += 1
+        s.image = 'fireguy-%s-%s' % (s.facing, (s.frame / 5) % 2)
+        s.frame += 1
 
-def hit(g, a, b):
-    player.damage(g, b)
+    def hit(g, a, b):
+        player.damage(g, b)
