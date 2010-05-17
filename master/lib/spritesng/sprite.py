@@ -1,13 +1,13 @@
 import pygame
 from pygame.locals import *
-
+from decoradores import deprecated
 from cnst import *
 
 class Sprite:
-    def __init__(self, r, n):
-        self.rect = pygame.Rect(r)
-        self.pos = r.centerx / TH, r.centery / TW
-        self.image = n
+    def __init__(self, rect, name):
+        self.rect = pygame.Rect(rect)
+        self.pos = rect.centerx / TH, rect.centery / TW
+        self.image = name
         self.shape = pygame.Rect(0, 0, TW, TH)
         self.exploded = 0
         self.loop = None
@@ -22,12 +22,14 @@ class Sprite:
         self.deinit = deinit
         self.auto_gc = True
 
-def Sprite2(g, r, n):
-    s = Sprite(r, n)
-    img = g.images[n]
-    s.rect.w = s.shape.w = img.get_width()
-    s.rect.h = s.shape.h = img.get_height()
-    return s
+
+class Sprite2(Sprite):
+    def __init__(self, game, rect, name):
+        Sprite.__init__(self, rect, name)
+        img = game.images[n]
+        self.rect.w = self.shape.w = img.get_width()
+        self.rect.h = self.shape.h = img.get_height()
+
 
 class Sprite3(Sprite):
     def __init__(self, game, rect, name, shape):
@@ -69,8 +71,22 @@ class Sprite3(Sprite):
                 self.standing.carrying.remove(self)
         self.standing = None
 
+    def get_code(self, ix,iy):
+        #dx,dy get taken down to their signed component
+        dx = sign(ix)
+        dy = sign(iy)
+        rect = self.rect
+        x = [rect.left, rect.centerx, rect.right][dx + 1]
+        y = [rect.top, rect.centery, rect.bottom][dy + 1]
+        x = (x + dx) / TW + dx * max(0, abs(ix) - 1)
+        y = (y + dy) / TH + dy * max(0, abs(iy) - 1)
+        if x < 0 or y < 0 or x >= self.game.size[0] or y >= self.game.size[1]:
+            return 0
+        else:
+            return self.game.data[2][y][x]
 
 
+@deprecated
 def apply_gravity(g, s):
     if s.standing != None:
         s.vy = 0
@@ -78,6 +94,7 @@ def apply_gravity(g, s):
     s.vy += 0.2 * 2
     s.vy = min(s.vy, 6 * 2)
 
+@deprecated
 def apply_standing(g,s):
     if s.standing == None: return
     if not s.standing.active:
@@ -92,17 +109,20 @@ def apply_standing(g,s):
         s.rect.y += 1 #throw on a bit o' gravity
         return
 
+@deprecated
 def stop_standing(g,s):
     if hasattr(s.standing,'carrying'):
         if s in s.standing.carrying:
             s.standing.carrying.remove(s)
     s.standing = None
 
+@deprecated
 def deinit(g,s):
     if hasattr(s,'standing'):
         stop_standing(g,s)
 
 
+@deprecated
 def init_bounds(g,s):
     x,y = s.rect.centerx/TW,s.rect.centery/TH
     min_x,min_y,max_x,max_y = x,y,x,y
@@ -122,22 +142,26 @@ def init_bounds(g,s):
     #if g.bounds.h < SH:
         #print 'uh oh, g.bounds.h < SH',g.bounds.h
 
+@deprecated
 def init_view(g,s):
     g.view.centerx = s.rect.centerx
     g.view.centery = s.rect.centery
     s.pan(g,s)
 
+@deprecated
 def init_codes(g,s):
     g.view.clamp_ip(g.bounds)
     border = g.get_border(INIT_BORDER)
     g.run_codes(border)
 
 
+@deprecated
 def sign(v):
     if v < 0: return -1
     if v > 0: return 1
     return 0
 
+@deprecated
 def get_code(g,s,ix,iy):
     #dx,dy get taken down to their signed component
     dx,dy = sign(ix),sign(iy)
@@ -149,6 +173,7 @@ def get_code(g,s,ix,iy):
     if x < 0 or y < 0 or x >= g.size[0] or y >= g.size[1]: return 0
     return g.data[2][y][x]
 
+@deprecated
 def myinc(frame, increment):
     #frame - the current frame
     #inc - a float to add to a number

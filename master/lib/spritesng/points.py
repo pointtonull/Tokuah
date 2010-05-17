@@ -6,21 +6,16 @@ from cnst import *
 import sprite
 import player
 
-def init(g,r,v):
-    s = sprite.Sprite2(g,r,'points/%d'%v) #3
-    s.rect.centery = r.centery
-    s.rect.centerx = r.centerx
-    g.sprites.append(s)
-    s.loop = loop
-    
-    s.frame = 0
-    return s
-    
-def loop(g,s):
-    #sprite.apply_gravity(g,s)
-    
-    s.frame += 1
-    if s.frame == FPS:
-        s.active = False
-    
+class Points(sprite.Sprite2):
+    def __init__(self, game, rect, v):
+        sprite.Sprite2.__init__(game, rect, 'points/%d' % v) #3
+        self.rect.centery = r.centery
+        self.rect.centerx = r.centerx
+        self.sprites.append(self)
 
+        self.frame = 0
+
+    def loop(self):
+        self.frame += 1
+        if self.frame == FPS:
+            self.active = False

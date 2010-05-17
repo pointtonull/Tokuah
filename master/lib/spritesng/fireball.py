@@ -5,53 +5,54 @@ import sprite
 import capsule
 import player
 
-def init(g, r, p, big=False):
-    s = sprite.Sprite3(g, r, 'fireball', (0, 0, 32, 32))
-    s.big = big
-    if p.facing == 'left':
-        s.rect.centerx = r.x + 34 - 27
-        s.rect.centery = r.y + 83 - 62
-    else:
-        s.rect.centerx = r.right - 34 + 27
-        s.rect.centery = r.y + 83 - 62
-    s.groups.add('solid')
-    s.groups.add('enemy')
-    s.hit_groups.add('player')
-    s.hit = hit
-    g.sprites.insert(0,s)
-    s.loop = loop
-    s.life = 600
-    s.strength = 1
-    s.standing = None
+class Fireball(sprite.Sprite3):
+    def __init__(self, game, rect, parent, big=False):
+        sprite.Sprite3.__init__(self, game, rect, 'fireball', (0, 0, 32, 32))
+        self.big = big
 
-    s.bounces = 3
+        if parent.facing == 'left':
+            self.rect.centerx = rect.x + 34 - 27
+            self.rect.centery = rect.y + 83 - 62
+        else:
+            self.rect.centerx = rect.right - 34 + 27
+            self.rect.centery = rect.y + 83 - 62
 
-    s.vx = 0.4
-    if p.facing == 'left':
-        s.vx = -0.4
+        self.groups.add('solid')
+        self.groups.add('enemy')
+        self.hit_groups.add('player')
+        self.game.sprites.insert(0, self)
 
-    s.vx += p.vx
-    s.vy = 0
+        self.life = 600
+        self.strength = 1
+        self.standing = None
 
-    return s
+        self.bounces = 3
 
-def loop(g, s):
-    sprite.apply_gravity(g, s)
-    sprite.apply_standing(g, s)
+        self.vx = 0.4
+        if parent.facing == 'left':
+            self.vx = -0.4
 
-    if s.bounces > 0 and s.standing:
-        sprite.stop_standing(g, s)
-        s.vy = -s.bounces * 0.75
-        s.bounces -= 1
-        if s.bounces == 0:
-            s.vx = 0
+        self.vx += parent.vx
+        self.vy = 0
 
-    s.rect.x += sprite.myinc(g.frame, s.vx)
-    s.rect.y += sprite.myinc(g.frame, s.vy)
 
-    s.life -= 1
-    if s.life == 0:
-        s.active = False
+    def loop(self):
+        self.sprite.apply_gravity()
+        self.sprite.apply_standing()
 
-def hit(g,a,b):
-    player.damage(g,b)
+        if self.bounces > 0 and self.standing:
+            self.stop_standing()
+            self.vy = -self.bounces * 0.75
+            self.bounces -= 1
+            if self.bounces == 0:
+                self.vx = 0
+
+        self.rect.x += sprite.myinc(self.game.frame, self.vx)
+        self.rect.y += sprite.myinc(self.game.frame, self.vy)
+
+        self.life -= 1
+        if self.life == 0:
+            self.active = False
+
+    def hit(self, a, b):
+        player.damage(self.game, b)

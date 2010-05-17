@@ -2,25 +2,28 @@
 #-*- coding: UTF-8 -*-
 import sys
 import os
-sys.path.append(os.path.abspath("./lib"))
 
-from player import Player
-from spikey import Spikey
-from platform import Platform
-from parrot import Parrot
+sys.path.insert(0, os.path.abspath("../lib"))
+print sys.path
+
+from blob import Blob
+from boss import Boss
+from boss import Bub
+from brobo import Brobo
 from bubble import Bubble
+from capsule import Capsule
+from door import Door
+from fireball import Fireball
+from fireguy import Fireguy
 from frog import Frog
+from laser import Laser
+from panda import Panda
+from parrot import Parrot
+from platform import Platform
+from player import Player
+from points import Points
+from robo import Robo
+from shootbot import Shootbot
+from spikey import Spikey
 #from tiles_basic import Tiles_basic
 import tiles_basic
-from panda import Panda
-from door import Door
-from fireguy import Fireguy
-from robo import Robo
-from brobo import Brobo
-from laser import Laser
-from points import Points
-from blob import Blob
-from shootbot import Shootbot
-from boss import Boss
-from fireball import Fireball
-from capsule import Capsule

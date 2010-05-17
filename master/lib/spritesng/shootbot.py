@@ -3,81 +3,73 @@ from pygame.locals import *
 
 import sprite
 import player
-import laser
+from laser import Laser
 
 from cnst import *
 
-def init(g,r,n,facing = 'left',*params):
-    s = sprite.Sprite3(g,r,'shootbot-%s-0' % (facing),(0,0,18,24))
-    s.rect.bottom = r.bottom
-    s.rect.centerx = r.centerx
-    s.groups.add('solid')
-    s.groups.add('enemy')
-    s.hit_groups.add('player')
-    s.hit = hit
-    g.sprites.append(s)
-    s.loop = loop
-    s.facing = facing
+class Shootbot(sprite.Sprite3):
+    def __init__(self, game, rect, name, facing='left', *args):
+        sprite.Sprite3.__init__(self, game, rect, 'shootbot-%s-0' % (facing),
+            (0, 0, 18, 24))
+        self.rect.bottom = rect.bottom
+        self.rect.centerx = rect.centerx
+        self.groups.add('solid')
+        self.groups.add('enemy')
+        self.hit_groups.add('player')
+        self.game.sprites.append(self)
+        self.facing = facing
 
-    s.shoot = 120
-    s.shooting = 0
+        self.shoot = 120
+        self.shooting = 0
 
-    if s.facing == 'left':
-        s.vx = -1.0
-    else:
-        s.vx = 1.0
-    s.vy = 0
-    
-    s._prev = pygame.Rect(-1,-1,0,0)
-    s.strength = 3
-    
-    s.standing = None
-    return s
-    
-def loop(g,s):
-    sprite.apply_gravity(g,s)
-    sprite.apply_standing(g,s)
-    
-    #if s.rect.x == s._prev.x: # or sprite.get_code(g,s,sign(s.vx),0) == CODE_SHOOTBOT_TURN:
-    #    s.vx = -s.vx
+        if self.facing == 'left':
+            self.vx = -1.0
+        else:
+            self.vx = 1.0
+        self.vy = 0
 
-    s._prev = pygame.Rect(s.rect)
+        self._prev = pygame.Rect(-1, -1, 0, 0)
+        self.strength = 3
 
-    if g.player.rect.centerx > s.rect.centerx:
-        s.vx += 0.02
-    elif g.player.rect.centerx < s.rect.centerx:
-        s.vx -= 0.02
+        self.standing = None
 
-    if s.vx > 0.0:
-        s.facing = 'right'
-    elif s.vx < 0.0:
-        s.facing = 'left'
-    s.image = 'shootbot-%s-%s' % (s.facing, (g.frame / 10) % 4)
+    def loop(self):
+        self.apply_gravity()
+        self.apply_standing()
 
-    if sprite.get_code(g,s,sign(s.vx),0) == CODE_SHOOTBOT_TURN:
-        s.vx = 0.0
+        self._prev = pygame.Rect(self.rect)
 
-    s.vx = min(1.0, s.vx)
-    s.vx = max(-1.0, s.vx)
-    
-    if s.shoot == 0:
-        shot = laser.init(g,s.rect,s)
-        #g.sprites.append(shot)
-        s.shoot = 120
-        s.shooting = 10
+        if self.game.player.rect.centerx > self.rect.centerx:
+            self.vx += 0.02
+        elif self.game.player.rect.centerx < self.rect.centerx:
+            self.vx -= 0.02
 
-    if s.shooting > 0:
-        s.image = 'shootbot-%s-shoot' % (s.facing)
-        s.shooting -= 1
+        if self.vx > 0.0:
+            self.facing = 'right'
+        elif self.vx < 0.0:
+            self.facing = 'left'
+        self.image = 'shootbot-%s-%s' % (self.facing,
+            (self.game.frame / 10) % 4)
 
-    s.shoot -= 1
-    
-    s.rect.x += sprite.myinc(g.frame,s.vx)
-    s.rect.y += sprite.myinc(g.frame,s.vy)
-    
-    
+        if self.get_code(sign(self.vx), 0) == CODE_SHOOTBOT_TURN:
+            self.vx = 0.0
 
-def hit(g,a,b):
-    player.damage(g,b)
-    #print 'youve been spikeys!'
-    pass
+        self.vx = min(1.0, self.vx)
+        self.vx = max(-1.0, self.vx)
+
+        if self.shoot == 0:
+            shot = Laser(self.game, self.rect, self)
+            self.shoot = 120
+            self.shooting = 10
+
+        if self.shooting > 0:
+            self.image = 'shootbot-%s-shoot' % (self.facing)
+            self.shooting -= 1
+
+        self.shoot -= 1
+
+        self.rect.x += sprite.myinc(self.game.frame, self.vx)
+        self.rect.y += sprite.myinc(self.game.frame, self.vy)
+
+    def hit(self, a, b):
+        player.damage(self.game, b)

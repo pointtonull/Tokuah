@@ -238,6 +238,15 @@ def Verbose(level=1):
     return decorador
 
 
+def deprecated(func):
+    @wraps(func)
+    def dfunc(*args, **kwargs):
+        debug(" W: Usind deprecated %s" % func.func_name)
+        return func(*args, **kwargs)
+
+    return dfunc
+
+
 class MetaSingleton(type):
     
     def __init__(self, name, bases, dict):

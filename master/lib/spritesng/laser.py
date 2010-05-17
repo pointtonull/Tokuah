@@ -4,46 +4,35 @@ from pygame.locals import *
 import player
 import sprite
 
-def init(g,r,p):
-    s = sprite.Sprite3(g,r,'laser',(0,0,4,2))
+class Laser(sprite.Sprite3):
+    def __init__(self, game, rect, parent):
+        sprite.Sprite3.__init__(game, rect, 'laser', (0, 0, 4, 2))
 
-    s.rect.centerx = r.centerx
-    s.rect.centery = r.centery
+        self.rect.centerx = rect.centerx
+        self.rect.centery = rect.centery
 
-    s.groups.add('solid')
-    s.groups.add('laser')
-    #s.groups.add('enemy')
-    s.hit_groups.add('player')
+        self.groups.add('solid')
+        self.groups.add('laser')
+        self.hit_groups.add('player')
 
-    s.hit = hit
-    g.sprites.append(s)
-    s.loop = loop
-    s.life = 90
-    s.strength = 1
-    #if big: s.strength = 3
-    
-    s.vx = 1
-    if p.facing == 'left':
-        s.vx = -1
-    s.vy = 0
-    s.rect.centerx += s.vx*(6+s.rect.width/2)
-    s.rect.centery -= 2
-    
-    return s
-    
-def loop(g,s):
-    s.rect.x += s.vx*2
-    s.life -= 1
-    if s.life == 0:
-        s.active = False
-        #die(g,s)
+        self.game.sprites.append(self)
+        self.life = 90
+        self.strength = 1
+        
+        self.vx = 1
 
-def hit(g,a,b): 
-    player.damage(g,b)
-    #die(g,a)
-    #a.act
-    
+        if parent.facing == 'left':
+            self.vx = -1
 
-    #b.strength -= a.strength
-    #if b.strength <= 0:
-        #b.active = False
+        self.vy = 0
+        self.rect.centerx += self.vx * (6 + self.rect.width / 2)
+        self.rect.centery -= 2
+        
+    def loop(self):
+        self.rect.x += self.vx * 2
+        self.life -= 1
+        if self.life == 0:
+            self.active = False
+
+    def hit(self, a, b): 
+        player.damage(self.game, b)

@@ -6,52 +6,52 @@ import player
 
 from cnst import *
 
-def init(g, r, n, facing, *params):
-    s = sprite.Sprite3(g, r, 'brobo-%s-0' % (facing),(0, 0, 60, 74))
-    s.rect.bottom = r.bottom
-    s.rect.centerx = r.centerx
-    s.groups.add('solid')
-    s.groups.add('enemy')
-    s.hit_groups.add('player')
-    s.hit = hit
-    g.sprites.append(s)
-    s.loop = loop
-    s.facing = facing
+class Brobo(sprite.Sprite3):
+    def __init__(self, game, rect, name, facing, *args):
+        sprite.Sprite3.__init__(self, game, rect, 'brobo-%s-0' % (facing),
+            (0, 0, 60, 74))
+        self.rect.bottom = rect.bottom
+        self.rect.centerx = rect.centerx
+        self.groups.add('solid')
+        self.groups.add('enemy')
+        self.hit_groups.add('player')
+        self.hit = hit
+        self.game.sprites.append(self)
+        self.loop = loop
+        self.facing = facing
 
-    if s.facing == 'left':
-        s.vx = -0.6
-    else:
-        s.vx = 0.6
-    s.vy = 0
+        if self.facing == 'left':
+            self.vx = - 0.6
+        else:
+            self.vx = 0.6
+        self.vy = 0
 
-    s._prev = None #pygame.Rect(-1,-1,0,0)
-    s.strength = 6
+        self._prev = None
+        self.strength = 6
 
-    s.standing = None
-    s.ix = 0
-    return s
+        self.standing = None
+        self.ix = 0
 
-def loop(g,s):
-    sprite.apply_gravity(g,s)
-    sprite.apply_standing(g,s)
+    def loop(self):
+        self.apply_gravity()
+        self.apply_standing()
 
-    if ((s.ix != 0 and s.rect.x == s._prev.x)
-        or sprite.get_code(g, s, sign(s.vx), 0) == CODE_BROBO_TURN):
-            s.vx = -s.vx
+        if ((self.ix != 0 and self.rect.x == self._prev.x)
+            or self.get_code(sign(s.vx), 0) == CODE_BROBO_TURN):
+                self.vx = - self.vx
 
-    s._prev = pygame.Rect(s.rect)
+        self._prev = pygame.Rect(self.rect)
 
-    if s.vx > 0:
-        s.facing = 'right'
-    elif s.vx < 0:
-        s.facing = 'left'
-    s.image = 'brobo-%s-%s' % (s.facing, (g.frame / 10) % 2)
+        if self.vx > 0:
+            self.facing = 'right'
+        elif self.vx < 0:
+            self.facing = 'left'
 
-    s.ix = sprite.myinc(g.frame, s.vx)
-    s.rect.x += s.ix
-    s.rect.y += sprite.myinc(g.frame, s.vy)
+        self.image = 'brobo-%s-%s' % (self.facing, (self.game.frame / 10) % 2)
 
+        self.ix = sprite.myinc(self.game.frame, self.vx)
+        self.rect.x += self.ix
+        self.rect.y += sprite.myinc(self.game.frame, self.vy)
 
-
-def hit(g, a, b):
-    player.damage(g, b)
+    def hit(self, a, b):
+        player.damage(self.game, b)

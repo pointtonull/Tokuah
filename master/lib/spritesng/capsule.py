@@ -1,75 +1,69 @@
 import pygame
 from pygame.locals import *
-
-#import random
-
 import sprite
 
-def init(g, r):
-    s = sprite.Sprite3(g, r, 'captured-generic', (0, 0, 32, 32))
+class Capsule(sprite.Sprite3):
+    def __init__(self, game, rect):
+        sprite.Sprite3.__init__(self, game, rect, 'captured-generic',
+            (0, 0, 32, 32))
 
-    s.rect.centerx = r.centerx
-    s.rect.centery = r.centery
-    s.hit_groups.add('player')
-    s.groups.add('capsule')
-    s.hit = hit
-    g.sprites.append(s)
-    s.loop = loop
+        self.rect.centerx = rect.centerx
+        self.rect.centery = rect.centery
+        self.hit_groups.add('player')
+        self.groups.add('capsule')
+        self.game.sprites.append(self)
 
-    s.life = 300
+        s.life = 300
 
-    s.vx = (g.game.random % 10) / 5.0 - 0.5 #random.random() - 0.5
-    s.vy = -1.0
-    s.x = float(s.rect.x)
-    #s.y = float(s.rect.y)
+        self.vx = (self.game.game.random % 10) / 5.0 - 0.5
+        self.vy = - 1.0
+        self.x = float(self.rect.x)
 
-    s.carrying = []
-    s.prev = pygame.Rect(s.rect)
+        self.carrying = []
+        self.prev = pygame.Rect(self.rect)
 
-    g.game.sfx['capsule'].play()
+        self.game.game.sfx['capsule'].play()
 
-    return s
+    def loop(self):
+        self.vx += (self.game.game.random % 100) / 1000.0 - 0.05
+        self.vx = max(-0.25, min(0.25, self.vx))
+        self.x += self.vx
 
-def loop(g,s):
-    s.vx += (g.game.random % 100) / 1000.0 - 0.05
-    s.vx = max(-0.25, min(0.25, s.vx))
-    s.x += s.vx
+        dx = int(self.x - self.rect.x)
 
-    dx = int(s.x - s.rect.x)
+        dy = sprite.myinc(g.frame, s.vy)
 
-    dy = sprite.myinc(g.frame, s.vy)
+        self.rect.x += dx
+        self.rect.y += dy
 
-    s.rect.x += dx
-    s.rect.y += dy
+        if self.life == 0:
+            self.die()
+        self.life -= 1
 
-    if s.life == 0:
-        die(g, s)
-    s.life -= 1
-
-    for b in s.carrying:
-        b.rect.x += dx
-        b.rect.y += dy
+        for b in self.carrying:
+            b.rect.x += dx
+            b.rect.y += dy
 
 
-def die(g, s):
-    g.game.sfx['pop'].play()
-    s.active = False
+    def die(self):
+        self.game.game.sfx['pop'].play()
+        self.active = False
 
-    for b in s.carrying:
-        sprite.stop_standing(g, b)
+        for b in self.carrying:
+            self.stop_standing()
 
 
-def hit(g, a, b):
-    if not hasattr(b, 'standing'):
-        return
+    def hit(self, a, b):
+        if not hasattr(b, 'standing'):
+            return
 
-    r = a.rect
-    aprev = a.prev
-    cur = b.rect
-    prev = b.prev
+        rect = a.rect
+        aprev = a.prev
+        cur = b.rect
+        prev = b.prev
 
-    if prev.bottom <= aprev.top and cur.bottom > r.top:
-        cur.bottom = r.top
-        b.standing = a
-        if b not in a.carrying:
-            a.carrying.append(b)
+        if prev.bottom <= aprev.top and cur.bottom > rect.top:
+            cur.bottom = rect.top
+            b.standing = a
+            if b not in a.carrying:
+                a.carrying.append(b)
