@@ -9,14 +9,12 @@ class Panda(sprite.Sprite3):
     def __init__(game, rect, name, facing, *args):
         sprite.Sprite3.__init__(game, rect, 'panda-%s' % (facing),
             (0, 0, 40, 86))
-        self.rect.bottom = r.bottom
-        self.rect.centerx = r.centerx
+        self.rect.bottom = rect.bottom
+        self.rect.centerx = rect.centerx
         self.groups.add('solid')
         self.groups.add('enemy')
         self.hit_groups.add('player')
-        self.hit = hit
         game.sprites.append(self)
-        self.loop = loop
 
         self.vx = 0
         self.vy = 0

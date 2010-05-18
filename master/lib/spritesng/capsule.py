@@ -13,7 +13,7 @@ class Capsule(sprite.Sprite3):
         self.groups.add('capsule')
         self.game.sprites.append(self)
 
-        s.life = 300
+        self.life = 300
 
         self.vx = (self.game.game.random % 10) / 5.0 - 0.5
         self.vy = - 1.0
@@ -31,7 +31,7 @@ class Capsule(sprite.Sprite3):
 
         dx = int(self.x - self.rect.x)
 
-        dy = sprite.myinc(g.frame, s.vy)
+        dy = sprite.myinc(self.game.frame, self.vy)
 
         self.rect.x += dx
         self.rect.y += dy
@@ -54,8 +54,9 @@ class Capsule(sprite.Sprite3):
 
 
     def hit(self, a, b):
-        if not hasattr(b, 'standing'):
-            return
+
+#        if not hasattr(b, 'standing'):
+#            return
 
         rect = a.rect
         aprev = a.prev

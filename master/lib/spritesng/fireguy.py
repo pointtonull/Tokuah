@@ -15,7 +15,6 @@ class Fireguy(sprite.Sprite3):
         self.groups.add('solid')
         self.groups.add('enemy')
         self.hit_groups.add('player')
-        self.hit = hit
         self.game.sprites.append(self)
 
         self.moving = 0
@@ -33,6 +32,7 @@ class Fireguy(sprite.Sprite3):
 
         self.standing = None
 
+
     def loop(self):
         self.apply_gravity()
         self.apply_standing()
@@ -46,36 +46,40 @@ class Fireguy(sprite.Sprite3):
                 self.facing = 'left'
             else:
                 self.facing = 'right'
-        s._prev = pygame.Rect(s.rect)
 
-        s.rect.x += s.vx
-        s.rect.y += s.vy
+        self._prev = pygame.Rect(s.rect)
 
-        if s.idling > 0:
-            if s.idling % 120 > 60:
-                s.facing = 'left'
+        self.rect.x += self.vx
+        self.rect.y += self.vy
+
+        if self.idling > 0:
+            if self.idling % 120 > 60:
+                self.facing = 'left'
             else:
-                s.facing = 'right'
-            s.idling -= 1
-            if s.idling == 0:
-                s.moving = 90
-                #if g.game.random % 2 == 0:
-                if random.randint(0,1):
-                    s.vx = -2
-                    s.facing = 'left'
+                self.facing = 'right'
+            self.idling -= 1
+
+            if self.idling == 0:
+                self.moving = 90
+
+                if random.randint(0, 1):
+                    self.vx = -2
+                    self.facing = 'left'
                 else:
-                    s.vx = 2
-                    s.facing = 'right'
-        elif s.moving > 0:
-            s.moving -= 1
-            if s.moving == 0:
-                s.idling = 240
-                s.vx = 0
+                    self.vx = 2
+                    self.facing = 'right'
+
+        elif self.moving > 0:
+            self.moving -= 1
+            if self.moving == 0:
+                self.idling = 240
+                self.vx = 0
+
         else:
-            s.idling = 240
+            self.idling = 240
 
-        s.image = 'fireguy-%s-%s' % (s.facing, (s.frame / 5) % 2)
-        s.frame += 1
+        self.image = 'fireguy-%s-%s' % (self.facing, (self.frame / 5) % 2)
+        self.frame += 1
 
-    def hit(g, a, b):
-        player.damage(g, b)
+    def hit(self, a, b):
+        player.damage(self.game, b)

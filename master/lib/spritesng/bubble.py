@@ -5,22 +5,22 @@ import sprite
 import capsule
 
 class Bubble(sprite.Sprite3):
-    def __init__(self, game, rect, p, big=False):
-        if not hasattr(game, 'bubble_count'):
-            game.bubble_count = 0
+    def __init__(self, game, rect, parent, big=False):
 
         if game.bubble_count >= 3:
-            return None
+            return
 
         game.bubble_count += 1
-        #print 'new bubble', g.bubble_count
-        if big:
+
+        self.big = big
+        self.strength = 3 if self.big else 1
+        if self.big:
             sprite.Sprite3.__init__(self, game, rect, 'big-bubble',
                 (0, 0, 32, 32))
         else:
             sprite.Sprite3.__init__(self, game, rect, 'bubble',
                 (0, 0, 14, 14))
-        self.big = big
+
         self.rect.centerx = rect.centerx
         self.rect.centery = rect.centery
         self.groups.add('solid')
@@ -28,9 +28,7 @@ class Bubble(sprite.Sprite3):
         self.hit_groups.add('enemy')
         self.game.sprites.append(self)
         self.life = 30
-        self.strength = 1
-        if big:
-            s.strength = 3
+        self.parent = parent
 
         self.vx = 2
         if p.facing == 'left':
@@ -42,7 +40,6 @@ class Bubble(sprite.Sprite3):
         self.game.game.sfx['bubble'].play()
 
     def deinit(self):
-        #print "bubble deinit"
         self.game.bubble_count -= 1
 
     def loop(self):

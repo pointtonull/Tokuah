@@ -4,14 +4,13 @@
 import pygame
 from pygame.locals import *
 
-#from cnst import *
 import sprite
 import tiles
 
 class Player(sprite.Sprite3):
     def __init__(self, game, rect, name, *args):
         sprite.Sprite3.__init__(self, game, rect, 'player/right', 
-            (12, 16, 30 - 12, 54 - 16))
+            (12, 16, 30 - 12, 54 -16))
         self.rect.bottom = rect.bottom
         self.rect.centerx = rect.centerx
         self.sprite.groups.add('player')
@@ -50,165 +49,167 @@ class Player(sprite.Sprite3):
         sprite.init_codes(g, s)
         self.sprite.no_explode = False
 
-    def event(self, g, s, e):
+    def event(self, game, event):
         #print 'player.event',e
-        if s.door_timer != None or s.exploded > 0:
+        if self.door_timer != None or self.exploded > 0:
             return
 
-        if (e.type is USEREVENT and e.action == 'jump' and s.standing != None
-                and s.jumping == 0 and s.vy == 0):
-            sprite.stop_standing(g, s)
-            if s.powered_up:
-                s.vy = -0.5 * 2.5 * 6
-            else:
-                s.vy = -0.5 * 2 * 6
-            s.jumping = 1.4
-            g.game.sfx['jump'].play()
+        if (event.type is USEREVENT and eivent.action == 'jump'
+            and self.standing != None and self.jumping == 0
+            and self.vy == 0):
+            sprite.stop_standing()
 
-        if e.type is USEREVENT and e.action == 'stop-jump':
-            s.jumping = 0
+            self.vy = -6 if self.powered_up else -7.5
 
-        if e.type is USEREVENT and (e.action == 'up' or e.action == 'down'):
-            if sprite.get_code(g, s, 0, 0) in DOOR_CODES:
-                s.vx = 0
-                s.vy = 0
-                s.door_timer = DOOR_DELAY
-                if s.current_door != None:
+            self.jumping = 1.4
+            self.game.game.sfx['jump'].play()
+
+        if event.type is USEREVENT and event.action == 'stop-jump':
+            self.jumping = 0
+
+        if event.type is USEREVENT and (e.action == 'up'
+            or event.action == 'down'):
+            if self.get_code(0, 0) in DOOR_CODES:
+                self.vx = 0
+                self.vy = 0
+                self.door_timer = DOOR_DELAY
+                if self.current_door != None:
                     # It should never be None actually...
-                    s.current_door.open = DOOR_DELAY
-                s.image = None
-                s.door_pos = s.rect.centerx / TW, s.rect.centery / TH
+                    self.current_door.open = DOOR_DELAY
+                self.image = None
+                self.door_pos = (self.rect.centerx / TW,
+                    self.rect.centery / TH)
 
-        if e.type is USEREVENT and e.action == 'bubble':
-            if s.powered_up:
-                sprites.bubble.init(g, s.rect, s, big=True)
+        if event.type is USEREVENT and event.action == 'bubble':
+            if self.powered_up:
+                Bubble(self.game, self.rect, self, big=True)
             else:
-                sprites.bubble.init(g, s.rect, s, big=False)
-            s.shooting = 10
+                Bubble(self.game, self.rect, self, big=False)
+            self.shooting = 10
 
-        if e.type is KEYDOWN and e.key == K_F10:
+        if event.type is KEYDOWN and event.key == K_F10:
             powerup(g, s)
-            s.god_mode = True
+            self.god_mode = True
 
 
 
     def loop(self, g, s):
-        s._prev2 = pygame.Rect(s.rect)
+        self._prev2 = pygame.Rect(s.rect)
 
-        if s.death_counter > 0:
-            s.groups = set()
-            if not s.no_explode:
-                s.exploded += 1
-                if s.exploded > FPS / 2:
-                    s.image = None
+        if self.death_counter > 0:
+            self.groups = set()
+            if not self.no_explode:
+                self.exploded += 1
+                if self.exploded > FPS / 2:
+                    self.image = None
             else:
-                s.image = None
-            s.death_counter -= 1
+                self.image = None
+            self.death_counter -= 1
             return
-        if s.death_counter == 0:
+        if self.death_counter == 0:
             g.status = 'dead'
             return
 
-        if s.exploded > 0:
-            if s.powered_up:
-                s.image = 'player/right'
+        if self.exploded > 0:
+            if self.powered_up:
+                self.image = 'player/right'
             else:
-                s.image = 'splayer/right'
-            s.exploded -= 1
+                self.image = 'splayer/right'
+            self.exploded -= 1
             return
 
 
         sprite.apply_gravity(g, s)
         sprite.apply_standing(g, s)
 
-        if s.door_timer != None:
-            if s.door_timer == 0:
-                x, y = s.door_pos #s.rect.centerx/TW,s.rect.centery/TH
+        if self.door_timer != None:
+            if self.door_timer == 0:
+                x, y = self.door_pos #self.rect.centerx/TW,self.rect.centery/TH
                 import door
                 door.hit(g, (x, y), s)
-                s.door_timer = None
+                self.door_timer = None
             else:
-                s.door_timer -= 1
+                self.door_timer -= 1
                 return
 
         inpt = g.game.input
 
         #check if we hit the ceiling
-        if not s.jumping and s.vy < 0 and s.rect.y == s._prev.y:
-            s.vy = 0
+        if not self.jumping and self.vy < 0 and self.rect.y == self._prev.y:
+            self.vy = 0
 
-        if s.jumping:
-            s.vy -= s.jumping
-            s.jumping = max(0, s.jumping - 0.2)
+        if self.jumping:
+            self.vy -= self.jumping
+            self.jumping = max(0, self.jumping - 0.2)
 
         inc = 1.0
         mx = 4
-        if inpt.right and s.vx < mx:
-            s.vx += inc
-            s.facing = 'right'
-        elif not inpt.right and s.vx > 0:
-            s.vx -= inc
+        if inpt.right and self.vx < mx:
+            self.vx += inc
+            self.facing = 'right'
+        elif not inpt.right and self.vx > 0:
+            self.vx -= inc
 
-        if inpt.left  and s.vx > -mx:
-            s.vx -= inc
-            s.facing = 'left'
-        elif not inpt.left and s.vx < 0:
-            s.vx += inc
+        if inpt.left  and self.vx > -mx:
+            self.vx -= inc
+            self.facing = 'left'
+        elif not inpt.left and self.vx < 0:
+            self.vx += inc
 
 
-        s._prev = pygame.Rect(s.rect)
+        self._prev = pygame.Rect(s.rect)
 
-        vx = s.vx
-        vy = s.vy
-        s.rect.x += vx
-        s.rect.y += sprite.myinc(g.frame, s.vy)
+        vx = self.vx
+        vy = self.vy
+        self.rect.x += vx
+        self.rect.y += sprite.myinc(g.frame, self.vy)
 
-        if s.vy < 0:
-            s.image = 'player/%s-jump' % (s.facing)
-        elif s.shooting > 0:
-            if s.shooting > 5:
-                s.image = 'player/%s-shoot-1' % (s.facing)
+        if self.vy < 0:
+            self.image = 'player/%s-jump' % (s.facing)
+        elif self.shooting > 0:
+            if self.shooting > 5:
+                self.image = 'player/%s-shoot-1' % (s.facing)
             else:
-                s.image = 'player/%s-shoot-2' % (s.facing)
-            s.shooting -= 1
-        elif inpt.right or inpt.left and s.standing:
-            s.image = 'player/%s-walk-%s' % (s.facing, int(s.walk_frame))
-            s.walk_frame += 0.2
-            if s.walk_frame > 4:
-                s.walk_frame = 1
+                self.image = 'player/%s-shoot-2' % (s.facing)
+            self.shooting -= 1
+        elif inpt.right or inpt.left and self.standing:
+            self.image = 'player/%s-walk-%s' % (s.facing, int(s.walk_frame))
+            self.walk_frame += 0.2
+            if self.walk_frame > 4:
+                self.walk_frame = 1
         else:
-            s.image = 'player/%s'%(s.facing)
+            self.image = 'player/%s'%(s.facing)
 
-        if s.flash_counter > 0:
-            if s.flash_timer < 4:
-                s.image = None
-            if s.flash_timer == 0:
-                s.flash_timer = 8
-                s.flash_counter -= 1
-            s.flash_timer -= 1
+        if self.flash_counter > 0:
+            if self.flash_timer < 4:
+                self.image = None
+            if self.flash_timer == 0:
+                self.flash_timer = 8
+                self.flash_counter -= 1
+            self.flash_timer -= 1
 
-        if s.image != None:
-            if s.powerup_transition > 0:
+        if self.image != None:
+            if self.powerup_transition > 0:
                 if (s.powerup_transition % 10) > 5:
-                    s.image = 's' + s.image
-                s.powerup_transition -= 1
-            elif not s.powered_up:
-                s.image = 's' + s.image
+                    self.image = 's' + self.image
+                self.powerup_transition -= 1
+            elif not self.powered_up:
+                self.image = 's' + self.image
 
-        s.looking = False
+        self.looking = False
         if inpt.up:
             g.view.y -= 2
-            s.looking = True
+            self.looking = True
         if inpt.down:
             g.view.y += 2
-            s.looking = True
+            self.looking = True
 
         n = sprite.get_code(g, s, 0, 0)
         if n == CODE_EXIT:
             g.status = 'exit'
         if n == CODE_DOOR_AUTO:
-            x = s.rect.centerx / TW
-            y = s.rect.centery / TH
+            x = self.rect.centerx / TW
+            y = self.rect.centery / TH
             import door
             door.hit(g, (x, y), s)
 
@@ -233,7 +234,7 @@ class Player(sprite.Sprite3):
         border.w += pad * 2
         #pad = 80
         pad = (SH / 2) - TH
-        if s.looking:
+        if self.looking:
             pad = TH * 2
         border.y -= pad
         border.h += pad * 2
@@ -247,8 +248,8 @@ class Player(sprite.Sprite3):
         dx = dest.x-g.view.x
         dy = dest.y-g.view.y
         #mx,my = 6,6
-        mx = max(2, abs(s._prev2.x-s.rect.x))
-        my = max(2, abs(s._prev2.y-s.rect.y))
+        mx = max(2, abs(s._prev2.x-self.rect.x))
+        my = max(2, abs(s._prev2.y-self.rect.y))
         if abs(dx) > mx:
             dx = sign(dx) * mx
         if abs(dy) > my:
@@ -258,35 +259,35 @@ class Player(sprite.Sprite3):
 
 
     def powerup(g,s):
-        if not s.powered_up:
-            s.powerup_transition = 100
-            s.powered_up = True
+        if not self.powered_up:
+            self.powerup_transition = 100
+            self.powered_up = True
 
             if hasattr(g.game, 'powerup'):
                 g.game.powerup = True
 
 
     def damage(g, s):
-        if s.god_mode:
+        if self.god_mode:
             return
 
-        if s.door_timer != None:
+        if self.door_timer != None:
             return
 
-        if s.powered_up:
+        if self.powered_up:
             g.game.sfx['pop'].play()
-            s.powerup_transition = 100
-            s.powered_up = False
+            self.powerup_transition = 100
+            self.powered_up = False
             if hasattr(g.game, 'powerup'):
                 g.game.powerup = False
-        elif s.powerup_transition == 0 and s.flash_counter == 0:
-            s.kill(g,s)
+        elif self.powerup_transition == 0 and self.flash_counter == 0:
+            self.kill(g,s)
 
 
     def kill(g, s, no_explode=False):
         if hasattr(g.game, 'powerup'):
             g.game.powerup = False
-        s.flash_counter = 10
-        s.no_explode = no_explode
+        self.flash_counter = 10
+        self.no_explode = no_explode
         g.game.music_play('death', 1)
-        s.death_counter = int(FPS * 2.25)
+        self.death_counter = int(FPS * 2.25)

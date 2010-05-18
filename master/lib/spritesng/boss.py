@@ -136,7 +136,7 @@ class Bub(sprite.Sprite3):
         self.rect.centery = r.centery
         self.game.sprites.append(self)
 
-        speed = random.randint(8, 32)
+        speed = random.randint(16, 64)
         angle = random.randint(0, 360) * 6.28 / 360
         self.vx = math.sin(angle) * speed
         self.vy = math.cos(angle) * speed

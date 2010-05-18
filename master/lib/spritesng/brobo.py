@@ -15,9 +15,7 @@ class Brobo(sprite.Sprite3):
         self.groups.add('solid')
         self.groups.add('enemy')
         self.hit_groups.add('player')
-        self.hit = hit
         self.game.sprites.append(self)
-        self.loop = loop
         self.facing = facing
 
         if self.facing == 'left':

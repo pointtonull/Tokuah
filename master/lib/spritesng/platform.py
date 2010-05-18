@@ -6,8 +6,8 @@ from cnst import *
 import sprite
 
 class Platform(sprite.Sprite3):
-    def init(self, game, rect, name, vx, vy):
 
+    def init(self, game, rect, name, vx, vy):
         x = rect.centerx / TW
         y = rect.centery / TH
         code = game.data[2][y][x]
@@ -33,13 +33,11 @@ class Platform(sprite.Sprite3):
         h = TH
         r = pygame.Rect(min_x * TW, iy * TH, w, h)
 
-        sprite.Sprite3(self, game, rect, 'platform/%d' % (max_x - min_x + 1),
-            (0, 0, w, h))
+        sprite.Sprite3.__init__(self, game, rect, 'platform/%d' %
+            (max_x - min_x + 1), (0, 0, w, h))
         self.groups.add('solid')
         self.hit_groups.add('player')
-        self.hit = hit
         game.sprites.append(self)
-        self.loop = loop
 
         self.vx = vx * 2
         self.vy = vy * 2

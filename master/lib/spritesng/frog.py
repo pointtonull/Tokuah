@@ -16,7 +16,6 @@ class Frog(sprite.Sprite3):
         self.groups.add('solid')
         self.groups.add('enemy')
         self.hit_groups.add('player')
-        self.hit = hit
         game.sprites.append(self)
         self.next_frame = 12
 
@@ -24,7 +23,7 @@ class Frog(sprite.Sprite3):
         self.vx = vx * 2
         self.vy = 0
         self.jumping = False
-        self.walking = not s.jumping
+        self.walking = not self.jumping
         self._prev = None
 
         self.strength = 3
@@ -35,32 +34,30 @@ class Frog(sprite.Sprite3):
         self.game = game
 
     def loop(self):
-        sprite.apply_gravity(self.game, self)
-        sprite.apply_standing(self.game, self)
+        self.apply_gravity()
+        self.apply_standing()
 
         if self.walking:
             if self._prev != None:
                 if (self.rect.x == self._prev.x or sprite.get_code(game, self,
                         sign(self.vx), 0) == CODE_FROG_TURN):
-                    self.vx = - self.vx
+                    self.vx = -self.vx
                     self.next_frame = 1
 
             if (self.standing != None and sprite.get_code(game, self,
                     sign(self.vx), 1) == CODE_FROG_JUMP):
-                #s.vy_jump = -4.0
                 self.vy_jump = - 3.6 * 1.22
                 if (sprite.get_code(self.game, self, sign(self.vx) * 2, 1)
                         == CODE_FROG_JUMP):
-                    #s.vy_jump = -6.5
                     self.vy_jump = - 6.0 * 1.22
                     if (sprite.get_code(game, self, sign(self.vx) * 3, 1)
                          == CODE_FROG_JUMP):
-                        #s.vy_jump = -8.5
                         self.vy_jump = - 8.1 * 1.22
 
                 self.jumping = True
                 self.walking = False
                 self.next_frame = 20
+
                 if self.vx > 0:
                     self.image = 'frog/prejump-right'
                 elif self.vx < 0:
@@ -70,12 +67,13 @@ class Frog(sprite.Sprite3):
 
             self.rect.x += self.vx
             self.rect.y += self.vy
+
         else:
             self._prev = pygame.Rect(self.rect)
             if (self.next_frame <= 0):
                 if (self.standing != None):
                     self.walking = True
-                    self.jumping = not s.walking
+                    self.jumping = not self.walking
                     self.next_frame = 1
                 vx = self.vx * 1.8
                 self.rect.x += sprite.myinc(self.game.frame, vx)

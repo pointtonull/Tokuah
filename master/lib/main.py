@@ -54,6 +54,7 @@ class Game(engine.Game):
         self.high = 0
         self.lives = 2
         self.coins = 0
+        self.bubble_count = 0
         self.powerup = False
 
     @Verbose(VERBOSE)
@@ -323,10 +324,7 @@ class Game(engine.Game):
 
 
 def main():
-    #print "Hello from your game's main()"
-    #print data.load('sample.txt').read()
-
-    fname = None #data.filepath(os.path.join('levels','test.tga'))
+    fname = None
     for v in sys.argv:
         if '.tga' in v:
             fname = v
@@ -336,7 +334,7 @@ def main():
     l = l2 = menu.Menu(game)
     #l = menu.Intro(g,l2)
     if fname != None:
-        l = level.Level(game, fname,engine.Quit(game))
+        l = level.Level(game, fname, engine.Quit(game))
 
     game.run(l)
     pygame.quit()
