@@ -41,12 +41,8 @@ TILES = {
     0x43: [Tile_left,   ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
     0x44: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
     0x45: [Tile_rigth,  ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
-#0x51: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
-#0x52: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
     0x54: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
     0x55: [Tile_left,   ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
-#0x61: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
-#0x62: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
     0x64: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
     0x65: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
     0x70: [Tile_rigth,  ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
@@ -91,12 +87,8 @@ TILES = {
     0x83: [Tile_left,   ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
     0x84: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
     0x85: [Tile_rigth,  ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
-#0x91: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
-#0x92: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
     0x94: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
     0x95: [Tile_left,   ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
-#0xa1: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
-#0xa2: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
     0xa4: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
     0xa5: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
     0xb0: [Tile_rigth,  ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
@@ -127,12 +119,8 @@ TILES = {
     0xc3: [Tile_left,   ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
     0xc4: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
     0xc5: [Tile_rigth,  ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
-#0xd1: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
-#0xd2: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
     0xd4: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
     0xd5: [Tile_left,   ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
-#0xe1: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
-#0xe2: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 1, 1, 1],
     0xe4: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
     0xe5: [Tile,        ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
     0xf0: [Tile_rigth,  ['solid'],  tiles_basic.hit_block, 1, 0, 0, 0],
@@ -160,6 +148,7 @@ TILES = {
 
 TANIMATE = [
 #(starting_tile, animated list of frames incs),
+
 # powerup
     (0x08,
         (0, ) * 23 +
@@ -167,6 +156,7 @@ TANIMATE = [
         (2, ) * 3 +
         (3, ) * 3
     ),
+
 # extra life
     (0x0C,
         (0, ) * 7 +
@@ -174,11 +164,13 @@ TANIMATE = [
         (2, ) * 3 +
         (0, ) * 17
     ),
+
 # veggies
     (0x18,
         (1, ) * 2 +
         (0, ) * 63
     ),
+
 # points
     (0x1A,
         (0, ) * 16 +
@@ -195,6 +187,7 @@ TANIMATE = [
         (1, ) * 2 +
         (0, ) * 14
     ),
+
 # coin
     (0x28,
         (0, ) * 4 +
@@ -206,6 +199,7 @@ TANIMATE = [
         (6, ) * 4 +
         (7, ) * 4
     ),
+
 # door
     (0x30,
         (0, ) * 1 +
@@ -224,7 +218,7 @@ TREPLACE = [
 def t_put(game, pos, name):
     x, y = pos
     if name not in TILES:
-        t_init(game, pygame.Rect(x * TW, y * TH, TW, TH), name, [], None)
+        Tile(game, pygame.Rect(x * TW, y * TH, TW, TH), name, [], None)
         return
     v = TILES[name]
     v[0](game, pygame.Rect(x * TW, y * TH, TW, TH), name, *v[1:])

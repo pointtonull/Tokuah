@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 #-*- coding: UTF-8 -*-
 import cPickle
+import sys
 import time
 import signal
 import inspect
 from debug import debug
 from functools import wraps
 from threading import Thread
+import inspect
 
 
 VERBOSE = False
@@ -217,21 +219,35 @@ class Retry:
 
 
 def Verbose(level=1):
+
+    def get_depth():
+        n = 1
+        while True:
+            try:
+                sys._getframe(n)
+            except ValueError:
+                return n - 1
+            n += 1
+
     def decorador(func):
         @wraps(func)
         def dfunc(*args, **kwargs):
 
             if level >= 3:
-                debug(" > %s(%s, %s)" % (func.func_name, args, kwargs))
+                debug("%s> %s(%s, %s)" % (" " * get_depth(), func.func_name,
+                    args, kwargs))
             elif level >= 1:
-                debug(" > %s" %func.func_name)
+                debug("%s> %s" % (" " * get_depth(), func.func_name))
 
             result = func(*args, **kwargs)
 
             if level >= 4:
-                debug(" < %s: %s" % (func.func_name, result))
+                debug("%s< %s: %s" % (" " * get_depth(), func.func_name,
+                    result))
             elif level >= 2:
-                debug(" < %s" % func.func_name)
+                debug('%s< %s, file "%s", line %s' % (" " * get_depth(),
+                    func.func_name, inspect.getfile(func),
+                    inspect.getsourcelines(func)[-1]))
 
             return result
         return dfunc
@@ -241,7 +257,8 @@ def Verbose(level=1):
 def deprecated(func):
     @wraps(func)
     def dfunc(*args, **kwargs):
-        debug(" W: Usind deprecated %s" % func.func_name)
+#        debug(" W: Usind deprecated %s from %s" % (func.func_name, inspect.getfile(func)))
+        raise DeprecationWarning("Nabo")
         return func(*args, **kwargs)
 
     return dfunc

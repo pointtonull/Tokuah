@@ -1,53 +1,54 @@
 #!/usr/bin/env python
 #-*- coding: UTF-8 -*-
-
 import pygame
-from pygame.locals import *
-
 import sprite
 import tiles
+from pygame.locals import *
+from cnst import *
+from decoradores import Verbose
 
 class Player(sprite.Sprite3):
+    @Verbose(2)
     def __init__(self, game, rect, name, *args):
         sprite.Sprite3.__init__(self, game, rect, 'player/right', 
             (12, 16, 30 - 12, 54 -16))
         self.rect.bottom = rect.bottom
         self.rect.centerx = rect.centerx
-        self.sprite.groups.add('player')
-        self.sprite.groups.add('solid')
-        game.sprites.append(s)
-        self.sprite.loop = loop
-        self.sprite.vx = 0
-        self.sprite.vy = 0
-        self.sprite.walk_frame = 1
-        self.sprite.jumping = 0
-        self.sprite.facing = 'right'
-        self.sprite.flash_counter = 0
-        self.sprite.flash_timer = 0
-        self.sprite.shooting = 0
-        self.sprite.powered_up = False
+        self.groups.add('player')
+        self.groups.add('solid')
+        game.sprites.append(self)
+#        self.loop = game.loop
+        self.vx = 0
+        self.vy = 0
+        self.walk_frame = 1
+        self.jumping = 0
+        self.facing = 'right'
+        self.flash_counter = 0
+        self.flash_timer = 0
+        self.shooting = 0
+        self.powered_up = False
+
         if hasattr(game, 'powerup'):
-            self.sprite.powered_up = game.powerup
-        self.sprite.powerup_transition = 0
-        self.sprite.door_timer = None
-        self.sprite.current_door = None
-        self.sprite.door_pos = None
-        game.player = s
-        self.sprite.event = event
-        self.sprite.pan = pan_screen
-        self.sprite.damage = damage
-        self.sprite.kill = kill
-        self.sprite.god_mode = False
-        self.sprite.death_counter = -1
+            self.powered_up = game.powerup
 
-        self.sprite._prev = pygame.Rect(s.rect)
-        self.sprite._prev2 = pygame.Rect(s.rect)
-        self.sprite.looking = False
+        self.powerup_transition = 0
+        self.door_timer = None
+        self.current_door = None
+        self.door_pos = None
+        game.player = self
 
-        sprite.init_bounds(g, s)
-        sprite.init_view(g, s)
-        sprite.init_codes(g, s)
-        self.sprite.no_explode = False
+        self.god_mode = False
+        self.death_counter = -1
+
+        self._prev = pygame.Rect(self.rect)
+        self._prev2 = pygame.Rect(self.rect)
+        self.looking = False
+
+        self.init_bounds(game)
+        self.init_view(game)
+        self.init_codes(game)
+        self.no_explode = False
+
 
     def event(self, game, event):
         #print 'player.event',e
@@ -225,9 +226,9 @@ class Player(sprite.Sprite3):
                 #pygame.mixer.music.load("
                 #g.game.music.play('finish',1)
 
-    def pan_screen(g,s):
+    def pan_screen(self, game):
         # adjust the view
-        border = pygame.Rect(s.rect)
+        border = pygame.Rect(self.rect)
         #pad = 100
         pad = (SW / 2) - TW
         border.x -= pad
@@ -239,23 +240,25 @@ class Player(sprite.Sprite3):
         border.y -= pad
         border.h += pad * 2
 
-        dest = pygame.Rect(g.view)
+        dest = pygame.Rect(game.view)
         dest.top = min(dest.top, border.top)
         dest.right = max(dest.right, border.right)
         dest.bottom = max(dest.bottom, border.bottom)
         dest.left = min(dest.left, border.left)
 
-        dx = dest.x-g.view.x
-        dy = dest.y-g.view.y
+        dx = dest.x - game.view.x
+        dy = dest.y - game.view.y
         #mx,my = 6,6
-        mx = max(2, abs(s._prev2.x-self.rect.x))
-        my = max(2, abs(s._prev2.y-self.rect.y))
+        mx = max(2, abs(self._prev2.x - self.rect.x))
+        my = max(2, abs(self._prev2.y - self.rect.y))
+
         if abs(dx) > mx:
             dx = sign(dx) * mx
         if abs(dy) > my:
             dy = sign(dy) * my
-        g.view.x += dx
-        g.view.y += dy
+
+        game.view.x += dx
+        game.view.y += dy
 
 
     def powerup(g,s):

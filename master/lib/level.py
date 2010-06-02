@@ -328,9 +328,8 @@ class Level:
 
             # let the sprites do their thing
             for s in sprites:
-                if s.loop == None:
-                    continue
-                s.loop(self, s)
+                if s.loop != None:
+                    s.loop()
 
             # re-calculate the groupings
             groups = {}
@@ -390,7 +389,7 @@ class Level:
 
             #pan the screen
             if self.player != None:
-                self.player.pan(self, self.player)
+                self.player.pan_screen(self)
 
         # more frames
         self.frame += 1
@@ -398,7 +397,7 @@ class Level:
         #handle various game status'
         if self.status == '_first':
             if self.player.exploded:
-                self.player.loop(self, self.player)
+                self.player.loop(self.player)
             else:
                 self.status = 'first'
 

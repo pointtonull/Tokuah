@@ -1,9 +1,12 @@
+#!/usr/bin/env python
+#-*- coding: UTF-8 -*-
 import pygame
 from pygame.locals import *
 from decoradores import deprecated
 from cnst import *
 
 class Sprite:
+
     def __init__(self, rect, name):
         self.rect = pygame.Rect(rect)
         self.pos = rect.centerx / TH, rect.centery / TW
@@ -24,6 +27,7 @@ class Sprite:
 
 
 class Sprite2(Sprite):
+
     def __init__(self, game, rect, name):
         Sprite.__init__(self, rect, name)
         img = game.images[n]
@@ -32,6 +36,7 @@ class Sprite2(Sprite):
 
 
 class Sprite3(Sprite):
+
     def __init__(self, game, rect, name, shape):
         shape = pygame.Rect(shape)
         Sprite.__init__(self, rect, name)
@@ -41,12 +46,14 @@ class Sprite3(Sprite):
         self.rect.h = self.shape.h = shape.h
         self.game = game
 
+
     def apply_gravity(self):
         if self.standing != None:
             self.vy = 0
             return
         self.vy += 0.2 * 2
         self.vy = min(self.vy, 6 * 2)
+
 
     def apply_standing(self):
         if self.standing == None:
@@ -65,11 +72,13 @@ class Sprite3(Sprite):
             self.rect.y += 1 #throw on a bit o' gravity
             return
 
+
     def stop_standing(self):
         if hasattr(self.standing,'carrying'):
             if self in self.standing.carrying:
                 self.standing.carrying.remove(self)
         self.standing = None
+
 
     def get_code(self, ix,iy):
         #dx,dy get taken down to their signed component
@@ -84,6 +93,47 @@ class Sprite3(Sprite):
             return 0
         else:
             return self.game.data[2][y][x]
+
+
+    def init_bounds(self, game):
+        x = self.rect.centerx / TW
+        y = self.rect.centery / TH
+
+        min_x = x
+        min_y = y
+        max_x = x
+        max_y = y
+
+        while game.data[2][y][min_x] != CODE_BOUNDS:
+            min_x -= 1
+        while game.data[2][y][max_x] != CODE_BOUNDS:
+            max_x += 1
+        while game.data[2][min_y][x] != CODE_BOUNDS:
+            min_y -= 1
+        while game.data[2][max_y][x] != CODE_BOUNDS:
+            max_y += 1
+
+        min_x += 1
+        min_y += 1
+
+        game.bounds = pygame.Rect(min_x * TW, min_y * TH, (max_x - min_x) * TW,
+            (max_y - min_y) * TH)
+
+        game.view.w = min(SW, game.bounds.w)
+        game.view.h = min(SH, game.bounds.h)
+
+
+    def init_view(self, game):
+        game.view.centerx = self.rect.centerx
+        game.view.centery = self.rect.centery
+        self.pan_screen(game)
+
+
+    def init_codes(self, game):
+        game.view.clamp_ip(game.bounds)
+        border = game.get_border(INIT_BORDER)
+        game.run_codes(border)
+
 
 
 @deprecated
