@@ -48,6 +48,10 @@ class Sound:
             self.sound.play()
 
 class Game(engine.Game):
+
+#    def run(self, *args, **kwargs):
+#        return engine.Game.run(self, *args, **kwargs)
+
     @Verbose(VERBOSE)
     def init_play(self):
         self.score = 0
@@ -209,7 +213,8 @@ class Game(engine.Game):
             if ok:
                 break
 
-    def event(self,e):
+
+    def event(self, e):
         # The keys, buttons and axis for the input can be changed in cnst.py
 
         self.random += 1 + self.random % 100
@@ -323,6 +328,7 @@ class Game(engine.Game):
 
 
 
+@Verbose(VERBOSE)
 def main():
     fname = None
     for v in sys.argv:

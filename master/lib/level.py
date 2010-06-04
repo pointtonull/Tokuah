@@ -367,10 +367,10 @@ class Level:
                         hits.append([dist, t])
 
                 hits.sort()
-                for dist, t in hits:
-                    if not t.rect.colliderect(s.rect):
+                for dist, tile in hits:
+                    if not tile.rect.colliderect(s.rect):
                         continue
-                    t.hit(self, t, s)
+                    tile.hit(self, tile, s)
 
             # remove inactive sprites
             border = self.get_border(DEINIT_BORDER)
@@ -397,7 +397,7 @@ class Level:
         #handle various game status'
         if self.status == '_first':
             if self.player.exploded:
-                self.player.loop(self.player)
+                self.player.loop()
             else:
                 self.status = 'first'
 
@@ -433,14 +433,14 @@ class Level:
 
 
 
-    def event(self,e):
+    def event(self, e):
         #if e.type is KEYDOWN and e.key in (K_ESCAPE,):
         if e.type is USEREVENT and e.action == 'exit':
             next = menu.Transition(self.game,self.parent)
             return menu.Prompt(self.game,'Salir? S/N', next, self)
 
         if self.player != None:
-            self.player.event(self,self.player,e)
+            self.player.event(self, e)
 
 
     def paint_text(self,screen):

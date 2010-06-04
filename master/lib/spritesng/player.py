@@ -8,7 +8,8 @@ from cnst import *
 from decoradores import Verbose
 
 class Player(sprite.Sprite3):
-    @Verbose(2)
+
+    @Verbose(VERBOSE)
     def __init__(self, game, rect, name, *args):
         sprite.Sprite3.__init__(self, game, rect, 'player/right', 
             (12, 16, 30 - 12, 54 -16))
@@ -55,10 +56,10 @@ class Player(sprite.Sprite3):
         if self.door_timer != None or self.exploded > 0:
             return
 
-        if (event.type is USEREVENT and eivent.action == 'jump'
+        if (event.type is USEREVENT and event.action == 'jump'
             and self.standing != None and self.jumping == 0
             and self.vy == 0):
-            sprite.stop_standing()
+            self.stop_standing()
 
             self.vy = -6 if self.powered_up else -7.5
 
@@ -68,7 +69,7 @@ class Player(sprite.Sprite3):
         if event.type is USEREVENT and event.action == 'stop-jump':
             self.jumping = 0
 
-        if event.type is USEREVENT and (e.action == 'up'
+        if event.type is USEREVENT and (event.action == 'up'
             or event.action == 'down'):
             if self.get_code(0, 0) in DOOR_CODES:
                 self.vx = 0
@@ -93,9 +94,8 @@ class Player(sprite.Sprite3):
             self.god_mode = True
 
 
-
-    def loop(self, g, s):
-        self._prev2 = pygame.Rect(s.rect)
+    def loop(self):
+        self._prev2 = pygame.Rect(self.rect)
 
         if self.death_counter > 0:
             self.groups = set()
@@ -108,7 +108,7 @@ class Player(sprite.Sprite3):
             self.death_counter -= 1
             return
         if self.death_counter == 0:
-            g.status = 'dead'
+            self.game.status = 'dead'
             return
 
         if self.exploded > 0:
@@ -120,12 +120,12 @@ class Player(sprite.Sprite3):
             return
 
 
-        sprite.apply_gravity(g, s)
-        sprite.apply_standing(g, s)
+        self.apply_gravity()
+        self.apply_standing()
 
         if self.door_timer != None:
             if self.door_timer == 0:
-                x, y = self.door_pos #self.rect.centerx/TW,self.rect.centery/TH
+                x, y = self.door_pos
                 import door
                 door.hit(g, (x, y), s)
                 self.door_timer = None
@@ -133,7 +133,7 @@ class Player(sprite.Sprite3):
                 self.door_timer -= 1
                 return
 
-        inpt = g.game.input
+        inpt = self.game.game.input
 
         #check if we hit the ceiling
         if not self.jumping and self.vy < 0 and self.rect.y == self._prev.y:
@@ -158,28 +158,29 @@ class Player(sprite.Sprite3):
             self.vx += inc
 
 
-        self._prev = pygame.Rect(s.rect)
+        self._prev = pygame.Rect(self.rect)
 
         vx = self.vx
         vy = self.vy
         self.rect.x += vx
-        self.rect.y += sprite.myinc(g.frame, self.vy)
+        self.rect.y += self.myinc(self.vy)
 
         if self.vy < 0:
-            self.image = 'player/%s-jump' % (s.facing)
+            self.image = 'player/%s-jump' % (self.facing)
         elif self.shooting > 0:
             if self.shooting > 5:
-                self.image = 'player/%s-shoot-1' % (s.facing)
+                self.image = 'player/%s-shoot-1' % (self.facing)
             else:
-                self.image = 'player/%s-shoot-2' % (s.facing)
+                self.image = 'player/%s-shoot-2' % (self.facing)
             self.shooting -= 1
         elif inpt.right or inpt.left and self.standing:
-            self.image = 'player/%s-walk-%s' % (s.facing, int(s.walk_frame))
+            self.image = 'player/%s-walk-%s' % (self.facing,
+                int(self.walk_frame))
             self.walk_frame += 0.2
             if self.walk_frame > 4:
                 self.walk_frame = 1
         else:
-            self.image = 'player/%s'%(s.facing)
+            self.image = 'player/%s' % (self.facing)
 
         if self.flash_counter > 0:
             if self.flash_timer < 4:
@@ -191,7 +192,7 @@ class Player(sprite.Sprite3):
 
         if self.image != None:
             if self.powerup_transition > 0:
-                if (s.powerup_transition % 10) > 5:
+                if (self.powerup_transition % 10) > 5:
                     self.image = 's' + self.image
                 self.powerup_transition -= 1
             elif not self.powered_up:
@@ -199,30 +200,30 @@ class Player(sprite.Sprite3):
 
         self.looking = False
         if inpt.up:
-            g.view.y -= 2
+            self.game.view.y -= 2
             self.looking = True
         if inpt.down:
-            g.view.y += 2
+            self.game.view.y += 2
             self.looking = True
 
-        n = sprite.get_code(g, s, 0, 0)
-        if n == CODE_EXIT:
-            g.status = 'exit'
-        if n == CODE_DOOR_AUTO:
+        code = self.get_code(0, 0)
+        if code == CODE_EXIT:
+            self.game.status = 'exit'
+        if code == CODE_DOOR_AUTO:
             x = self.rect.centerx / TW
             y = self.rect.centery / TH
-            import door
-            door.hit(g, (x, y), s)
+            import door #WTF!
+            door.hit(self.game, (x, y), self)
 
-        if hasattr(g, 'boss'):
+        if hasattr(self.game, 'boss'):
             #print g.boss.phase, g.boss.phase_frames
-            if g.boss.phase == 2 and g.boss.phase_frames == 60:
-                for y in xrange(len(g.layer)):
-                    for x in xrange(len(g.layer[y])):
-                        if g.data[2][y][x] == CODE_BOSS_PHASE2_BLOCK:
+            if self.game.boss.phase == 2 and self.game.boss.phase_frames == 60:
+                for y in xrange(len(self.game.layer)):
+                    for x in xrange(len(self.game.layer[y])):
+                        if self.game.data[2][y][x] == CODE_BOSS_PHASE2_BLOCK:
                             tiles.t_put(g, (x, y), 0x01) # solid tile
-            if g.boss.dead:
-                g.status = 'exit'
+            if self.game.boss.dead:
+                self.game.status = 'exit'
                 #pygame.mixer.music.load("
                 #g.game.music.play('finish',1)
 

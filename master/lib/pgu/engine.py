@@ -2,6 +2,9 @@
 """
 import pygame
 from pygame.locals import *
+from decoradores import Verbose
+
+VERBOSE = 3
 
 class State:
     """Template Class -- for a state.
@@ -84,6 +87,7 @@ class Game:
             return 1
         return 0
         
+    @Verbose(VERBOSE)
     def run(self,state,screen=None):
         """Run the state engine, this is a infinite loop (until a quit occurs).
         
@@ -126,7 +130,8 @@ class Game:
         return
             
     def init(self):
-        """Template Method - called at the beginning of State.run() to initialize things.
+        """Template Method - called at the beginning of State.run() t
+		o initialize things.
         
         <pre>Game.init()</pre>
         """
@@ -140,11 +145,13 @@ class Game:
         pygame.time.wait(10)
     
     def event(self,e):
-        """Template Method - called with each event, so the engine can capture special events.
+        """Template Method - called with each event, so the engine can capture
+		special events.
         
         <pre>Game.event(e): return captured</pre>
         
-        <p>return a True value if the event is captured and does not need to be passed onto the current
+        <p>return a True value if the event is captured and does not need to be
+		passed onto the current
         state</p>
         """
         if e.type is QUIT: 

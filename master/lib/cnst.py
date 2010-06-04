@@ -1,6 +1,7 @@
 from pygame.locals import *
 
 VERBOSE = 3
+DEPRECATED = 1
 
 SW, SH = 640, 480
 TW, TH = 32, 32

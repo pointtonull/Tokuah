@@ -218,16 +218,37 @@ class Retry:
         return call
 
 
-def Verbose(level=1):
+def get_depth():
+    def exist_frame(n):
+        try:
+            if sys._getframe(n):
+                return True
+        except ValueError:
+            return False
 
-    def get_depth():
-        n = 1
-        while True:
-            try:
-                sys._getframe(n)
-            except ValueError:
-                return n - 1
-            n += 1
+    now = 0
+    maxn = 1
+    minn = 0
+
+    while exist_frame(maxn):
+        minn = maxn
+        maxn *= 2
+
+    # minn =< depth < maxn
+    middle = (minn + maxn) / 2
+    
+    while minn < middle:
+        if exist_frame(middle):
+            minn = middle
+        else:
+            maxn = middle
+
+        middle = (minn + maxn) / 2
+    
+    return max(minn - 4, 0)
+
+
+def Verbose(level=1):
 
     def decorador(func):
         @wraps(func)
@@ -253,15 +274,30 @@ def Verbose(level=1):
         return dfunc
     return decorador
 
+def Deprecated(level=1):
+    """
+Level can be 0 (do nothing), 1 (print debug waring) o 2 (raise 
+DeprecationWarning)
+    """
 
-def deprecated(func):
-    @wraps(func)
-    def dfunc(*args, **kwargs):
-#        debug(" W: Usind deprecated %s from %s" % (func.func_name, inspect.getfile(func)))
-        raise DeprecationWarning("Nabo")
-        return func(*args, **kwargs)
+    assert level in (0, 1, 2)
 
-    return dfunc
+    def decorator(func):
+
+        @wraps(func)
+        def dfunc(*args, **kwargs):
+            if level > 0:
+                debug(" W: Usind deprecated %s from %s" % (func.func_name,
+                    inspect.getfile(func)))
+
+            if level == 2:
+                raise DeprecationWarning("""Don't use it!""")
+
+            return func(*args, **kwargs)
+
+        return dfunc
+
+    return decorator
 
 
 class MetaSingleton(type):

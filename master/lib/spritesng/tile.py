@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 #-*- coding: UTF-8 -*-
+from decoradores import Verbose
 from cnst import *
 from pygame.locals import *
 import pygame
@@ -9,6 +10,7 @@ import tiles
 class Tile(sprite.Sprite):
     def __init__(self, game, rect, name, hit_groups, hit, *args):
         sprite.Sprite.__init__(self, rect, name)
+        self.hit = hit
 
         for group in hit_groups:
             self.hit_groups.add(group)
@@ -18,9 +20,10 @@ class Tile(sprite.Sprite):
             self.standable = args[0]
 
         game.layer[rect.centery / TH][rect.centerx / TW] = self
-
-    def hit(self, a, b, *args): #WTF! (definición recursiva sin sentido)
-        return hit(game, a, b, *args)
+    
+    @Verbose(VERBOSE)
+    def hit(self, a, b, *args):
+        return self.hit(game, a, b, *args)
 
 # tile that takes up half the space it normally would, and is on the left side
 class Tile_left(Tile):

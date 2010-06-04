@@ -2,7 +2,7 @@
 #-*- coding: UTF-8 -*-
 import pygame
 from pygame.locals import *
-from decoradores import deprecated
+from decoradores import Deprecated
 from cnst import *
 
 class Sprite:
@@ -13,7 +13,6 @@ class Sprite:
         self.image = name
         self.shape = pygame.Rect(0, 0, TW, TH)
         self.exploded = 0
-        self.loop = None
 
         self.hit_groups = set()
         self.hit = None
@@ -135,8 +134,33 @@ class Sprite3(Sprite):
         game.run_codes(border)
 
 
+    def myinc(self, speed):
+        returns = 0
+        s = sign(speed)
+        returns = int(speed)
+        speed -= returns
+        speed = abs(speed)
+        c = 37 #an arbitrary prime number
+        n = int(self.game.frame * c * speed) % c < int(c * speed)
+        returns += s * n
+        return returns
 
-@deprecated
+
+    def get_code(self, ix,iy):
+        #dx,dy get taken down to their signed component
+        dx = sign(ix)
+        dy = sign(iy)
+
+        rect = self.rect
+        x = (rect.left, rect.centerx, rect.right)[dx + 1]
+        y = (rect.top, rect.centery, rect.bottom)[dy + 1]
+        x = (x + dx) / TW + dx * max(0, abs(ix) - 1)
+        y = (y + dy) / TH + dy * max(0, abs(iy) - 1)
+        if x < 0 or y < 0 or x >= self.game.size[0] or y >= self.game.size[1]:
+            return 0
+        return self.game.data[2][y][x]
+
+@Deprecated(DEPRECATED)
 def apply_gravity(g, s):
     if s.standing != None:
         s.vy = 0
@@ -144,7 +168,7 @@ def apply_gravity(g, s):
     s.vy += 0.2 * 2
     s.vy = min(s.vy, 6 * 2)
 
-@deprecated
+@Deprecated(DEPRECATED)
 def apply_standing(g,s):
     if s.standing == None: return
     if not s.standing.active:
@@ -159,20 +183,19 @@ def apply_standing(g,s):
         s.rect.y += 1 #throw on a bit o' gravity
         return
 
-@deprecated
+@Deprecated(DEPRECATED)
 def stop_standing(g,s):
     if hasattr(s.standing,'carrying'):
         if s in s.standing.carrying:
             s.standing.carrying.remove(s)
     s.standing = None
 
-@deprecated
+@Deprecated(DEPRECATED)
 def deinit(g,s):
     if hasattr(s,'standing'):
         stop_standing(g,s)
 
-
-@deprecated
+@Deprecated(DEPRECATED)
 def init_bounds(g,s):
     x,y = s.rect.centerx/TW,s.rect.centery/TH
     min_x,min_y,max_x,max_y = x,y,x,y
@@ -192,48 +215,20 @@ def init_bounds(g,s):
     #if g.bounds.h < SH:
         #print 'uh oh, g.bounds.h < SH',g.bounds.h
 
-@deprecated
+@Deprecated(DEPRECATED)
 def init_view(g,s):
     g.view.centerx = s.rect.centerx
     g.view.centery = s.rect.centery
     s.pan(g,s)
 
-@deprecated
+@Deprecated(DEPRECATED)
 def init_codes(g,s):
     g.view.clamp_ip(g.bounds)
     border = g.get_border(INIT_BORDER)
     g.run_codes(border)
 
-
-@deprecated
+@Deprecated(0)
 def sign(v):
     if v < 0: return -1
     if v > 0: return 1
     return 0
-
-@deprecated
-def get_code(g,s,ix,iy):
-    #dx,dy get taken down to their signed component
-    dx,dy = sign(ix),sign(iy)
-    r = s.rect
-    x = [r.left,r.centerx,r.right][dx+1]
-    y = [r.top,r.centery,r.bottom][dy+1]
-    x = (x+dx)/TW + dx*max(0,abs(ix)-1)
-    y = (y+dy)/TH + dy*max(0,abs(iy)-1)
-    if x < 0 or y < 0 or x >= g.size[0] or y >= g.size[1]: return 0
-    return g.data[2][y][x]
-
-@deprecated
-def myinc(frame, increment):
-    #frame - the current frame
-    #inc - a float to add to a number
-    #returns - how much to add to your integer..
-    returns = 0
-    s = sign(increment)
-    returns = int(increment)
-    increment -= returns
-    increment = abs(increment)
-    c = 37 #an arbitrary prime number
-    n = int(frame * c * increment) % c < int(c * increment)
-    returns += s * n
-    return returns

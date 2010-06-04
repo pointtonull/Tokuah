@@ -4,7 +4,7 @@ from pygame.locals import *
 from cnst import *
 
 import tiles_basic
-from spritesng.tile import *
+from spritesng.tile import Tile, Tile_left, Tile_rigth, tile_to_sprite
 
 # NOTE: If you add new tiles, use Tile for regular tiles.
 #       Tile_left and Tile_rigth are for tiles that take up only half of the

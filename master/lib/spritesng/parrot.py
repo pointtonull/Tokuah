@@ -32,8 +32,8 @@ class Parrot(sprite.Sprite3):
     def loop(self):
 
         if self._prev != None:
-            if (self.rect.x == self._prev.x or sprite.get_code(self.game,
-                    self, sign(self.vx), 0) == CODE_PARROT_TURN):
+            if (self.rect.x == self._prev.x or self.get_code(sign(self.vx), 0)
+                == CODE_PARROT_TURN):
                 self.vx = -self.vx
 
                 if self.vx > 0:
