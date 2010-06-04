@@ -5,6 +5,13 @@ import sys
 import time
 import signal
 import inspect
+
+try:
+    import multiprocessing
+    MP = True
+except ImportError:
+    MP = False
+
 from debug import debug
 from functools import wraps
 from threading import Thread
@@ -48,6 +55,29 @@ class TimeoutExc(Exception):
         Exception.__init__(self)
         self.value = value
 
+def mptimeout(timeout, func, *args, **kwargs):
+    assert inspect.isfunction(func) or inspect.ismethod(func)
+
+    @wraps(func)
+    def newfunc(queue, args, kwargs):
+        return queue.put(func(*args, **kwargs))
+
+    queue = multiprocessing.Queue()
+    proc = multiprocessing.Process(None, newfunc, newfunc.func_name,
+        (queue, args, kwargs))
+    proc.start()
+    proc.join(timeout)
+
+    try:
+        return queue.get()
+    except:
+        return None
+
+#    if proc.is_alive():
+#        proc.terminate()
+#        raise TimeoutExc()
+#    else:
+#        return queue.get()
 
 def signaltimeout(timeout, func, *args, **kwargs):
     def handler(signum, frame):
@@ -71,7 +101,10 @@ def Timeout(time, default=None):
         def decorated(*args, **kwargs):
 
             try:
-                return signaltimeout(time, func, *args, **kwargs)
+                if MP:
+                    return mptimeout(time, func, *args, **kwargs)
+                else:
+                    return signaltimeout(time, func, *args, **kwargs)
             except TimeoutExc:
                 return default
 
