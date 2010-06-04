@@ -6,6 +6,7 @@ import tiles
 from pygame.locals import *
 from cnst import *
 from decoradores import Verbose
+from spritesng.bubble import Bubble
 
 class Player(sprite.Sprite3):
 

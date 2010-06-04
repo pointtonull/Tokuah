@@ -8,13 +8,12 @@ from cnst import *
 
 class Blob(sprite.Sprite3):
     def __init__(self, game, rect, name, *args):
-        sprite.Sprite3(game, rect, 'blob', (0, 0, 30, 30))
+        sprite.Sprite3.__init__(self, game, rect, 'blob', (0, 0, 30, 30))
         self.rect.bottom = rect.bottom
         self.rect.centerx = rect.centerx
         self.groups.add('solid')
         self.groups.add('enemy')
         self.hit_groups.add('player')
-        self.hit = hit
         self.game.sprites.append(self)
 
         self.vx = 0
@@ -41,7 +40,7 @@ class Blob(sprite.Sprite3):
 
         self._prev = pygame.Rect(self.rect)
 
-        self.rect.y += sprite.myinc(self.game.frame, self.vy)
+        self.rect.y += self.myinc(self.vy)
 
     def hit(self, a, b):
         player.damage(self.game, b)

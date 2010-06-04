@@ -1,5 +1,7 @@
 import pygame
 from pygame.locals import *
+from cnst import *
+from decoradores import Verbose
 
 import sprite
 import capsule
@@ -31,7 +33,7 @@ class Bubble(sprite.Sprite3):
         self.parent = parent
 
         self.vx = 2
-        if p.facing == 'left':
+        if parent.facing == 'left':
             self.vx = -2
         self.vy = 0
         self.rect.centerx += self.vx * (6 + self.rect.width / 2)
@@ -39,6 +41,7 @@ class Bubble(sprite.Sprite3):
 
         self.game.game.sfx['bubble'].play()
 
+    @Verbose(VERBOSE)
     def deinit(self):
         self.game.bubble_count -= 1
 

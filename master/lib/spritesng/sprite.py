@@ -15,13 +15,11 @@ class Sprite:
         self.exploded = 0
 
         self.hit_groups = set()
-        self.hit = None
         self.groups = set()
 
         # needed for gravity to work / not work ... :)
         self.standing = None
         self.active = True
-        self.deinit = deinit
         self.auto_gc = True
 
 
@@ -160,6 +158,7 @@ class Sprite3(Sprite):
             return 0
         return self.game.data[2][y][x]
 
+
 @Deprecated(DEPRECATED)
 def apply_gravity(g, s):
     if s.standing != None:
@@ -169,7 +168,7 @@ def apply_gravity(g, s):
     s.vy = min(s.vy, 6 * 2)
 
 @Deprecated(DEPRECATED)
-def apply_standing(g,s):
+def apply_standing(g, s):
     if s.standing == None: return
     if not s.standing.active:
         stop_standing(g, s)
@@ -184,19 +183,14 @@ def apply_standing(g,s):
         return
 
 @Deprecated(DEPRECATED)
-def stop_standing(g,s):
+def stop_standing(g, s):
     if hasattr(s.standing,'carrying'):
         if s in s.standing.carrying:
             s.standing.carrying.remove(s)
     s.standing = None
 
 @Deprecated(DEPRECATED)
-def deinit(g,s):
-    if hasattr(s,'standing'):
-        stop_standing(g,s)
-
-@Deprecated(DEPRECATED)
-def init_bounds(g,s):
+def init_bounds(g, s):
     x,y = s.rect.centerx/TW,s.rect.centery/TH
     min_x,min_y,max_x,max_y = x,y,x,y
     while g.data[2][y][min_x] != CODE_BOUNDS: min_x -= 1
@@ -216,13 +210,13 @@ def init_bounds(g,s):
         #print 'uh oh, g.bounds.h < SH',g.bounds.h
 
 @Deprecated(DEPRECATED)
-def init_view(g,s):
+def init_view(g, s):
     g.view.centerx = s.rect.centerx
     g.view.centery = s.rect.centery
     s.pan(g,s)
 
 @Deprecated(DEPRECATED)
-def init_codes(g,s):
+def init_codes(g, s):
     g.view.clamp_ip(g.bounds)
     border = g.get_border(INIT_BORDER)
     g.run_codes(border)

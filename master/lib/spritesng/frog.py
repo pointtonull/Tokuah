@@ -10,7 +10,8 @@ import player
 
 class Frog(sprite.Sprite3):
     def __init__(self, game, rect, name, vx, *args):
-        sprite.Sprite3(self, game, rect, 'frog/walk-left-0', (16, 8, 36, 38))
+        sprite.Sprite3.__init__(self, game, rect, 'frog/walk-left-0',
+            (16, 8, 36, 38))
         self.rect.bottom = rect.bottom
         self.rect.centerx = rect.centerx
         self.groups.add('solid')
@@ -39,13 +40,13 @@ class Frog(sprite.Sprite3):
 
         if self.walking:
             if self._prev != None:
-                if (self.rect.x == self._prev.x or sprite.get_code(game, self,
-                        sign(self.vx), 0) == CODE_FROG_TURN):
+                if (self.rect.x == self._prev.x or self.get_code(sign(self.vx),
+                    0) == CODE_FROG_TURN):
                     self.vx = -self.vx
                     self.next_frame = 1
 
-            if (self.standing != None and sprite.get_code(game, self,
-                    sign(self.vx), 1) == CODE_FROG_JUMP):
+            if (self.standing != None and self.get_code(sign(self.vx),
+                    1) == CODE_FROG_JUMP):
                 self.vy_jump = - 3.6 * 1.22
                 if (sprite.get_code(self.game, self, sign(self.vx) * 2, 1)
                         == CODE_FROG_JUMP):

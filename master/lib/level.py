@@ -7,6 +7,7 @@ from pygame.locals import *
 
 from cnst import *
 from decoradores import Cache, Verbose
+from debug import debug
 
 import data
 
@@ -38,7 +39,6 @@ def load_level(fname):
 @Verbose(VERBOSE)
 def load_tiles(fname):
     img = pygame.image.load(fname).convert_alpha()
-#    img = pygame.image.load(fname).convert()
     img.set_alpha(False)
     w = img.get_width() / TW
     h = img.get_height() / TH
@@ -95,10 +95,11 @@ def pre_load():
     Level._images = load_images(data.filepath('images'))
 
 class Level:
-    def __init__(self,game,fname,parent):
+    def __init__(self, game, fname, parent):
         self.game = game
         self.fname = fname
         self.parent = parent
+        self.bubble_count = 0
 
     def init(self):
         self._tiles = Level._tiles
@@ -111,7 +112,6 @@ class Level:
             self.title = os.path.basename(self.fname)
         self.data = load_level(fname)
 
-        #self.images = load_images(data.filepath('images'))
         self.images = Level._images
         img = pygame.Surface((1, 1)).convert_alpha()
         img.fill((0, 0, 0, 0))
@@ -347,7 +347,8 @@ class Level:
                     for s2 in groups[g]:
                         if not s1.rect.colliderect(s2.rect):
                             continue
-                        s1.hit(self, s1, s2)
+                        debug(type(s1.hit))
+                        s1.hit(s1, s2)
 
             # hit walls and junk like that
             for s in sprites:
@@ -355,16 +356,17 @@ class Level:
                     continue
                 r = s.rect
                 hits = []
+
                 for y in xrange(r.top - r.top % TH, r.bottom, TH):
                     for x in xrange(r.left - r.left % TW, r.right, TW):
-                        t = self.layer[y / TH][x / TW]
-                        if t == None:
+                        tile = self.layer[y / TH][x / TW]
+                        if tile == None:
                             continue
-                        if not t.hit_groups.intersection(s.groups):
+                        if not tile.hit_groups.intersection(s.groups):
                             continue
-                        dist = (abs(t.rect.centerx - s.rect.centerx)
-                            + abs(t.rect.centery-s.rect.centery))
-                        hits.append([dist, t])
+                        dist = (abs(tile.rect.centerx - s.rect.centerx)
+                            + abs(tile.rect.centery - s.rect.centery))
+                        hits.append([dist, tile])
 
                 hits.sort()
                 for dist, tile in hits:
@@ -380,7 +382,7 @@ class Level:
                 if not s.active:
                     self.sprites.remove(s)
                     if hasattr(s,'deinit'):
-                        s.deinit(self, s)
+                        s.deinit()
                     if hasattr(s,'_code'):
                         if s._code not in self.codes:
                             print 'error in code GC', s._code
