@@ -27,16 +27,17 @@ class Sprite2(Sprite):
 
     def __init__(self, game, rect, name):
         Sprite.__init__(self, rect, name)
-        img = game.images[n]
+        img = game.images[name]
         self.rect.w = self.shape.w = img.get_width()
         self.rect.h = self.shape.h = img.get_height()
+        self.game = game
 
 
 class Sprite3(Sprite):
 
     def __init__(self, game, rect, name, shape):
-        shape = pygame.Rect(shape)
         Sprite.__init__(self, rect, name)
+        shape = pygame.Rect(shape)
         self.shape.x = shape.x
         self.shape.y = shape.y
         self.rect.w = self.shape.w = shape.w

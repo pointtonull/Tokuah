@@ -329,6 +329,7 @@ class Level:
             # let the sprites do their thing
             for s in sprites:
                 if s.loop != None:
+                    debug(s.__class__)
                     s.loop()
 
             # re-calculate the groupings
@@ -372,7 +373,8 @@ class Level:
                 for dist, tile in hits:
                     if not tile.rect.colliderect(s.rect):
                         continue
-                    tile.hit(self, tile, s)
+                    tile.hit(tile, s)
+#                    g, a, b, top=1, right=1, bottom=1, left=1
 
             # remove inactive sprites
             border = self.get_border(DEINIT_BORDER)
@@ -436,7 +438,6 @@ class Level:
 
 
     def event(self, e):
-        #if e.type is KEYDOWN and e.key in (K_ESCAPE,):
         if e.type is USEREVENT and e.action == 'exit':
             next = menu.Transition(self.game,self.parent)
             return menu.Prompt(self.game,'Salir? S/N', next, self)

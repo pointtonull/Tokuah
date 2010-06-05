@@ -10,7 +10,11 @@ import tiles
 class Tile(sprite.Sprite):
     def __init__(self, game, rect, name, hit_groups, hit, *args):
         sprite.Sprite.__init__(self, rect, name)
-        self.hit = hit
+        self.game = game
+        self._hit = hit
+
+        if args:
+            self.points = args[0]
 
         for group in hit_groups:
             self.hit_groups.add(group)
@@ -20,16 +24,18 @@ class Tile(sprite.Sprite):
             self.standable = args[0]
 
         game.layer[rect.centery / TH][rect.centerx / TW] = self
-    
-    @Verbose(VERBOSE)
+
+
     def hit(self, a, b, *args):
-        return self.hit(game, a, b, *args)
+        return self._hit(self.game, a, b, *args)
+
 
 # tile that takes up half the space it normally would, and is on the left side
 class Tile_left(Tile):
     def __init__(self, game, rect, name, hit_groups, hit, *args):
         Tile.__init__(self, game, rect, name, hit_groups, hit, *args)
         self.rect.w = rect.w / 2
+
 
 # same as tl_init, but on the right side
 class Tile_rigth(Tile):

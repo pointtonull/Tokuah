@@ -2,6 +2,7 @@
 #-*- coding: UTF-8 -*-
 import cPickle
 import sys
+import os
 import time
 import signal
 import inspect
@@ -280,6 +281,9 @@ def get_depth():
     
     return max(minn - 4, 0)
 
+def relpath(path):                                                   
+    return os.path.abspath(path).replace(os.path.commonprefix(
+        (os.path.abspath(os.path.curdir), os.path.abspath(path))), "")
 
 def Verbose(level=1):
 
@@ -300,7 +304,7 @@ def Verbose(level=1):
                     result))
             elif level >= 2:
                 debug('%s< %s, file "%s", line %s' % (" " * get_depth(),
-                    func.func_name, inspect.getfile(func),
+                    func.func_name, relpath(inspect.getfile(func)),
                     inspect.getsourcelines(func)[-1]))
 
             return result

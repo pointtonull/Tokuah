@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 #-*- coding: UTF-8 -*-
+
 from cnst import *
-import tiles
-from spritesng import Player, Bubble
 from debug import debug
+from decoradores import Deprecated
+from spritesng import Player, Bubble, Points, tile
+import pygame
+import tiles
 
 #TODO: Arreglar esta maraña de mierdez, y yo que creí que el trabajo duro iba
 #      a terminar cuando finalizara con sprites ¬¬
@@ -71,10 +74,11 @@ def hit_fally(g, a, b, top=1, right=1, bottom=1, left=1):
     tile.tile_to_sprite(g,a)
 
     s = a
-    s.timer = FPS/4
+    s.timer = FPS / 4
     s.image = s.image + 1
     s.hit = hit_block
     s.vy = 0
+
     def loop(g, s):
         a.timer -= 1
         if a.timer > 0:
@@ -83,6 +87,7 @@ def hit_fally(g, a, b, top=1, right=1, bottom=1, left=1):
             g.game.sfx['fally'].play()
         sprite.apply_gravity(g, s)
         s.rect.y += s.vy
+
     s.loop = loop
 
 
@@ -126,7 +131,8 @@ def one_up(g, b):
     g.game.sfx['powerup'].play()
 
 
-def hit_item(g, a, b, pts):
+def hit_item(g, a, b, *args):
+    pts = a.points
     if not tile_close(g, a, b):
         return
 
@@ -135,8 +141,7 @@ def hit_item(g, a, b, pts):
     g.game.score += pts
     tile_explode(g, a)
 
-    import sprites
-    sprites.points.init(g, a.rect, pts)
+    Points(g, a.rect, pts)
 
 
 def hit_power(g, a, b):
@@ -163,14 +168,15 @@ def tile_close(g, a, b):
 def tile_explode(g, a):
     g.game.sfx['explode'].play()
     tiles.t_put(g, a.pos, 0)
-    import tile
     tile.tile_to_sprite(g, a)
     s = a
     s.hit_groups = set()
+
     def loop(g, s):
         s.exploded += 2
         if s.exploded > 8:
             s.active = False
             #if s in g.sprites:
                 #g.sprites.remove(s)
+
     s.loop = loop
