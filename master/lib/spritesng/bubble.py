@@ -1,7 +1,10 @@
+#!/usr/bin/env python
+#-*- coding: UTF-8 -*-
 import pygame
 from pygame.locals import *
 from cnst import *
 from decoradores import Verbose
+from capsule import Capsule
 
 import sprite
 import capsule
@@ -61,7 +64,7 @@ class Bubble(sprite.Sprite3):
             if hasattr(b, '_code'):
                 code = b._code
                 delattr(b, '_code')
-            Capsule.__init__(self, self.game, b.rect)
+            Capsule(self.game, b.rect)
             if code != None:
                 self._code = code
         else:

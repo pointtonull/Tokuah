@@ -31,7 +31,7 @@ class Capsule(sprite.Sprite3):
 
         dx = int(self.x - self.rect.x)
 
-        dy = sprite.myinc(self.game.frame, self.vy)
+        dy = self.myinc(self.vy)
 
         self.rect.x += dx
         self.rect.y += dy
