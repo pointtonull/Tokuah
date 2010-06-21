@@ -62,8 +62,11 @@
         <note priority="medium" time="1272296958">
             implementar pause, quit y otras cosas necesarias
         </note>
-        <note priority="medium" time="1272297037">
+        <note priority="medium" time="1272297037" done="1276120961">
             convertir los pandas a cactus
+            <comment>
+                Matt los implementó
+            </comment>
         </note>
         <note priority="medium" time="1272297078">
             F2 para habilitar/deshabilitar sonido
