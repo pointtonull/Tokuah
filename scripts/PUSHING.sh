@@ -24,20 +24,6 @@ def pushing(repo):
     return process.wait()
 
 
-"""    | awk -v pwd="$PWD" '
-    function exec(command){
-        while (command|getline result)
-            print result
-        return result
-    }
-
-    {
-        sub("\\.git$", "")
-        exec("echo \"" $0 "\"")
-#        ; cd \"" $0 "\"; pushing")
-}'"""
-
-
 def main():
     curdir = os.path.abspath(os.path.curdir)
     repos = get_repos(curdir)
